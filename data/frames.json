@@ -1,0 +1,44 @@
+[
+  {
+    "id": "2026-03-18T17:00:00.000Z",
+    "timestamp": "2026-03-18T17:00:00.000Z",
+    "currentPrice": 80800,
+    "previousPrice": 82400,
+    "percentChange1h": -1.94,
+    "direction": "bear",
+    "intensity": 65,
+    "signedScore": -0.65,
+    "stage": "very-bear",
+    "prompt": "very strong bearish dominance, broader skull, heavier claws, dense fur mass, looming posture, darker colder shadows, brutal predator energy",
+    "imageUrl": "/frames/2026-03-18T17-00-00Z.jpg",
+    "provider": "placeholder"
+  },
+  {
+    "id": "2026-03-18T18:00:00.000Z",
+    "timestamp": "2026-03-18T18:00:00.000Z",
+    "currentPrice": 81250,
+    "previousPrice": 80800,
+    "percentChange1h": 0.56,
+    "direction": "bull",
+    "intensity": 19,
+    "signedScore": 0.19,
+    "stage": "hybrid",
+    "prompt": "perfectly balanced 50-50 bull-bear hybrid, equal horn and bear traits, symmetrical hybrid anatomy, controlled cinematic menace",
+    "imageUrl": "/frames/2026-03-18T18-00-00Z.jpg",
+    "provider": "placeholder"
+  },
+  {
+    "id": "2026-03-18T19:00:00.000Z",
+    "timestamp": "2026-03-18T19:00:00.000Z",
+    "currentPrice": 82000,
+    "previousPrice": 81250,
+    "percentChange1h": 0.92,
+    "direction": "bull",
+    "intensity": 31,
+    "signedScore": 0.31,
+    "stage": "strong-bull",
+    "prompt": "clear bullish dominance, longer horns, stronger chest and shoulders, forward charging posture, hotter amber glow, aggressive upward force",
+    "imageUrl": "/frames/2026-03-18T19-00-00Z.jpg",
+    "provider": "placeholder"
+  }
+]
