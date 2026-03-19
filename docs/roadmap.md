@@ -7,25 +7,28 @@
 - [x] Scaffold Next.js UI and API routes
 - [x] Add sample archived frames
 
-## Milestone 2 - live market data
-- [x] Replace mock BTC snapshot with live provider
-- [ ] Persist newly generated frame metadata to storage
-- [ ] Add hourly generation job
+## Milestone 2 - live market signal engine
+- [ ] Fetch Fear & Greed index
+- [ ] Fetch BTC price history for MA7 / MA30
+- [ ] Compute weighted composite score
+- [ ] Map composite score to 20 canonical bands
+- [ ] Persist hourly evaluation records
 
-## Milestone 3 - image generation integration
-- [x] Add provider adapter foundation for ChatGPT/OpenAI image generation
-- [ ] Evaluate ChatGPT image generation as primary engine
-- [ ] Test reference-image consistency workflow
-- [ ] Wire provider adapter into saved frame workflow
-- [ ] Save generated images to public frame archive
+## Milestone 3 - canonical asset system
+- [x] Define 20-state ladder
+- [x] Define animation system
+- [x] Add state manifest
+- [ ] Generate 20 canonical stills
+- [ ] Generate 3 loop variants per state via fal.ai
 
-## Milestone 4 - product UI
-- [ ] Build actual timeline scrubber
-- [ ] Add image thumbnails / real image rendering
-- [ ] Add chart-to-frame synchronization
-- [ ] Add timelapse playback mode
+## Milestone 4 - app integration
+- [ ] Load current state from composite score
+- [ ] Resolve current still + loop assets from manifest
+- [ ] Show animation-first hero state in UI
+- [ ] Add timeline scrubber and state history
 
 ## Milestone 5 - polish
-- [ ] Add provider abstraction for future bakeoffs
-- [ ] Add frame detail drawer with full prompt and metadata
+- [ ] Add component-score debug panel
+- [ ] Add chart-to-state synchronization
 - [ ] Improve responsive layout and visual design
+- [ ] Add variant rotation logic for loop selection
