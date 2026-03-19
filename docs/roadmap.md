@@ -8,11 +8,11 @@
 - [x] Add sample archived frames
 
 ## Milestone 2 - live market signal engine
-- [ ] Fetch Fear & Greed index
-- [ ] Fetch BTC price history for MA7 / MA30
-- [ ] Compute weighted composite score
-- [ ] Map composite score to 20 canonical bands
-- [ ] Persist hourly evaluation records
+- [x] Fetch Fear & Greed index
+- [x] Fetch BTC price history for MA7 / MA30
+- [x] Compute weighted composite score
+- [x] Map composite score to 20 canonical bands
+- [ ] Persist hourly evaluation records only when state changes
 
 ## Milestone 3 - canonical asset system
 - [x] Define 20-state ladder

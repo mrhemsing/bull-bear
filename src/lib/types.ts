@@ -9,6 +9,32 @@ export type VisualStage =
   | 'very-bull'
   | 'max-bull';
 
+export interface StateManifestEntry {
+  id: string;
+  index: number;
+  label: string;
+  scoreMin: number;
+  scoreMax: number;
+  still: string;
+  loops: string[];
+}
+
+export interface CompositeMarketSnapshot {
+  timestamp: string;
+  source: string;
+  currentPrice: number;
+  ma7: number;
+  ma30: number;
+  fearAndGreed: number;
+  sentimentScore: number;
+  trend7Score: number;
+  trend30Score: number;
+  finalScore: number;
+  stateIndex: number;
+  stateLabel: string;
+  stateId: string;
+}
+
 export interface MarketSnapshot {
   currentPrice: number;
   previousPrice: number;
@@ -56,5 +82,11 @@ export interface FrameRecord {
   imageUrl: string;
   provider: string;
   source?: string;
+  stateIndex?: number;
+  stateLabel?: string;
+  finalScore?: number;
+  fearAndGreed?: number;
+  ma7?: number;
+  ma30?: number;
   notes?: string;
 }

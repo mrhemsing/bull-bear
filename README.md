@@ -28,31 +28,33 @@ Instead of generating a brand new image every hour, V1 uses a pre-generated cano
 4. If the state changed, swap to the corresponding still/loop asset.
 5. Save the hourly evaluation for history and playback.
 
-## Why this architecture
-
-Pre-generating the state library gives the project:
-
-- stronger identity consistency
-- instant loading
-- lower generation cost
-- better animation quality
-- easier frontend integration
-
 ## Current implementation status
 
 ### Shipped
 - Next.js app scaffold
 - Architecture, style bible, prompt system, state ladder, and animation docs
 - State manifest for 20 canonical states
-- Early BTC/API integration scaffolding
+- Live composite signal engine foundation
 - Timeline-first UI foundation
 - Frame persistence foundation
 
+### Live signal engine
+Current live data sources:
+- Fear & Greed API (`alternative.me`)
+- CoinGecko daily BTC price history
+
+Current calculations:
+- Fear & Greed sentiment score
+- price vs MA7 score
+- price vs MA30 score
+- weighted final score
+- 20-state band resolution
+
 ### Next up
-- live Fear & Greed + MA7 / MA30 signal engine
-- 20 canonical still prompts and generation workflow
+- add manifest-driven current-state rendering in UI
+- only persist hourly evaluations when the band changes
+- generate the 20 canonical still prompts and production workflow
 - fal.ai animation loop workflow
-- manifest-driven UI rendering
 
 ## Docs
 
@@ -61,6 +63,7 @@ Pre-generating the state library gives the project:
 - `docs/prompt-system.md`
 - `docs/state-ladder.md`
 - `docs/animation-system.md`
+- `docs/asset-production-plan.md`
 - `docs/roadmap.md`
 
 ## Repository structure
@@ -76,6 +79,7 @@ docs/
   prompt-system.md
   state-ladder.md
   animation-system.md
+  asset-production-plan.md
   roadmap.md
 data/
   frames.json

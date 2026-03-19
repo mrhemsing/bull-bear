@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
-import { getBitcoinSnapshot } from '@/lib/btc';
-import { mapPercentToCreatureState } from '@/lib/state';
+import { getCompositeMarketSnapshot } from '@/lib/btc';
+import { compositeSnapshotToCreatureState } from '@/lib/signal';
 import { buildPromptBundle } from '@/lib/prompts';
 import { generateMarketBeastPreview } from '@/lib/image-provider';
 import { saveFrameRecord, saveGeneratedImage } from '@/lib/frames';
 
 export async function POST() {
   try {
-    const snapshot = await getBitcoinSnapshot();
-    const state = mapPercentToCreatureState(snapshot.percentChange1h);
+    const snapshot = await getCompositeMarketSnapshot();
+    const state = compositeSnapshotToCreatureState(snapshot);
     const prompts = buildPromptBundle(state);
     const generation = await generateMarketBeastPreview(prompts);
 
@@ -22,8 +22,8 @@ export async function POST() {
       id: snapshot.timestamp,
       timestamp: snapshot.timestamp,
       currentPrice: snapshot.currentPrice,
-      previousPrice: snapshot.previousPrice,
-      percentChange1h: snapshot.percentChange1h,
+      previousPrice: snapshot.ma7,
+      percentChange1h: snapshot.finalScore,
       direction: state.direction,
       intensity: state.intensity,
       signedScore: state.signedScore,
@@ -32,6 +32,12 @@ export async function POST() {
       imageUrl: savedImageUrl ?? generation.imageUrl ?? '/frames/pending.png',
       provider: generation.provider,
       source: snapshot.source,
+      stateIndex: snapshot.stateIndex,
+      stateLabel: snapshot.stateLabel,
+      finalScore: snapshot.finalScore,
+      fearAndGreed: snapshot.fearAndGreed,
+      ma7: snapshot.ma7,
+      ma30: snapshot.ma30,
       notes: generation.note
     };
 
