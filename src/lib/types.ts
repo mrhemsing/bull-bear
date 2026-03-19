@@ -35,7 +35,10 @@ export interface GenerationPreview {
   provider: string;
   status: 'configured' | 'not-configured';
   imageUrl?: string;
+  imageBase64?: string;
+  imageMimeType?: string;
   model?: string;
+  revisedPrompt?: string;
   note: string;
 }
 
@@ -52,5 +55,6 @@ export interface FrameRecord {
   prompt: string;
   imageUrl: string;
   provider: string;
+  source?: string;
   notes?: string;
 }

@@ -43,8 +43,13 @@ export async function generateMarketBeastPreview(prompts: PromptBundle): Promise
     status: 'configured',
     model: OPENAI_IMAGE_MODEL,
     imageUrl: image?.url,
+    imageBase64: image?.b64_json,
+    imageMimeType: image?.b64_json ? 'image/png' : undefined,
+    revisedPrompt: image?.revised_prompt,
     note: image?.url
       ? 'Image URL returned from OpenAI image generation.'
-      : 'Provider call succeeded, but no image URL was returned. Base64 handling may be needed next.'
+      : image?.b64_json
+        ? 'Base64 image payload returned from OpenAI image generation.'
+        : 'Provider call succeeded, but no image payload was returned.'
   };
 }
