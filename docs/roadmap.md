@@ -8,14 +8,15 @@
 - [x] Add sample archived frames
 
 ## Milestone 2 - live market data
-- [ ] Replace mock BTC snapshot with live provider
+- [x] Replace mock BTC snapshot with live provider
 - [ ] Persist newly generated frame metadata to storage
 - [ ] Add hourly generation job
 
 ## Milestone 3 - image generation integration
+- [x] Add provider adapter foundation for ChatGPT/OpenAI image generation
 - [ ] Evaluate ChatGPT image generation as primary engine
 - [ ] Test reference-image consistency workflow
-- [ ] Wire provider adapter into `/api/generate`
+- [ ] Wire provider adapter into saved frame workflow
 - [ ] Save generated images to public frame archive
 
 ## Milestone 4 - product UI

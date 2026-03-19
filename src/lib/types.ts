@@ -14,6 +14,7 @@ export interface MarketSnapshot {
   previousPrice: number;
   percentChange1h: number;
   timestamp: string;
+  source: string;
 }
 
 export interface CreatureState {
@@ -28,6 +29,14 @@ export interface PromptBundle {
   identityLock: string;
   stateModifier: string;
   finalPrompt: string;
+}
+
+export interface GenerationPreview {
+  provider: string;
+  status: 'configured' | 'not-configured';
+  imageUrl?: string;
+  model?: string;
+  note: string;
 }
 
 export interface FrameRecord {
