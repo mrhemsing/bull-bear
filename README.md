@@ -35,8 +35,11 @@ Instead of generating a brand new image every hour, V1 uses a pre-generated cano
 - Architecture, style bible, prompt system, state ladder, and animation docs
 - State manifest for 20 canonical states
 - Live composite signal engine foundation
-- Timeline-first UI foundation
-- Frame persistence foundation
+- State-aware UI foundation
+- Band-change persistence gating
+- Canonical still prompt pack
+- Exportable state prompt dataset for stills + loops
+- fal.ai animation prompt documentation and workflow scaffolding
 
 ### Live signal engine
 Current live data sources:
@@ -50,11 +53,13 @@ Current calculations:
 - weighted final score
 - 20-state band resolution
 
-### Next up
-- add manifest-driven current-state rendering in UI
-- only persist hourly evaluations when the band changes
-- generate the 20 canonical still prompts and production workflow
-- fal.ai animation loop workflow
+### Production assets
+Canonical production files now include:
+- `data/state-manifest.json`
+- `data/state-prompts.json`
+- `docs/canonical-prompt-pack.md`
+- `docs/fal-animation-prompts.md`
+- `docs/asset-generation-workflow.md`
 
 ## Docs
 
@@ -64,6 +69,9 @@ Current calculations:
 - `docs/state-ladder.md`
 - `docs/animation-system.md`
 - `docs/asset-production-plan.md`
+- `docs/canonical-prompt-pack.md`
+- `docs/fal-animation-prompts.md`
+- `docs/asset-generation-workflow.md`
 - `docs/roadmap.md`
 
 ## Repository structure
@@ -80,10 +88,14 @@ docs/
   state-ladder.md
   animation-system.md
   asset-production-plan.md
+  canonical-prompt-pack.md
+  fal-animation-prompts.md
+  asset-generation-workflow.md
   roadmap.md
 data/
   frames.json
   state-manifest.json
+  state-prompts.json
 public/
   frames/
 ```
