@@ -3,20 +3,34 @@ import { getCompositeMarketSnapshot } from '@/lib/btc';
 import { compositeSnapshotToCreatureState } from '@/lib/signal';
 import { buildPromptBundle } from '@/lib/prompts';
 import { generateMarketBeastPreview } from '@/lib/image-provider';
-import { saveFrameRecord, saveGeneratedImage } from '@/lib/frames';
+import { saveFrameRecord, saveGeneratedImage, shouldPersistFrame } from '@/lib/frames';
 
 export async function POST() {
   try {
     const snapshot = await getCompositeMarketSnapshot();
     const state = compositeSnapshotToCreatureState(snapshot);
     const prompts = buildPromptBundle(state);
-    const generation = await generateMarketBeastPreview(prompts);
 
-    const savedImageUrl = await saveGeneratedImage({
-      timestamp: snapshot.timestamp,
-      imageBase64: generation.imageBase64,
-      imageMimeType: generation.imageMimeType
+    const shouldPersist = await shouldPersistFrame({
+      stateIndex: snapshot.stateIndex,
+      finalScore: snapshot.finalScore
     });
+
+    const generation = shouldPersist
+      ? await generateMarketBeastPreview(prompts)
+      : {
+          provider: 'manifest',
+          status: 'not-configured' as const,
+          note: 'Band did not change meaningfully; skipped new generation and persistence.'
+        };
+
+    const savedImageUrl = shouldPersist
+      ? await saveGeneratedImage({
+          timestamp: snapshot.timestamp,
+          imageBase64: generation.imageBase64,
+          imageMimeType: generation.imageMimeType
+        })
+      : null;
 
     const frame = {
       id: snapshot.timestamp,
@@ -41,14 +55,17 @@ export async function POST() {
       notes: generation.note
     };
 
-    await saveFrameRecord(frame);
+    if (shouldPersist) {
+      await saveFrameRecord(frame);
+    }
 
     return NextResponse.json({
       snapshot,
       state,
       prompts,
       generation,
-      frame
+      frame,
+      shouldPersist
     });
   } catch (error) {
     return NextResponse.json(
