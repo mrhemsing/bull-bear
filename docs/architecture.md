@@ -59,6 +59,7 @@ V1 behavior:
 - compute composite score
 - map score to one of 20 states
 - update the displayed creature only when the state changes
+- expose a dedicated capture path that schedulers can trigger safely each hour
 
 ## Critical design rule
 

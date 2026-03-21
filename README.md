@@ -43,6 +43,7 @@ Instead of generating a brand new image every hour, V1 uses a pre-generated cano
 - Deterministic still/loop asset resolver with loop variant rotation
 - Animation-first hero that prefers canonical loops and falls back to stills
 - State-band chart synced to transition timeline selection
+- Dedicated scheduled capture endpoint for hourly persistence
 - Canonical still prompt pack
 - Exportable state prompt dataset for stills + loops
 - fal.ai animation prompt documentation and workflow scaffolding
