@@ -1,16 +1,8 @@
 import { NextResponse } from 'next/server';
-import { getCompositeMarketSnapshot } from '@/lib/btc';
-import { compositeSnapshotToCreatureState } from '@/lib/signal';
-import { getStateManifestEntry } from '@/lib/frames';
+import { getLiveMarketBeastState } from '@/lib/live-state';
 
 export async function GET() {
-  const snapshot = await getCompositeMarketSnapshot();
-  const state = compositeSnapshotToCreatureState(snapshot);
-  const manifest = getStateManifestEntry(snapshot.stateIndex);
+  const live = await getLiveMarketBeastState();
 
-  return NextResponse.json({
-    snapshot,
-    state,
-    manifest
-  });
+  return NextResponse.json(live);
 }

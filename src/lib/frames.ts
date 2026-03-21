@@ -38,17 +38,12 @@ export async function saveFrameRecord(frame: FrameRecord): Promise<FrameRecord[]
   return updated;
 }
 
-export async function shouldPersistFrame(nextFrame: Pick<FrameRecord, 'stateIndex' | 'finalScore'>): Promise<boolean> {
+export async function shouldPersistFrame(nextFrame: Pick<FrameRecord, 'stateIndex'>): Promise<boolean> {
   const existing = await readFramesFromDisk();
   const latest = [...existing].sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))[0];
 
   if (!latest) return true;
-  if (latest.stateIndex !== nextFrame.stateIndex) return true;
-
-  const latestScore = latest.finalScore ?? null;
-  if (latestScore === null || nextFrame.finalScore === undefined) return false;
-
-  return Math.abs(latestScore - nextFrame.finalScore) >= 10;
+  return latest.stateIndex !== nextFrame.stateIndex;
 }
 
 export async function saveGeneratedImage(params: {

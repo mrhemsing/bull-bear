@@ -12,8 +12,7 @@ export async function POST() {
     const prompts = buildPromptBundle(state);
 
     const shouldPersist = await shouldPersistFrame({
-      stateIndex: snapshot.stateIndex,
-      finalScore: snapshot.finalScore
+      stateIndex: snapshot.stateIndex
     });
 
     const generation = shouldPersist

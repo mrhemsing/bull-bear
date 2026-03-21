@@ -12,7 +12,7 @@
 - [x] Fetch BTC price history for MA7 / MA30
 - [x] Compute weighted composite score
 - [x] Map composite score to 20 canonical bands
-- [ ] Persist hourly evaluation records only when state changes
+- [x] Persist hourly evaluation records only when state changes
 
 ## Milestone 3 - canonical asset system
 - [x] Define 20-state ladder

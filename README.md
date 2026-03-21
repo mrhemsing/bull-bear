@@ -36,7 +36,8 @@ Instead of generating a brand new image every hour, V1 uses a pre-generated cano
 - State manifest for 20 canonical states
 - Live composite signal engine foundation
 - State-aware UI foundation
-- Band-change persistence gating
+- State-transition-only persistence gating
+- Live state resolver for current display + transition history
 - Canonical still prompt pack
 - Exportable state prompt dataset for stills + loops
 - fal.ai animation prompt documentation and workflow scaffolding
