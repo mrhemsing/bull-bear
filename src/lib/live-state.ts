@@ -1,3 +1,4 @@
+import { resolveStateAssets } from './assets';
 import { getCompositeMarketSnapshot } from './btc';
 import { getFrames, getLatestFrame, getStateManifestEntry } from './frames';
 import { compositeSnapshotToCreatureState } from './signal';
@@ -8,6 +9,11 @@ export async function getLiveMarketBeastState() {
   const manifest = getStateManifestEntry(snapshot.stateIndex);
   const latestTransition = getLatestFrame();
   const history = getFrames();
+  const assets = resolveStateAssets({
+    manifest,
+    latestTransition,
+    timestamp: snapshot.timestamp
+  });
 
   return {
     snapshot,
@@ -15,7 +21,9 @@ export async function getLiveMarketBeastState() {
     manifest,
     latestTransition,
     history,
-    activeStill: manifest?.still ?? latestTransition?.imageUrl ?? '/frames/pending.png',
-    activeLoops: manifest?.loops ?? []
+    assets,
+    activeStill: assets.still,
+    activeLoops: assets.loops,
+    activeLoop: assets.activeLoop
   };
 }

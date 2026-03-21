@@ -40,6 +40,7 @@ Instead of generating a brand new image every hour, V1 uses a pre-generated cano
 - Live state resolver for current display + transition history
 - Interactive transition timeline scrubber
 - Debug panel for component-score and band-mapping transparency
+- Deterministic still/loop asset resolver with loop variant rotation
 - Canonical still prompt pack
 - Exportable state prompt dataset for stills + loops
 - fal.ai animation prompt documentation and workflow scaffolding

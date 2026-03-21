@@ -46,7 +46,8 @@ export default async function HomePage() {
               </div>
               <div style={{ display: 'inline-flex', gap: 10, flexWrap: 'wrap' }}>
                 <InlineBadge label="Still" value={live.activeStill} mono />
-                <InlineBadge label="Loops" value={live.activeLoops.length ? `${live.activeLoops.length} variants` : 'Pending'} />
+                <InlineBadge label="Active loop" value={live.activeLoop ?? 'Pending'} mono />
+                <InlineBadge label="Asset source" value={live.assets.source} />
               </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 12 }}>
@@ -67,7 +68,9 @@ export default async function HomePage() {
           <Stat label="Direction" value={live.creature.direction} />
           <Stat label="Intensity" value={`${live.creature.intensity}%`} />
           <Stat label="Resolved still" value={live.activeStill} mono />
+          <Stat label="Active loop" value={live.activeLoop ?? 'Pending'} mono />
           <Stat label="Loop variants" value={live.activeLoops.join(', ') || 'Pending'} mono />
+          <Stat label="Loop rotation" value={live.assets.loopVariantIndex === null ? 'Pending' : `Variant ${live.assets.loopVariantIndex + 1} of ${live.activeLoops.length}`} />
         </div>
       </section>
 

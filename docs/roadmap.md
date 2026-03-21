@@ -31,4 +31,4 @@
 - [x] Add component-score debug panel
 - [ ] Add chart-to-state synchronization
 - [ ] Improve responsive layout and visual design
-- [ ] Add variant rotation logic for loop selection
+- [x] Add variant rotation logic for loop selection

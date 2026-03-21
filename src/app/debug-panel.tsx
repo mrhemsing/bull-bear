@@ -44,6 +44,7 @@ export function DebugPanel({
           <DebugMetric label="Previous saved state" value={previousStateIndex ? String(previousStateIndex) : 'None'} />
           <DebugMetric label="State delta" value={stateDelta} />
           <DebugMetric label="Source" value={snapshot.source} />
+          <DebugMetric label="Manifest asset id" value={manifest?.id ?? 'None'} />
         </div>
       </div>
     </section>
