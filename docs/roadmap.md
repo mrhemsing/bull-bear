@@ -22,9 +22,9 @@
 - [ ] Generate 3 loop variants per state via fal.ai
 
 ## Milestone 4 - app integration
-- [ ] Load current state from composite score
-- [ ] Resolve current still + loop assets from manifest
-- [ ] Show animation-first hero state in UI
+- [x] Load current state from composite score
+- [x] Resolve current still + loop assets from manifest
+- [x] Show animation-first hero state in UI
 - [x] Add timeline scrubber and state history
 
 ## Milestone 5 - polish

@@ -1,5 +1,6 @@
 import { getLiveMarketBeastState } from '@/lib/live-state';
 import { DebugPanel } from './debug-panel';
+import { HeroMedia } from './hero-media';
 import { TimelineScrubber } from './timeline-scrubber';
 
 function formatSignedNumber(value?: number, digits = 2) {
@@ -35,27 +36,32 @@ export default async function HomePage() {
 
       <section style={{ display: 'grid', gridTemplateColumns: '1.45fr 1fr', gap: 24, marginBottom: 28 }}>
         <div style={{ background: '#121931', borderRadius: 20, padding: 20, border: '1px solid #24304f' }}>
-          <div style={{ aspectRatio: '16 / 9', borderRadius: 16, background: 'linear-gradient(135deg, #243455, #101727 65%)', padding: 22, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            <div>
-              <div style={{ color: '#8ea3c7', textTransform: 'uppercase', letterSpacing: 1.5, fontSize: 12, marginBottom: 10 }}>
-                Live canonical state
-              </div>
-              <div style={{ fontSize: 34, fontWeight: 800, marginBottom: 8 }}>{live.snapshot.stateLabel}</div>
-              <div style={{ color: '#c5d0e7', maxWidth: 620, lineHeight: 1.5, marginBottom: 16 }}>
-                State {live.manifest?.index ?? live.snapshot.stateIndex} mapped from a live composite market score of {formatSignedNumber(live.snapshot.finalScore)}. The display resolves from the canonical asset manifest first, then falls back to the latest saved transition record.
-              </div>
-              <div style={{ display: 'inline-flex', gap: 10, flexWrap: 'wrap' }}>
-                <InlineBadge label="Still" value={live.activeStill} mono />
-                <InlineBadge label="Active loop" value={live.activeLoop ?? 'Pending'} mono />
-                <InlineBadge label="Asset source" value={live.assets.source} />
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 12 }}>
-              <HeroChip label="Score" value={formatSignedNumber(live.snapshot.finalScore)} />
-              <HeroChip label="F&G" value={String(live.snapshot.fearAndGreed)} />
-              <HeroChip label="MA7" value={formatUsd(live.snapshot.ma7)} />
-              <HeroChip label="MA30" value={formatUsd(live.snapshot.ma30)} />
-            </div>
+          <div style={{ color: '#8ea3c7', textTransform: 'uppercase', letterSpacing: 1.5, fontSize: 12, marginBottom: 12 }}>
+            Live canonical state
+          </div>
+
+          <HeroMedia
+            activeLoop={live.activeLoop}
+            activeStill={live.activeStill}
+            stateLabel={live.snapshot.stateLabel}
+            score={formatSignedNumber(live.snapshot.finalScore)}
+          />
+
+          <div style={{ color: '#c5d0e7', maxWidth: 620, lineHeight: 1.5, marginTop: 16, marginBottom: 16 }}>
+            State {live.manifest?.index ?? live.snapshot.stateIndex} mapped from a live composite market score of {formatSignedNumber(live.snapshot.finalScore)}. The hero now prefers the canonical loop asset first, then falls back to the resolved still when animation is unavailable.
+          </div>
+
+          <div style={{ display: 'inline-flex', gap: 10, flexWrap: 'wrap', marginBottom: 16 }}>
+            <InlineBadge label="Still" value={live.activeStill} mono />
+            <InlineBadge label="Active loop" value={live.activeLoop ?? 'Pending'} mono />
+            <InlineBadge label="Asset source" value={live.assets.source} />
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 12 }}>
+            <HeroChip label="Score" value={formatSignedNumber(live.snapshot.finalScore)} />
+            <HeroChip label="F&G" value={String(live.snapshot.fearAndGreed)} />
+            <HeroChip label="MA7" value={formatUsd(live.snapshot.ma7)} />
+            <HeroChip label="MA30" value={formatUsd(live.snapshot.ma30)} />
           </div>
         </div>
 
