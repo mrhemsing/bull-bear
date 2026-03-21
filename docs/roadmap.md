@@ -28,7 +28,7 @@
 - [x] Add timeline scrubber and state history
 
 ## Milestone 5 - polish
-- [ ] Add component-score debug panel
+- [x] Add component-score debug panel
 - [ ] Add chart-to-state synchronization
 - [ ] Improve responsive layout and visual design
 - [ ] Add variant rotation logic for loop selection

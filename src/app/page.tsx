@@ -1,4 +1,5 @@
 import { getLiveMarketBeastState } from '@/lib/live-state';
+import { DebugPanel } from './debug-panel';
 import { TimelineScrubber } from './timeline-scrubber';
 
 function formatSignedNumber(value?: number, digits = 2) {
@@ -91,6 +92,12 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      <DebugPanel
+        snapshot={live.snapshot}
+        manifest={live.manifest}
+        previousStateIndex={previousTransition?.stateIndex}
+      />
 
       <TimelineScrubber history={live.history} />
     </main>
