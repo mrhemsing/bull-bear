@@ -16,6 +16,15 @@ Turn the canonical Bull Bear state library into production-ready assets:
 
 ## Batch strategy
 
+Before generating, run:
+
+```bash
+npm run assets:prepare
+```
+
+This scaffolds the canonical `public/states/state-xx/` folders and exports machine-readable + human-readable production checklists under `data/generated/`.
+
+
 ### Batch 1 — still generation
 Generate all 20 stills using the `stillPrompt` field from `data/state-prompts.json`.
 

@@ -113,8 +113,10 @@ public/
 ```bash
 npm install
 npm run dev
+npm run assets:prepare
 ```
 
 ## Notes
 
 The most important constraint is **consistency**. This is not a random image generator. It is a single market beast evolving across 20 canonical states.
+tor. It is a single market beast evolving across 20 canonical states.

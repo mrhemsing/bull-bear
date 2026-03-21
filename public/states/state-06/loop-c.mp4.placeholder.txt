@@ -1,0 +1,3 @@
+state-06 / Moderately Bearish
+Drop approved loop C here.
+Expected runtime path: /states/state-06/loop-c.mp4

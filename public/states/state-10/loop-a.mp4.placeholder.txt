@@ -1,0 +1,3 @@
+state-10 / Neutral
+Drop approved loop A here.
+Expected runtime path: /states/state-10/loop-a.mp4

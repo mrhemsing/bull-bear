@@ -1,0 +1,3 @@
+state-14 / Moderately Bullish
+Drop approved still image here.
+Expected runtime path: /states/state-14/still.png

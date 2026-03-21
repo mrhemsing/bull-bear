@@ -1,0 +1,3 @@
+state-04 / Firmly Bearish
+Drop approved loop C here.
+Expected runtime path: /states/state-04/loop-c.mp4

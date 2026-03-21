@@ -1,0 +1,3 @@
+state-10 / Neutral
+Drop approved still image here.
+Expected runtime path: /states/state-10/still.png

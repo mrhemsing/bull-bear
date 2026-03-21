@@ -1,0 +1,3 @@
+state-02 / Very Strong Bearish
+Drop approved loop A here.
+Expected runtime path: /states/state-02/loop-a.mp4

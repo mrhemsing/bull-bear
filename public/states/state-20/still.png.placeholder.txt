@@ -1,0 +1,3 @@
+state-20 / Extremely Bullish
+Drop approved still image here.
+Expected runtime path: /states/state-20/still.png

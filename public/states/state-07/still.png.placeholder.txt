@@ -1,0 +1,3 @@
+state-07 / Lean Bearish
+Drop approved still image here.
+Expected runtime path: /states/state-07/still.png

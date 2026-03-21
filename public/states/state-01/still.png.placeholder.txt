@@ -1,0 +1,3 @@
+state-01 / Extremely Bearish
+Drop approved still image here.
+Expected runtime path: /states/state-01/still.png

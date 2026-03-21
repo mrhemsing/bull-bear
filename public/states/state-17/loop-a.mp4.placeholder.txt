@@ -1,0 +1,3 @@
+state-17 / Strong Bullish
+Drop approved loop A here.
+Expected runtime path: /states/state-17/loop-a.mp4
