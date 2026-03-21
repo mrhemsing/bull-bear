@@ -29,6 +29,6 @@
 
 ## Milestone 5 - polish
 - [x] Add component-score debug panel
-- [ ] Add chart-to-state synchronization
+- [x] Add chart-to-state synchronization
 - [ ] Improve responsive layout and visual design
 - [x] Add variant rotation logic for loop selection

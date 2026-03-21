@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { StateChart } from './state-chart';
 import type { FrameRecord } from '@/lib/types';
 
 function formatSignedNumber(value?: number, digits = 2) {
@@ -48,6 +49,8 @@ export function TimelineScrubber({ history }: { history: FrameRecord[] }) {
         </div>
         <div style={{ color: '#f6d06b', fontWeight: 700 }}>Selected: {selected.stateLabel ?? selected.stage}</div>
       </div>
+
+      <StateChart history={history} selectedIndex={selectedIndex} onSelect={setSelectedIndex} />
 
       <div style={{ background: '#121931', borderRadius: 18, padding: 18, border: '1px solid #24304f', marginBottom: 16 }}>
         <input
