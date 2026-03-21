@@ -25,16 +25,16 @@ export default async function HomePage() {
   const previousTransition = live.history[1] ?? null;
 
   return (
-    <main style={{ padding: 32, maxWidth: 1240, margin: '0 auto' }}>
+    <main style={{ padding: '24px clamp(16px, 3vw, 32px) 48px', maxWidth: 1240, margin: '0 auto' }}>
       <header style={{ marginBottom: 32 }}>
         <p style={{ textTransform: 'uppercase', letterSpacing: 2, color: '#8ea3c7', marginBottom: 8 }}>Bull Bear</p>
-        <h1 style={{ margin: 0, fontSize: 44 }}>The Bitcoin market beast</h1>
+        <h1 style={{ margin: 0, fontSize: 'clamp(2.2rem, 5vw, 44px)', lineHeight: 1.05 }}>The Bitcoin market beast</h1>
         <p style={{ maxWidth: 800, color: '#b4bfd3', lineHeight: 1.6 }}>
           A cinematic recurring creature driven by a live composite score from Fear &amp; Greed, BTC/USD vs MA7, and BTC/USD vs MA30. The live market maps into 20 canonical beast states, while the historical timeline only records actual state transitions.
         </p>
       </header>
 
-      <section style={{ display: 'grid', gridTemplateColumns: '1.45fr 1fr', gap: 24, marginBottom: 28 }}>
+      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24, marginBottom: 28, alignItems: 'start' }}>
         <div style={{ background: '#121931', borderRadius: 20, padding: 20, border: '1px solid #24304f' }}>
           <div style={{ color: '#8ea3c7', textTransform: 'uppercase', letterSpacing: 1.5, fontSize: 12, marginBottom: 12 }}>
             Live canonical state
@@ -57,7 +57,7 @@ export default async function HomePage() {
             <InlineBadge label="Asset source" value={live.assets.source} />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
             <HeroChip label="Score" value={formatSignedNumber(live.snapshot.finalScore)} />
             <HeroChip label="F&G" value={String(live.snapshot.fearAndGreed)} />
             <HeroChip label="MA7" value={formatUsd(live.snapshot.ma7)} />
@@ -80,10 +80,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 28 }}>
+      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, marginBottom: 28 }}>
         <div style={{ background: '#121931', borderRadius: 18, padding: 18, border: '1px solid #24304f' }}>
           <div style={{ color: '#8ea3c7', textTransform: 'uppercase', letterSpacing: 1, fontSize: 12, marginBottom: 8 }}>Live signal breakdown</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
             <HeroChip label="Sentiment score" value={formatSignedNumber(live.snapshot.sentimentScore)} />
             <HeroChip label="Trend 7 score" value={formatSignedNumber(live.snapshot.trend7Score)} />
             <HeroChip label="Trend 30 score" value={formatSignedNumber(live.snapshot.trend30Score)} />
@@ -133,7 +133,7 @@ function HeroChip({ label, value }: { label: string; value: string }) {
 
 function TimelineMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '10px 12px', borderRadius: 12, background: 'rgba(255,255,255,0.03)', border: '1px solid #2b3655' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, padding: '10px 12px', borderRadius: 12, background: 'rgba(255,255,255,0.03)', border: '1px solid #2b3655' }}>
       <div style={{ color: '#8ea3c7', fontSize: 13 }}>{label}</div>
       <div style={{ fontWeight: 700, textAlign: 'right' }}>{value}</div>
     </div>

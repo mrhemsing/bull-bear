@@ -10,7 +10,7 @@ export function HeroMedia({
   score: string;
 }) {
   return (
-    <div style={{ position: 'relative', aspectRatio: '16 / 9', borderRadius: 16, overflow: 'hidden', background: '#0c1327', border: '1px solid #2a3555' }}>
+    <div style={{ position: 'relative', aspectRatio: '16 / 9', minHeight: 280, borderRadius: 16, overflow: 'hidden', background: '#0c1327', border: '1px solid #2a3555' }}>
       {activeLoop ? (
         <video
           key={activeLoop}
@@ -39,12 +39,12 @@ export function HeroMedia({
         }}
       />
 
-      <div style={{ position: 'absolute', left: 18, right: 18, bottom: 18, display: 'flex', justifyContent: 'space-between', gap: 16, alignItems: 'end' }}>
+      <div style={{ position: 'absolute', left: 18, right: 18, bottom: 18, display: 'flex', justifyContent: 'space-between', gap: 16, alignItems: 'end', flexWrap: 'wrap' }}>
         <div>
           <div style={{ color: '#8ea3c7', textTransform: 'uppercase', letterSpacing: 1.5, fontSize: 12, marginBottom: 8 }}>
             {activeLoop ? 'Animation-first hero' : 'Still fallback hero'}
           </div>
-          <div style={{ fontSize: 30, fontWeight: 800, marginBottom: 6 }}>{stateLabel}</div>
+          <div style={{ fontSize: 'clamp(1.5rem, 4vw, 30px)', fontWeight: 800, marginBottom: 6, lineHeight: 1.05 }}>{stateLabel}</div>
           <div style={{ color: '#c5d0e7', lineHeight: 1.4, maxWidth: 540 }}>
             {activeLoop
               ? 'Loop variant is active for the current canonical market state.'

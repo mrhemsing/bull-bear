@@ -88,7 +88,7 @@ export function TimelineScrubber({ history }: { history: FrameRecord[] }) {
         </div>
       </div>
 
-      <article style={{ display: 'grid', gridTemplateColumns: '220px 1fr auto', gap: 16, background: '#121931', borderRadius: 16, padding: 16, border: '1px solid #24304f' }}>
+      <article style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, background: '#121931', borderRadius: 16, padding: 16, border: '1px solid #24304f' }}>
         <div style={{ aspectRatio: '16 / 9', borderRadius: 12, background: 'linear-gradient(135deg, #45315f, #131c35)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 14, color: '#c6d1e8' }}>
           <div style={{ fontSize: 12, color: '#8ea3c7', textTransform: 'uppercase', letterSpacing: 1 }}>Selected transition</div>
           <div style={{ fontWeight: 700, fontSize: 22 }}>{selected.stateLabel ?? selected.stage}</div>
@@ -112,7 +112,7 @@ export function TimelineScrubber({ history }: { history: FrameRecord[] }) {
           </div>
         </div>
 
-        <div style={{ alignSelf: 'center', color: '#f6d06b', fontWeight: 700, textAlign: 'right' }}>
+        <div style={{ alignSelf: 'center', color: '#f6d06b', fontWeight: 700, textAlign: 'right', justifySelf: 'end' }}>
           <div style={{ fontSize: 28 }}>{selected.stateIndex ?? '—'}</div>
           <div style={{ color: '#8ea3c7', fontSize: 12, marginTop: 4 }}>state index</div>
         </div>

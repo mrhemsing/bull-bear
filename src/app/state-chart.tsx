@@ -40,7 +40,7 @@ export function StateChart({
         <div style={{ color: '#8ea3c7' }}>Higher = more bullish · click any point to sync selection</div>
       </div>
 
-      <div style={{ position: 'relative', height: 220, padding: '12px 0 28px' }}>
+      <div style={{ position: 'relative', height: 220, padding: '12px 0 28px', overflowX: 'auto' }}>
         <div style={{ position: 'absolute', inset: '12px 0 28px 0', display: 'grid', gridTemplateRows: 'repeat(5, 1fr)' }}>
           {[20, 15, 10, 5, 1].map((tick) => (
             <div key={tick} style={{ borderTop: '1px solid rgba(142,163,199,0.16)', position: 'relative' }}>
@@ -49,7 +49,7 @@ export function StateChart({
           ))}
         </div>
 
-        <div style={{ position: 'absolute', inset: '12px 0 28px 0', display: 'flex', alignItems: 'end', gap: 10 }}>
+        <div style={{ position: 'absolute', inset: '12px 0 28px 0', display: 'flex', alignItems: 'end', gap: 10, minWidth: 'max(100%, 480px)' }}>
           {history.map((frame, index) => {
             const stateIndex = frame.stateIndex ?? 10;
             const normalized = (stateIndex - minState) / (maxState - minState);
