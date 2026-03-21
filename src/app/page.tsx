@@ -1,4 +1,5 @@
 import { getLiveMarketBeastState } from '@/lib/live-state';
+import { TimelineScrubber } from './timeline-scrubber';
 
 function formatSignedNumber(value?: number, digits = 2) {
   if (value === undefined || value === null || Number.isNaN(value)) return '—';
@@ -91,43 +92,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <h2 style={{ margin: 0 }}>State transition timeline</h2>
-          <span style={{ color: '#8ea3c7' }}>{live.history.length} saved transitions</span>
-        </div>
-        <div style={{ display: 'grid', gap: 14 }}>
-          {live.history.map((frame, index) => {
-            const previous = live.history[index + 1];
-            return (
-              <article key={frame.id} style={{ display: 'grid', gridTemplateColumns: '200px 1fr auto', gap: 16, background: '#121931', borderRadius: 16, padding: 16, border: '1px solid #24304f' }}>
-                <div style={{ aspectRatio: '16 / 9', borderRadius: 12, background: 'linear-gradient(135deg, #45315f, #131c35)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 14, color: '#c6d1e8' }}>
-                  <div style={{ fontSize: 12, color: '#8ea3c7', textTransform: 'uppercase', letterSpacing: 1 }}>State {frame.stateIndex ?? '—'}</div>
-                  <div style={{ fontWeight: 700 }}>{frame.stateLabel ?? frame.stage}</div>
-                  <div style={{ fontSize: 12, color: '#9cb0d5' }}>{frame.imageUrl}</div>
-                </div>
-                <div>
-                  <div style={{ fontWeight: 700, marginBottom: 6 }}>{new Date(frame.timestamp).toLocaleString()}</div>
-                  <div style={{ color: '#b4bfd3', marginBottom: 6 }}>
-                    BTC/USD {formatUsd(frame.currentPrice)} · score {formatSignedNumber(frame.finalScore)} · F&amp;G {frame.fearAndGreed ?? '—'}
-                  </div>
-                  <div style={{ color: '#b4bfd3', marginBottom: 6 }}>
-                    MA7 {formatUsd(frame.ma7)} · MA30 {formatUsd(frame.ma30)} · {frame.direction}
-                  </div>
-                  <div style={{ color: '#8ea3c7', fontSize: 13, marginBottom: 6 }}>{frame.notes ?? frame.prompt}</div>
-                  <div style={{ color: '#f6d06b', fontSize: 13, fontWeight: 700 }}>
-                    {formatRelativeStateChange(frame.stateIndex, previous?.stateIndex)}
-                  </div>
-                </div>
-                <div style={{ alignSelf: 'center', color: '#f6d06b', fontWeight: 700, textAlign: 'right' }}>
-                  <div>{frame.intensity}%</div>
-                  <div style={{ color: '#8ea3c7', fontSize: 12, marginTop: 4 }}>{frame.provider}</div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
+      <TimelineScrubber history={live.history} />
     </main>
   );
 }

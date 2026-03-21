@@ -25,7 +25,7 @@
 - [ ] Load current state from composite score
 - [ ] Resolve current still + loop assets from manifest
 - [ ] Show animation-first hero state in UI
-- [ ] Add timeline scrubber and state history
+- [x] Add timeline scrubber and state history
 
 ## Milestone 5 - polish
 - [ ] Add component-score debug panel

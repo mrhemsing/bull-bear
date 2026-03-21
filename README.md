@@ -38,6 +38,7 @@ Instead of generating a brand new image every hour, V1 uses a pre-generated cano
 - State-aware UI foundation
 - State-transition-only persistence gating
 - Live state resolver for current display + transition history
+- Interactive transition timeline scrubber
 - Canonical still prompt pack
 - Exportable state prompt dataset for stills + loops
 - fal.ai animation prompt documentation and workflow scaffolding
