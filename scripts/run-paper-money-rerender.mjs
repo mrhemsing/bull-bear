@@ -224,7 +224,9 @@ const reviewChecklist = matchingQueue.map((job) => {
   const generation = generationResultByStateVariant.get(key) ?? null;
   const review = reviewResultByStateVariant.get(key) ?? null;
   const reviewFrame = review?.reviewFrame ?? null;
+  const seamEndFrame = review?.seamEndFrame ?? null;
   const reviewFrameFilesystemPath = reviewFrame ? path.join(root, reviewFrame.replace(/\//g, path.sep)) : null;
+  const seamEndFrameFilesystemPath = seamEndFrame ? path.join(root, seamEndFrame.replace(/\//g, path.sep)) : null;
   return {
     stateId: job.stateId,
     stateIndex: job.stateIndex,
@@ -236,9 +238,13 @@ const reviewChecklist = matchingQueue.map((job) => {
     generationNotes: generation?.notes ?? null,
     generationModel: generation?.model ?? selectedModel,
     reviewFrame,
+    seamEndFrame,
     reviewFrameFilesystemPath,
+    seamEndFrameFilesystemPath,
     reviewStatus: review?.status ?? 'not-recorded',
+    seamStatus: review?.seamStatus ?? 'not-recorded',
     reviewNotes: review?.notes ?? null,
+    seamNotes: review?.seamNotes ?? null,
   };
 });
 
@@ -261,6 +267,8 @@ const summary = {
   staleReviewFramesCount: matchingReviewResults.filter((item) => item.status === 'stale-source-loop').length,
   missingLoopFileReviewCount: matchingReviewResults.filter((item) => item.status === 'missing-loop-file').length,
   failedReviewCount: matchingReviewResults.filter((item) => item.status === 'failed').length,
+  seamReadyCount: reviewChecklist.filter((item) => item.seamStatus === 'ready-for-comparison' || item.seamStatus === 'comparison-ready').length,
+  seamBlockedCount: reviewChecklist.filter((item) => item.seamStatus !== 'ready-for-comparison' && item.seamStatus !== 'comparison-ready').length,
   regressionScan,
   reviewChecklist,
   reportJson: relativeFromRoot(reportJsonPath),
@@ -303,6 +311,8 @@ const mdLines = [
   `Stale review frames: ${summary.staleReviewFramesCount}`,
   `Missing-loop review frames: ${summary.missingLoopFileReviewCount}`,
   `Failed review frames: ${summary.failedReviewCount}`,
+  `Seam-review ready frames: ${summary.seamReadyCount}`,
+  `Seam-review blocked frames: ${summary.seamBlockedCount}`,
   `Paper-money regression matches: ${summary.regressionScan.totalMatches}`,
   '',
   '## Batch artifacts',
@@ -335,20 +345,25 @@ const mdLines = [
       ]),
   '## Review checklist',
   '',
-  '| State | Label | Variant | Loop target | Review frame | Generation | Review status |',
-  '| --- | --- | --- | --- | --- | --- | --- |',
-  ...summary.reviewChecklist.map((item) => `| ${item.stateId} | ${item.label} | ${String(item.variant ?? '').toUpperCase() || '—'} | \`${item.target}\` | ${item.reviewFrame ? `\`${item.reviewFrame}\`` : '—'} | ${item.generationStatus} | ${item.reviewStatus} |`),
+  '| State | Label | Variant | Loop target | Start frame | End frame | Generation | Review status | Seam status |',
+  '| --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+  ...summary.reviewChecklist.map((item) => `| ${item.stateId} | ${item.label} | ${String(item.variant ?? '').toUpperCase() || '—'} | \`${item.target}\` | ${item.reviewFrame ? `\`${item.reviewFrame}\`` : '—'} | ${item.seamEndFrame ? `\`${item.seamEndFrame}\`` : '—'} | ${item.generationStatus} | ${item.reviewStatus} | ${item.seamStatus} |`),
   '',
   '### Acceptance notes',
   '',
   ...summary.reviewChecklist.flatMap((item) => [
-    `- ${item.stateId}${item.variant ? `/${item.variant}` : ''}: ${item.reviewStatus === 'stale-source-loop' ? 'do not use the extracted frame as fresh acceptance proof until generation succeeds; it may still reflect the prior on-disk loop.' : `open ${item.reviewFrame ? `\`${item.reviewFrame}\`` : 'the extracted review frame'} and compare it against \`${item.target}\` before re-approval.`}`,
+    `- ${item.stateId}${item.variant ? `/${item.variant}` : ''}: ${item.reviewStatus === 'stale-source-loop' ? 'do not use the extracted frames as fresh acceptance proof until generation succeeds; they may still reflect the prior on-disk loop.' : `open the extracted start/end review frames and compare them against \`${item.target}\` before re-approval.`}`,
     `  - Generation model: \`${item.generationModel}\``,
     `  - Review gallery: \`${summary.reviewGallery}\``,
+    `  - Open review gallery directly: \`start "" "${summary.reviewGalleryFilesystemPath}"\``,
     `  - Loop file: \`${item.targetFilesystemPath}\``,
-    ...(item.reviewFrameFilesystemPath ? [`  - Review frame file: \`${item.reviewFrameFilesystemPath}\``] : []),
+    ...(item.reviewFrameFilesystemPath ? [`  - Start review frame file: \`${item.reviewFrameFilesystemPath}\``] : []),
+    ...(item.reviewFrameFilesystemPath ? [`  - Open start review frame directly: \`start "" "${item.reviewFrameFilesystemPath}"\``] : []),
+    ...(item.seamEndFrameFilesystemPath ? [`  - End review frame file: \`${item.seamEndFrameFilesystemPath}\``] : []),
+    ...(item.seamEndFrameFilesystemPath ? [`  - Open end review frame directly: \`start "" "${item.seamEndFrameFilesystemPath}"\``] : []),
     ...(item.generationNotes ? [`  - Generation: ${item.generationNotes}`] : []),
     ...(item.reviewNotes ? [`  - Review: ${item.reviewNotes}`] : []),
+    ...(item.seamNotes ? [`  - Seam review: ${item.seamNotes}`] : []),
   ]),
   '',
   '## Steps',
@@ -371,7 +386,9 @@ const mdLines = [
   '- [ ] Confirm replacement generation actually ran on a host with `FAL_KEY` (the generation status should no longer be `blocked-missing-fal-key`).',
   '- [ ] Reopen this report and use it as the source of truth for acceptance (`data/generated/paper-money-rerender-report.md`).',
   '- [ ] If the review status is `stale-source-loop`, do not treat the extracted PNG/gallery as fresh rerender evidence; rerun generation successfully first.',
-  '- [ ] Open the review gallery (`data/generated/loop-review-frames.html`) or each listed PNG and confirm paper-money imagery is gone in the replacement `loop-b` output.',
+  '- [ ] Open the review gallery (`data/generated/loop-review-frames.html`) or each listed PNG pair and confirm paper-money imagery is gone in the replacement `loop-b` output.',
+  '- [ ] Confirm seam status is review-ready before trusting the extracted frame pair (`ready-for-comparison` / `comparison-ready`); if seam status is anything else, do not approve the loop yet.',
+  '- [ ] Compare the extracted start/end frames for each loop and reject any rerender where the composition, animal position, or environment does not land back in the same place without a visible restart snap.',
   '- [ ] Verify the rerender metadata/results still contain 0 paper-money regressions before re-approving the loops (`Paper-money regression matches: 0` in this report).',
   '- [ ] Only widen rerender scope beyond states 01 / 10 / 20 after the targeted batch passes the visual review.',
   '',
@@ -379,9 +396,11 @@ const mdLines = [
   '',
   summary.staleReviewFramesCount > 0
     ? `Generation has not produced fresh proof yet for ${summary.staleReviewFramesCount} review item(s); rerun the same command with model \`${summary.model}\`${summary.timeoutMs ? ` and the recorded ${summary.timeoutMs}ms timeout` : ''} until generation succeeds, then use the refreshed gallery/report for acceptance.`
-    : hasFalKey
-      ? `Visually inspect the extracted replacement frames from model \`${summary.model}\`, then reopen \`${summary.reportMd}\` and complete the acceptance checklist before re-approving the rerendered loops.`
-      : `Run the same command on the first host with \`FAL_KEY\`${summary.timeoutMs ? ` using the recorded timeout override (${summary.timeoutMs}ms)` : ''}, then reopen \`${summary.reportMd}\` and use the listed frame paths plus acceptance checklist before re-approval.`
+    : summary.seamBlockedCount > 0
+      ? `Fresh rerender output exists, but ${summary.seamBlockedCount} loop(s) are not seam-review ready yet. Regenerate or re-extract until the report shows seam status \`ready-for-comparison\` / \`comparison-ready\`, then do the visual approval pass.`
+      : hasFalKey
+        ? `Visually inspect the extracted replacement start/end frame pairs from model \`${summary.model}\`, then reopen \`${summary.reportMd}\` and complete the acceptance checklist before re-approving the rerendered loops.`
+        : `Run the same command on the first host with \`FAL_KEY\`${summary.timeoutMs ? ` using the recorded timeout override (${summary.timeoutMs}ms)` : ''}, then reopen \`${summary.reportMd}\` and use the listed frame paths plus acceptance checklist before re-approval.`
 ];
 
 await fs.writeFile(reportMdPath, `${mdLines.join('\n')}\n`);

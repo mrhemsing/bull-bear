@@ -1,6 +1,6 @@
 {
-  "startedAt": "2026-03-30T13:46:28.053Z",
-  "finishedAt": "2026-03-30T13:47:53.694Z",
+  "startedAt": "2026-03-30T16:01:08.085Z",
+  "finishedAt": "2026-03-30T16:02:30.659Z",
   "states": [
     "state-20"
   ],
@@ -17,6 +17,8 @@
   "staleReviewFramesCount": 0,
   "missingLoopFileReviewCount": 0,
   "failedReviewCount": 0,
+  "seamReadyCount": 1,
+  "seamBlockedCount": 0,
   "regressionScan": {
     "terms": [
       "paper money",
@@ -50,9 +52,13 @@
       "generationNotes": "Generated loop and saved it to the canonical runtime target.",
       "generationModel": "fal-ai/kling-video/v2.1/standard/image-to-video",
       "reviewFrame": "out/loop-review-frames/state-20-b/state-20-b-frame-0.png",
+      "seamEndFrame": "out/loop-review-frames/state-20-b/state-20-b-frame-end.png",
       "reviewFrameFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\loop-review-frames\\state-20-b\\state-20-b-frame-0.png",
+      "seamEndFrameFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\loop-review-frames\\state-20-b\\state-20-b-frame-end.png",
       "reviewStatus": "extracted",
-      "reviewNotes": "Representative frame extracted at 0s for visual loop review."
+      "seamStatus": "ready-for-comparison",
+      "reviewNotes": "Representative start frame extracted at 0s for visual loop review.",
+      "seamNotes": "End frame extracted 0.1s before the loop ended for seamless-loop review."
     }
   ],
   "reportJson": "data/generated/paper-money-rerender-report.json",

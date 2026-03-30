@@ -6,10 +6,14 @@
     "variant": "b",
     "source": "public/states/state-20/loop-b.mp4",
     "reviewFrame": "out/loop-review-frames/state-20-b/state-20-b-frame-0.png",
-    "extractedAt": "2026-03-30T13:47:53.504Z",
+    "seamEndFrame": "out/loop-review-frames/state-20-b/state-20-b-frame-end.png",
+    "seamStatus": "ready-for-comparison",
+    "seamNotes": "End frame extracted 0.1s before the loop ended for seamless-loop review.",
+    "seamExtractionMode": "end-offset",
+    "extractedAt": "2026-03-30T16:02:30.165Z",
     "generationStatus": "generated",
     "generationNotes": "Generated loop and saved it to the canonical runtime target.",
     "status": "extracted",
-    "notes": "Representative frame extracted at 0s for visual loop review."
+    "notes": "Representative start frame extracted at 0s for visual loop review."
   }
 ]
