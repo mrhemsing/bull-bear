@@ -11,6 +11,7 @@
     "assets:prepare": "node scripts/prepare-canonical-assets.mjs",
     "generate:stills": "node scripts/run-image-generation-jobs.mjs",
     "promote:still": "node scripts/promote-still-candidate.mjs",
+    "review:still-pick": "node scripts/build-pending-still-pick.mjs",
     "generate:loops": "node scripts/run-loop-generation-jobs.mjs",
     "review:loops": "node scripts/extract-loop-review-frames.mjs",
     "rerender:paper-money": "node scripts/run-paper-money-rerender.mjs",

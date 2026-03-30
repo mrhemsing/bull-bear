@@ -1,0 +1,39 @@
+{
+  "recordedAt": "2026-03-30T21:56:47.163Z",
+  "sourceReviewRecordedAt": "2026-03-30T21:25:25.682Z",
+  "stateFilter": "state-20",
+  "pending": [
+    {
+      "stateId": "state-20",
+      "stateIndex": 20,
+      "label": "Extremely Bullish",
+      "canonicalTarget": "/states/state-20/still.png",
+      "overviewPath": "out/state-20-still-regeneration/state-20-still-regeneration-overview.png",
+      "overviewFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-overview.png",
+      "reviewHtml": "data/generated/still-candidate-review.html",
+      "reviewMarkdown": "data/generated/still-candidate-review.md",
+      "candidates": [
+        {
+          "index": 1,
+          "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-01.png",
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-compare.png",
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=1 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+        },
+        {
+          "index": 2,
+          "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-02.png",
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-compare.png",
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=2 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+        },
+        {
+          "index": 3,
+          "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-03.png",
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-compare.png",
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=3 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+        }
+      ],
+      "decisionStatus": "pending-human-pick",
+      "nextAction": "Choose exactly one candidate and run its listed promote:still command without --dry-run."
+    }
+  ]
+}
