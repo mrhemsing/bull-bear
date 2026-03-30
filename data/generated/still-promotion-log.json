@@ -1,0 +1,17 @@
+[
+  {
+    "recordedAt": "2026-03-30T18:55:33.422Z",
+    "stateId": "state-20",
+    "stateIndex": 20,
+    "label": "Extremely Bullish",
+    "candidate": 1,
+    "source": "out/state-20-still-regeneration/state-20-still-regeneration-01.png",
+    "sourceFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01.png",
+    "target": "/states/state-20/still.png",
+    "targetFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\public\\states\\state-20\\still.png",
+    "provider": "fal.ai",
+    "model": "fal-ai/flux/dev/image-to-image",
+    "referenceImage": "out/state-20-still-regeneration/state-20-still-reference.png",
+    "dryRun": true
+  }
+]
