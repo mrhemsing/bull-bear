@@ -1,0 +1,24 @@
+[
+  {
+    "stateId": "state-20",
+    "stateIndex": 20,
+    "label": "Extremely Bullish",
+    "provider": "openclaw-image-generate",
+    "mode": "edit",
+    "model": "openai/gpt-image-1",
+    "image": "out/state-20-still-regeneration/state-20-still-reference.png",
+    "prompt": "Create a cleaned replacement canonical still for Bull Bear state-20 (Extremely Bullish) using the provided current canonical still as the exact identity anchor. Preserve the same recurring hybrid bull-bear titan, same anatomy, same species, same centered low-angle hero framing, same Wall Street destruction environment, and the same premium photoreal dark-fantasy finish. Target state prompt: colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, maximum bullish dominance, gigantic horns, maximum chest and shoulder power, heavy hoof impact, blazing emerald eyes, heated gold-ember atmosphere, unstoppable upward market fury, only the slightest trace of bear ancestry Remove any floating paper scraps, banknotes, flyers, tickets, posters, confetti, or other rectangular debris from the image. Keep the atmosphere limited to smoke, haze, ember grit, lighting, rubble, and creature presence only. No text, no logos, no collage, no extra creatures, no costume changes, and no radical camera change.",
+    "count": 3,
+    "size": "1536x1024",
+    "outputDir": "out/state-20-still-regeneration",
+    "canonicalTarget": "/states/state-20/still.png",
+    "suggestedOutputs": [
+      "state-20-still-regeneration-01.png",
+      "state-20-still-regeneration-02.png",
+      "state-20-still-regeneration-03.png"
+    ],
+    "renderManifestPath": "out/state-20-still-regeneration/render-manifest.json",
+    "renderPromptPath": "out/state-20-still-regeneration/render-prompt.txt",
+    "notes": "Provider-ready still image-edit request for replacing a contaminated approved canonical still."
+  }
+]
