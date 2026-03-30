@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Still candidate review</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { font-family: Inter, Segoe UI, Arial, sans-serif; margin: 24px; background: #0b1020; color: #e8ecf3; }
+    h1, h2, h3, p { margin: 0 0 12px; }
+    .meta { color: #aab6cc; margin-bottom: 24px; }
+    .entry { background: #121a2b; border: 1px solid #25324a; border-radius: 14px; padding: 18px; margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 16px; }
+    figure { margin: 0; background: #0f1727; border: 1px solid #2d3b57; border-radius: 12px; padding: 12px; }
+    img { display: block; width: 100%; height: auto; border-radius: 8px; background: #05070d; }
+    figcaption { margin-top: 10px; color: #cdd7e8; font-size: 13px; }
+    code { color: #8ee6ff; }
+    ul { color: #cdd7e8; }
+  </style>
+</head>
+<body>
+  <h1>Still candidate review</h1>
+  <p class="meta">Recorded at 2026-03-30T17:58:25.867Z · State filter: state-20</p>
+  <section class="entry">
+    <h2>state-20 · Extremely Bullish</h2>
+    <p><strong>Provider:</strong> <code>fal.ai</code> · <strong>Model:</strong> <code>fal-ai/flux/dev/image-to-image</code></p>
+    <p><strong>Canonical target:</strong> <code>/states/state-20/still.png</code></p>
+    <p><strong>Reference still:</strong> <code>out/state-20-still-regeneration/state-20-still-reference.png</code></p>
+    <div class="grid">
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-reference.png" alt="state-20 contaminated reference still" />
+        <figcaption>Reference still (current contaminated anchor)</figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-01.png" alt="state-20 still candidate 1" />
+        <figcaption>Candidate 1 · <code>out/state-20-still-regeneration/state-20-still-regeneration-01.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-02.png" alt="state-20 still candidate 2" />
+        <figcaption>Candidate 2 · <code>out/state-20-still-regeneration/state-20-still-regeneration-02.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-03.png" alt="state-20 still candidate 3" />
+        <figcaption>Candidate 3 · <code>out/state-20-still-regeneration/state-20-still-regeneration-03.png</code></figcaption>
+      </figure>
+    </div>
+    <h3>Acceptance checklist</h3>
+    <ul>
+      <li>Reject any candidate that still contains paper-like debris, flyers, slips, bills, or rectangular scrap shapes.</li>
+      <li>Reject any candidate that drifts too far from the approved creature identity, anatomy, framing, or environment.</li>
+      <li>Pick exactly one candidate to promote as the cleaned still anchor before rerendering loops again.</li>
+      <li>After choosing the still, rerun the affected loop and repeat debris + seamless-loop review.</li>
+    </ul>
+  </section>
+</body>
+</html>

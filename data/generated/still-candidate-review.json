@@ -1,0 +1,36 @@
+{
+  "recordedAt": "2026-03-30T17:58:25.867Z",
+  "stateFilter": "state-20",
+  "entries": [
+    {
+      "stateId": "state-20",
+      "stateIndex": 20,
+      "label": "Extremely Bullish",
+      "provider": "fal.ai",
+      "model": "fal-ai/flux/dev/image-to-image",
+      "canonicalTarget": "/states/state-20/still.png",
+      "referenceImage": "out/state-20-still-regeneration/state-20-still-reference.png",
+      "referenceImageFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-reference.png",
+      "renderManifestPath": "out/state-20-still-regeneration/render-manifest.json",
+      "renderPromptPath": "out/state-20-still-regeneration/render-prompt.txt",
+      "outputs": [
+        {
+          "index": 1,
+          "path": "out/state-20-still-regeneration/state-20-still-regeneration-01.png",
+          "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01.png"
+        },
+        {
+          "index": 2,
+          "path": "out/state-20-still-regeneration/state-20-still-regeneration-02.png",
+          "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02.png"
+        },
+        {
+          "index": 3,
+          "path": "out/state-20-still-regeneration/state-20-still-regeneration-03.png",
+          "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03.png"
+        }
+      ],
+      "notes": "Generated 3 still candidate(s)."
+    }
+  ]
+}
