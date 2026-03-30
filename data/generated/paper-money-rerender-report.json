@@ -1,18 +1,20 @@
 {
-  "startedAt": "2026-03-30T13:24:27.495Z",
-  "finishedAt": "2026-03-30T13:35:58.693Z",
+  "startedAt": "2026-03-30T13:46:28.053Z",
+  "finishedAt": "2026-03-30T13:47:53.694Z",
   "states": [
     "state-20"
   ],
   "variant": "b",
   "prepOnly": false,
   "hasFalKey": true,
+  "model": "fal-ai/kling-video/v2.1/standard/image-to-video",
   "timeoutMs": 900000,
   "queueJobs": 1,
-  "generatedCount": 0,
+  "generatedCount": 1,
   "blockedMissingFalKeyCount": 0,
-  "failedGenerationCount": 1,
-  "extractedReviewFramesCount": 0,
+  "failedGenerationCount": 0,
+  "extractedReviewFramesCount": 1,
+  "staleReviewFramesCount": 0,
   "missingLoopFileReviewCount": 0,
   "failedReviewCount": 0,
   "regressionScan": {
@@ -44,12 +46,13 @@
       "variant": "b",
       "target": "public/states/state-20/loop-b.mp4",
       "targetFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\public\\states\\state-20\\loop-b.mp4",
-      "generationStatus": "failed",
-      "generationNotes": "Gateway Timeout",
+      "generationStatus": "generated",
+      "generationNotes": "Generated loop and saved it to the canonical runtime target.",
+      "generationModel": "fal-ai/kling-video/v2.1/standard/image-to-video",
       "reviewFrame": "out/loop-review-frames/state-20-b/state-20-b-frame-0.png",
       "reviewFrameFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\loop-review-frames\\state-20-b\\state-20-b-frame-0.png",
-      "reviewStatus": "stale-source-loop",
-      "reviewNotes": "Generation result is failed (Gateway Timeout), so this extracted frame may still reflect the pre-rerender loop on disk."
+      "reviewStatus": "extracted",
+      "reviewNotes": "Representative frame extracted at 0s for visual loop review."
     }
   ],
   "reportJson": "data/generated/paper-money-rerender-report.json",
@@ -70,16 +73,16 @@
       "kind": "generate-loop",
       "stateId": "state-20",
       "variant": "b",
-      "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/run-loop-generation-jobs.mjs --state=state-20 --variant=b",
+      "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/run-loop-generation-jobs.mjs --state=state-20 --variant=b --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
       "code": 0,
-      "stdout": "Starting loop job state-20/b with model fal-ai/minimax/video-01/image-to-video.\nProcessed 1 loop generation job(s) with model fal-ai/minimax/video-01/image-to-video. Results written to data/generated/canonical-loop-generation-results.json.\n",
+      "stdout": "Starting loop job state-20/b with model fal-ai/kling-video/v2.1/standard/image-to-video.\nCompleted loop job state-20/b -> public/states/state-20/loop-b.mp4.\nProcessed 1 loop generation job(s) with model fal-ai/kling-video/v2.1/standard/image-to-video. Results written to data/generated/canonical-loop-generation-results.json.\n",
       "stderr": ""
     },
     {
       "kind": "review-frames",
       "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/extract-loop-review-frames.mjs --states=state-20 --variant=b --overwrite",
       "code": 0,
-      "stdout": "Processed 1 loop review-frame job(s): 0 extracted, 1 stale-source-loop, 0 missing-loop-file, 0 failed.\nWrote data/generated/loop-review-frames.json, data/generated/loop-review-frames.md, and data/generated/loop-review-frames.html.\n",
+      "stdout": "Processed 1 loop review-frame job(s): 1 extracted, 0 stale-source-loop, 0 missing-loop-file, 0 failed.\nWrote data/generated/loop-review-frames.json, data/generated/loop-review-frames.md, and data/generated/loop-review-frames.html.\n",
       "stderr": ""
     }
   ]

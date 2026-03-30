@@ -47,6 +47,7 @@ await loadDotEnvLocal();
 const statesArg = process.argv.find((arg) => arg.startsWith('--states='));
 const variantArg = process.argv.find((arg) => arg.startsWith('--variant='));
 const timeoutArg = process.argv.find((arg) => arg.startsWith('--timeout-ms='));
+const modelArg = process.argv.find((arg) => arg.startsWith('--model='));
 const prepOnly = process.argv.includes('--prep-only');
 const overwriteReviewFrames = process.argv.includes('--overwrite-review-frames') || process.argv.includes('--overwrite');
 const selectedStates = (statesArg ? statesArg.split('=')[1] : 'state-01,state-10,state-20')
@@ -55,6 +56,7 @@ const selectedStates = (statesArg ? statesArg.split('=')[1] : 'state-01,state-10
   .filter(Boolean);
 const selectedVariant = (variantArg ? variantArg.split('=')[1].trim().toLowerCase() : null) || null;
 const selectedTimeoutMs = timeoutArg ? timeoutArg.split('=')[1].trim() : (process.env.FAL_VIDEO_TIMEOUT_MS?.trim() || null);
+const selectedModel = modelArg ? modelArg.split('=')[1].trim() : (process.env.FAL_VIDEO_MODEL?.trim() || 'fal-ai/minimax/video-01/image-to-video');
 const hasFalKey = Boolean(process.env.FAL_KEY?.trim());
 const startedAt = new Date().toISOString();
 
@@ -72,6 +74,7 @@ const runNodeScript = (scriptRelativePath, args = []) => new Promise((resolve) =
     env: {
       ...process.env,
       ...(selectedTimeoutMs ? { FAL_VIDEO_TIMEOUT_MS: selectedTimeoutMs } : {}),
+      ...(selectedModel ? { FAL_VIDEO_MODEL: selectedModel } : {}),
     },
   });
 
@@ -168,6 +171,7 @@ if (!prepOnly) {
     const generateArgs = [`--state=${state}`];
     if (selectedVariant) generateArgs.push(`--variant=${selectedVariant}`);
     if (selectedTimeoutMs) generateArgs.push(`--timeout-ms=${selectedTimeoutMs}`);
+    if (selectedModel) generateArgs.push(`--model=${selectedModel}`);
     const stepResult = {
       kind: 'generate-loop',
       stateId: state,
@@ -230,6 +234,7 @@ const reviewChecklist = matchingQueue.map((job) => {
     targetFilesystemPath: path.join(root, job.loopTargetFilesystemPath.replace(/\//g, path.sep)),
     generationStatus: generation?.status ?? 'not-recorded',
     generationNotes: generation?.notes ?? null,
+    generationModel: generation?.model ?? selectedModel,
     reviewFrame,
     reviewFrameFilesystemPath,
     reviewStatus: review?.status ?? 'not-recorded',
@@ -246,6 +251,7 @@ const summary = {
   variant: selectedVariant,
   prepOnly,
   hasFalKey,
+  model: selectedModel,
   timeoutMs: selectedTimeoutMs ? Number.parseInt(selectedTimeoutMs, 10) : null,
   queueJobs: matchingQueue.length,
   generatedCount: matchingLoopResults.filter((item) => item.status === 'generated').length,
@@ -268,7 +274,7 @@ const summary = {
 
 await fs.writeFile(reportJsonPath, `${JSON.stringify(summary, null, 2)}\n`);
 
-const rerunCommand = `npm run rerender:paper-money -- --states=${summary.states.join(',')}${summary.variant ? ` --variant=${summary.variant}` : ''}${summary.timeoutMs ? ` --timeout-ms=${summary.timeoutMs}` : ''} --overwrite-review-frames`;
+const rerunCommand = `npm run rerender:paper-money -- --states=${summary.states.join(',')}${summary.variant ? ` --variant=${summary.variant}` : ''}${summary.model ? ` --model=${summary.model}` : ''}${summary.timeoutMs ? ` --timeout-ms=${summary.timeoutMs}` : ''} --overwrite-review-frames`;
 
 const mdLines = [
   '# Paper-money rerender report',
@@ -287,6 +293,7 @@ const mdLines = [
   `Variant: ${summary.variant ?? 'all queued variants'}`,
   `Prep only: ${summary.prepOnly ? 'yes' : 'no'}`,
   `FAL_KEY present: ${summary.hasFalKey ? 'yes' : 'no'}`,
+  `Model override: ${summary.model}`,
   `Timeout override ms: ${summary.timeoutMs ?? 'default'}`,
   `Queued jobs in scope: ${summary.queueJobs}`,
   `Generated loops: ${summary.generatedCount}`,
@@ -336,6 +343,7 @@ const mdLines = [
   '',
   ...summary.reviewChecklist.flatMap((item) => [
     `- ${item.stateId}${item.variant ? `/${item.variant}` : ''}: ${item.reviewStatus === 'stale-source-loop' ? 'do not use the extracted frame as fresh acceptance proof until generation succeeds; it may still reflect the prior on-disk loop.' : `open ${item.reviewFrame ? `\`${item.reviewFrame}\`` : 'the extracted review frame'} and compare it against \`${item.target}\` before re-approval.`}`,
+    `  - Generation model: \`${item.generationModel}\``,
     `  - Review gallery: \`${summary.reviewGallery}\``,
     `  - Loop file: \`${item.targetFilesystemPath}\``,
     ...(item.reviewFrameFilesystemPath ? [`  - Review frame file: \`${item.reviewFrameFilesystemPath}\``] : []),
@@ -349,12 +357,6 @@ const mdLines = [
   '| --- | --- | --- | --- |',
   ...steps.map((step) => `| ${step.kind} | ${step.stateId ? `${step.stateId}${step.variant ? `/${step.variant}` : ''}` : summary.states.join(', ')} | ${step.code} | \`${step.command.replace(/\|/g, '\\|')}\` |`),
   '',
-  ...(summary.timeoutMs
-    ? [
-        `Recorded provider timeout override: \`${summary.timeoutMs}\` ms. Confirm each \`generate-loop\` command above includes \`--timeout-ms=${summary.timeoutMs}\` before trusting a failed rerun report.`,
-        '',
-      ]
-    : []),
   '## Output artifacts',
   '',
   '- `data/generated/canonical-loop-render-jobs.json`',
@@ -376,9 +378,9 @@ const mdLines = [
   '## Next action',
   '',
   summary.staleReviewFramesCount > 0
-    ? `Generation has not produced fresh proof yet for ${summary.staleReviewFramesCount} review item(s); rerun the same command${summary.timeoutMs ? ` with the recorded ${summary.timeoutMs}ms timeout` : ''} until generation succeeds, then use the refreshed gallery/report for acceptance.`
+    ? `Generation has not produced fresh proof yet for ${summary.staleReviewFramesCount} review item(s); rerun the same command with model \`${summary.model}\`${summary.timeoutMs ? ` and the recorded ${summary.timeoutMs}ms timeout` : ''} until generation succeeds, then use the refreshed gallery/report for acceptance.`
     : hasFalKey
-      ? `Visually inspect the extracted replacement frames, then reopen \`${summary.reportMd}\` and complete the acceptance checklist before re-approving the rerendered loops.`
+      ? `Visually inspect the extracted replacement frames from model \`${summary.model}\`, then reopen \`${summary.reportMd}\` and complete the acceptance checklist before re-approving the rerendered loops.`
       : `Run the same command on the first host with \`FAL_KEY\`${summary.timeoutMs ? ` using the recorded timeout override (${summary.timeoutMs}ms)` : ''}, then reopen \`${summary.reportMd}\` and use the listed frame paths plus acceptance checklist before re-approval.`
 ];
 
