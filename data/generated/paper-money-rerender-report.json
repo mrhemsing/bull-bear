@@ -1,6 +1,6 @@
 {
-  "startedAt": "2026-03-30T11:55:42.416Z",
-  "finishedAt": "2026-03-30T11:55:43.377Z",
+  "startedAt": "2026-03-30T11:58:50.228Z",
+  "finishedAt": "2026-03-30T11:58:51.211Z",
   "states": [
     "state-01",
     "state-10",
@@ -81,6 +81,10 @@
       "reviewNotes": "Representative frame extracted at 0s for visual loop review."
     }
   ],
+  "reportJson": "data/generated/paper-money-rerender-report.json",
+  "reportMd": "data/generated/paper-money-rerender-report.md",
+  "reportJsonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\paper-money-rerender-report.json",
+  "reportMdFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\paper-money-rerender-report.md",
   "steps": [
     {
       "kind": "prepare",

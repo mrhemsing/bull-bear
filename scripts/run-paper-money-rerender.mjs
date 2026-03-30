@@ -229,6 +229,10 @@ const summary = {
   failedReviewCount: matchingReviewResults.filter((item) => item.status === 'failed').length,
   regressionScan,
   reviewChecklist,
+  reportJson: relativeFromRoot(reportJsonPath),
+  reportMd: relativeFromRoot(reportMdPath),
+  reportJsonFilesystemPath: reportJsonPath,
+  reportMdFilesystemPath: reportMdPath,
   steps,
 };
 
@@ -261,6 +265,15 @@ const mdLines = [
   `Missing-loop review frames: ${summary.missingLoopFileReviewCount}`,
   `Failed review frames: ${summary.failedReviewCount}`,
   `Paper-money regression matches: ${summary.regressionScan.totalMatches}`,
+  '',
+  '## Batch artifacts',
+  '',
+  `- Report (Markdown): \`${summary.reportMd}\``,
+  `- Report file: \`${summary.reportMdFilesystemPath}\``,
+  `- Report (JSON): \`${summary.reportJson}\``,
+  `- Report file: \`${summary.reportJsonFilesystemPath}\``,
+  '',
+  'Reopen this Markdown report after running the batch on a keyed host; it is the canonical acceptance artifact for the targeted rerender pass.',
   '',
   '## Metadata regression scan',
   '',
@@ -312,6 +325,7 @@ const mdLines = [
   '## Acceptance checklist',
   '',
   '- [ ] Confirm replacement generation actually ran on a host with `FAL_KEY` (the generation status should no longer be `blocked-missing-fal-key`).',
+  '- [ ] Reopen this report and use it as the source of truth for acceptance (`data/generated/paper-money-rerender-report.md`).',
   '- [ ] Open each listed review-frame PNG and confirm paper-money imagery is gone in the replacement `loop-b` output.',
   '- [ ] Verify the rerender metadata/results still contain 0 paper-money regressions before re-approving the loops (`Paper-money regression matches: 0` in this report).',
   '- [ ] Only widen rerender scope beyond states 01 / 10 / 20 after the targeted batch passes the visual review.',
@@ -319,8 +333,8 @@ const mdLines = [
   '## Next action',
   '',
   hasFalKey
-    ? 'Visually inspect the extracted replacement frames and confirm paper-money imagery is gone before re-approving the rerendered loops.'
-    : 'Run the same command on the first host with `FAL_KEY` so the queued rerender batch can actually produce replacement MP4s, then inspect the extracted replacement frames before re-approval.'
+    ? `Visually inspect the extracted replacement frames, then reopen \`${summary.reportMd}\` and complete the acceptance checklist before re-approving the rerendered loops.`
+    : `Run the same command on the first host with \`FAL_KEY\`, then reopen \`${summary.reportMd}\` and use the listed frame paths plus acceptance checklist before re-approval.`
 ];
 
 await fs.writeFile(reportMdPath, `${mdLines.join('\n')}\n`);
