@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-03-30T17:58:25.867Z",
+  "recordedAt": "2026-03-30T19:56:39.774Z",
   "stateFilter": "state-20",
   "entries": [
     {
@@ -13,21 +13,39 @@
       "referenceImageFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-reference.png",
       "renderManifestPath": "out/state-20-still-regeneration/render-manifest.json",
       "renderPromptPath": "out/state-20-still-regeneration/render-prompt.txt",
+      "defaultLoopVariant": "b",
+      "defaultLoopTimeoutMs": "900000",
+      "defaultLoopModel": "fal-ai/kling-video/v2.1/standard/image-to-video",
       "outputs": [
         {
           "index": 1,
           "path": "out/state-20-still-regeneration/state-20-still-regeneration-01.png",
-          "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01.png"
+          "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01.png",
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-compare.png",
+          "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-compare.png",
+          "comparisonStatus": "generated",
+          "comparisonError": null,
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=1 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
         },
         {
           "index": 2,
           "path": "out/state-20-still-regeneration/state-20-still-regeneration-02.png",
-          "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02.png"
+          "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02.png",
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-compare.png",
+          "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-compare.png",
+          "comparisonStatus": "generated",
+          "comparisonError": null,
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=2 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
         },
         {
           "index": 3,
           "path": "out/state-20-still-regeneration/state-20-still-regeneration-03.png",
-          "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03.png"
+          "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03.png",
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-compare.png",
+          "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03-compare.png",
+          "comparisonStatus": "generated",
+          "comparisonError": null,
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=3 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
         }
       ],
       "notes": "Generated 3 still candidate(s)."

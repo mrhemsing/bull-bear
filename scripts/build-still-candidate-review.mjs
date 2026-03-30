@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 
 const root = process.cwd();
 const resultsPath = path.join(root, 'data', 'generated', 'canonical-image-generation-results.json');
@@ -10,6 +11,10 @@ const reviewHtmlPath = path.join(outputDir, 'still-candidate-review.html');
 
 const selectedStateArg = process.argv.find((arg) => arg.startsWith('--state='));
 const selectedState = selectedStateArg ? selectedStateArg.split('=')[1].trim() : null;
+
+const defaultLoopVariant = 'b';
+const defaultLoopTimeoutMs = '900000';
+const defaultLoopModel = 'fal-ai/kling-video/v2.1/standard/image-to-video';
 
 const relativeFromRoot = (targetPath) => path.relative(root, targetPath).replace(/\\/g, '/');
 const resolveFromRoot = (relativePath) => path.join(root, relativePath.replace(/^[/\\]+/, '').replace(/\//g, path.sep));
@@ -22,6 +27,35 @@ const escapeHtml = (value) => String(value)
 
 const readJson = async (targetPath) => JSON.parse(await fs.readFile(targetPath, 'utf8'));
 
+const ensureDir = async (targetPath) => {
+  await fs.mkdir(targetPath, { recursive: true });
+};
+
+const runFfmpegComparison = async ({ referencePath, candidatePath, outputPath }) => {
+  await ensureDir(path.dirname(outputPath));
+  const result = spawnSync(
+    'ffmpeg',
+    [
+      '-y',
+      '-i', referencePath,
+      '-i', candidatePath,
+      '-filter_complex', 'hstack=inputs=2',
+      outputPath,
+    ],
+    { encoding: 'utf8' },
+  );
+
+  if (result.status !== 0) {
+    const stderr = (result.stderr || '').trim();
+    const stdout = (result.stdout || '').trim();
+    throw new Error(stderr || stdout || 'ffmpeg comparison build failed');
+  }
+};
+
+const buildPromoteCommand = (stateId, candidateIndex) => (
+  `npm run promote:still -- --state=${stateId} --candidate=${candidateIndex} --variant=${defaultLoopVariant} --stage-loop-rerender --timeout-ms=${defaultLoopTimeoutMs} --model=${defaultLoopModel}`
+);
+
 const results = await readJson(resultsPath);
 const filtered = results.filter((item) => !selectedState || item.stateId === selectedState);
 
@@ -33,13 +67,42 @@ if (!filtered.length) {
 const generated = filtered.filter((item) => item.status === 'generated');
 const recordedAt = new Date().toISOString();
 
-const reviewEntries = generated.map((item) => {
+const reviewEntries = await Promise.all(generated.map(async (item) => {
   const referenceImage = item.image;
   const referenceImageFilesystemPath = resolveFromRoot(referenceImage);
-  const outputs = (item.outputs ?? []).map((outputPath, index) => ({
-    index: index + 1,
-    path: outputPath,
-    filesystemPath: resolveFromRoot(outputPath),
+  const outputs = await Promise.all((item.outputs ?? []).map(async (outputPath, index) => {
+    const filesystemPath = resolveFromRoot(outputPath);
+    const comparisonRelativePath = path.join(
+      'out',
+      `${item.stateId}-still-regeneration`,
+      `${item.stateId}-still-regeneration-${String(index + 1).padStart(2, '0')}-compare.png`,
+    ).replace(/\\/g, '/');
+    const comparisonFilesystemPath = resolveFromRoot(comparisonRelativePath);
+
+    let comparisonStatus = 'generated';
+    let comparisonError = null;
+
+    try {
+      await runFfmpegComparison({
+        referencePath: referenceImageFilesystemPath,
+        candidatePath: filesystemPath,
+        outputPath: comparisonFilesystemPath,
+      });
+    } catch (error) {
+      comparisonStatus = 'failed';
+      comparisonError = error instanceof Error ? error.message : String(error);
+    }
+
+    return {
+      index: index + 1,
+      path: outputPath,
+      filesystemPath,
+      comparisonPath: comparisonRelativePath,
+      comparisonFilesystemPath,
+      comparisonStatus,
+      comparisonError,
+      promoteCommand: buildPromoteCommand(item.stateId, index + 1),
+    };
   }));
 
   return {
@@ -53,10 +116,13 @@ const reviewEntries = generated.map((item) => {
     referenceImageFilesystemPath,
     renderManifestPath: item.renderManifestPath,
     renderPromptPath: item.renderPromptPath,
+    defaultLoopVariant,
+    defaultLoopTimeoutMs,
+    defaultLoopModel,
     outputs,
     notes: item.notes ?? null,
   };
-});
+}));
 
 const reviewPayload = {
   recordedAt,
@@ -85,16 +151,20 @@ const mdLines = [
     ...(entry.renderManifestPath ? [`- Render manifest: \`${entry.renderManifestPath}\``] : []),
     ...(entry.renderPromptPath ? [`- Render prompt: \`${entry.renderPromptPath}\``] : []),
     ...(entry.notes ? [`- Generation notes: ${entry.notes}`] : []),
+    `- Default follow-up loop variant: \`${entry.defaultLoopVariant}\``,
+    `- Default follow-up loop model: \`${entry.defaultLoopModel}\``,
+    `- Default follow-up timeout: \`${entry.defaultLoopTimeoutMs}\``,
     '',
-    '| Candidate | File | Open command |',
-    '| --- | --- | --- |',
-    ...entry.outputs.map((output) => `| ${output.index} | \`${output.path}\` | \`start "" "${output.filesystemPath}"\` |`),
+    '| Candidate | File | Compare image | Open commands | Promote command |',
+    '| --- | --- | --- | --- | --- |',
+    ...entry.outputs.map((output) => `| ${output.index} | \`${output.path}\` | ${output.comparisonStatus === 'generated' ? `\`${output.comparisonPath}\`` : `comparison failed: ${output.comparisonError}`} | \`start "" "${output.filesystemPath}"\`<br>\`start "" "${output.comparisonFilesystemPath}"\` | \`${output.promoteCommand}\` |`),
     '',
     '### Acceptance checklist',
     '',
     '- [ ] Compare each candidate against the contaminated reference still and reject any option that still contains paper-like debris, flyers, slips, bills, or rectangular scrap shapes.',
     '- [ ] Reject any candidate that drifts too far from the approved creature identity, anatomy, framing, or environment.',
     '- [ ] Pick exactly one still candidate to promote as the cleaned anchor before rerendering loops again.',
+    '- [ ] Run the listed `promote:still` command for the chosen candidate so the canonical still and follow-up rerender handoff are updated together.',
     '- [ ] After choosing the still, rerun the affected loop (`loop-b`) from that approved cleaned anchor and repeat debris + seamless-loop review.',
     '',
   ]),
@@ -119,8 +189,9 @@ const htmlLines = [
   '    figure { margin: 0; background: #0f1727; border: 1px solid #2d3b57; border-radius: 12px; padding: 12px; }',
   '    img { display: block; width: 100%; height: auto; border-radius: 8px; background: #05070d; }',
   '    figcaption { margin-top: 10px; color: #cdd7e8; font-size: 13px; }',
-  '    code { color: #8ee6ff; }',
+  '    code { color: #8ee6ff; word-break: break-word; }',
   '    ul { color: #cdd7e8; }',
+  '    .command { margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: #0b1322; border: 1px solid #2d3b57; }',
   '  </style>',
   '</head>',
   '<body>',
@@ -134,6 +205,7 @@ const htmlLines = [
       `    <p><strong>Provider:</strong> <code>${escapeHtml(entry.provider)}</code> · <strong>Model:</strong> <code>${escapeHtml(entry.model)}</code></p>`,
       `    <p><strong>Canonical target:</strong> <code>${escapeHtml(entry.canonicalTarget)}</code></p>`,
       `    <p><strong>Reference still:</strong> <code>${escapeHtml(entry.referenceImage)}</code></p>`,
+      `    <p><strong>Default loop rerender follow-up:</strong> variant <code>${escapeHtml(entry.defaultLoopVariant)}</code> · model <code>${escapeHtml(entry.defaultLoopModel)}</code> · timeout <code>${escapeHtml(entry.defaultLoopTimeoutMs)}</code></p>`,
       '    <div class="grid">',
       '      <figure>',
       `        <img src="${escapeHtml(referenceRelative)}" alt="${escapeHtml(`${entry.stateId} contaminated reference still`)}" />`,
@@ -141,10 +213,20 @@ const htmlLines = [
       '      </figure>',
       ...entry.outputs.map((output) => {
         const outputRelative = path.relative(path.dirname(reviewHtmlPath), output.filesystemPath).replace(/\\/g, '/');
+        const comparisonRelative = path.relative(path.dirname(reviewHtmlPath), output.comparisonFilesystemPath).replace(/\\/g, '/');
         return [
           '      <figure>',
           `        <img src="${escapeHtml(outputRelative)}" alt="${escapeHtml(`${entry.stateId} still candidate ${output.index}`)}" />`,
           `        <figcaption>Candidate ${output.index} · <code>${escapeHtml(output.path)}</code></figcaption>`,
+          `        <div class="command"><strong>Promote:</strong><br><code>${escapeHtml(output.promoteCommand)}</code></div>`,
+          '      </figure>',
+          '      <figure>',
+          output.comparisonStatus === 'generated'
+            ? `        <img src="${escapeHtml(comparisonRelative)}" alt="${escapeHtml(`${entry.stateId} still candidate ${output.index} comparison`)}" />`
+            : '        <div style="min-height: 180px; display:flex; align-items:center; justify-content:center; border-radius:8px; background:#05070d; color:#ffb4b4; padding:12px; text-align:center;">Comparison build failed</div>',
+          output.comparisonStatus === 'generated'
+            ? `        <figcaption>Comparison ${output.index} · reference (left) vs candidate (right) · <code>${escapeHtml(output.comparisonPath)}</code></figcaption>`
+            : `        <figcaption>Comparison ${output.index} failed · ${escapeHtml(output.comparisonError ?? 'unknown error')}</figcaption>`,
           '      </figure>',
         ].join('\n');
       }),
@@ -154,6 +236,7 @@ const htmlLines = [
       '      <li>Reject any candidate that still contains paper-like debris, flyers, slips, bills, or rectangular scrap shapes.</li>',
       '      <li>Reject any candidate that drifts too far from the approved creature identity, anatomy, framing, or environment.</li>',
       '      <li>Pick exactly one candidate to promote as the cleaned still anchor before rerendering loops again.</li>',
+      '      <li>Run the listed <code>promote:still</code> command for the chosen candidate so the canonical still and follow-up rerender handoff are updated together.</li>',
       '      <li>After choosing the still, rerun the affected loop and repeat debris + seamless-loop review.</li>',
       '    </ul>',
       '  </section>',
