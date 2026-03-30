@@ -1,19 +1,18 @@
 {
-  "startedAt": "2026-03-30T11:58:50.228Z",
-  "finishedAt": "2026-03-30T11:58:51.211Z",
+  "startedAt": "2026-03-30T13:24:27.495Z",
+  "finishedAt": "2026-03-30T13:35:58.693Z",
   "states": [
-    "state-01",
-    "state-10",
     "state-20"
   ],
   "variant": "b",
   "prepOnly": false,
-  "hasFalKey": false,
-  "queueJobs": 3,
+  "hasFalKey": true,
+  "timeoutMs": 900000,
+  "queueJobs": 1,
   "generatedCount": 0,
-  "blockedMissingFalKeyCount": 3,
-  "failedGenerationCount": 0,
-  "extractedReviewFramesCount": 3,
+  "blockedMissingFalKeyCount": 0,
+  "failedGenerationCount": 1,
+  "extractedReviewFramesCount": 0,
   "missingLoopFileReviewCount": 0,
   "failedReviewCount": 0,
   "regressionScan": {
@@ -39,76 +38,32 @@
   },
   "reviewChecklist": [
     {
-      "stateId": "state-01",
-      "stateIndex": 1,
-      "label": "Extremely Bearish",
-      "variant": "b",
-      "target": "public/states/state-01/loop-b.mp4",
-      "targetFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\public\\states\\state-01\\loop-b.mp4",
-      "generationStatus": "blocked-missing-fal-key",
-      "generationNotes": "FAL_KEY is not configured, so the animation provider request was not sent.",
-      "reviewFrame": "out/loop-review-frames/state-01-b/state-01-b-frame-0.png",
-      "reviewFrameFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\loop-review-frames\\state-01-b\\state-01-b-frame-0.png",
-      "reviewStatus": "extracted",
-      "reviewNotes": "Representative frame extracted at 0s for visual loop review."
-    },
-    {
-      "stateId": "state-10",
-      "stateIndex": 10,
-      "label": "Neutral",
-      "variant": "b",
-      "target": "public/states/state-10/loop-b.mp4",
-      "targetFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\public\\states\\state-10\\loop-b.mp4",
-      "generationStatus": "blocked-missing-fal-key",
-      "generationNotes": "FAL_KEY is not configured, so the animation provider request was not sent.",
-      "reviewFrame": "out/loop-review-frames/state-10-b/state-10-b-frame-0.png",
-      "reviewFrameFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\loop-review-frames\\state-10-b\\state-10-b-frame-0.png",
-      "reviewStatus": "extracted",
-      "reviewNotes": "Representative frame extracted at 0s for visual loop review."
-    },
-    {
       "stateId": "state-20",
       "stateIndex": 20,
       "label": "Extremely Bullish",
       "variant": "b",
       "target": "public/states/state-20/loop-b.mp4",
       "targetFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\public\\states\\state-20\\loop-b.mp4",
-      "generationStatus": "blocked-missing-fal-key",
-      "generationNotes": "FAL_KEY is not configured, so the animation provider request was not sent.",
+      "generationStatus": "failed",
+      "generationNotes": "Gateway Timeout",
       "reviewFrame": "out/loop-review-frames/state-20-b/state-20-b-frame-0.png",
       "reviewFrameFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\loop-review-frames\\state-20-b\\state-20-b-frame-0.png",
-      "reviewStatus": "extracted",
-      "reviewNotes": "Representative frame extracted at 0s for visual loop review."
+      "reviewStatus": "stale-source-loop",
+      "reviewNotes": "Generation result is failed (Gateway Timeout), so this extracted frame may still reflect the pre-rerender loop on disk."
     }
   ],
   "reportJson": "data/generated/paper-money-rerender-report.json",
   "reportMd": "data/generated/paper-money-rerender-report.md",
+  "reviewGallery": "data/generated/loop-review-frames.html",
   "reportJsonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\paper-money-rerender-report.json",
   "reportMdFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\paper-money-rerender-report.md",
+  "reviewGalleryFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\loop-review-frames.html",
   "steps": [
     {
       "kind": "prepare",
-      "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/prepare-canonical-assets.mjs \"--force-loop-states=state-01,state-10,state-20\"",
+      "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/prepare-canonical-assets.mjs --force-loop-states=state-20",
       "code": 0,
-      "stdout": "Prepared canonical asset workspace for 20 states.\nApproved loops detected: 60\nLoop targets ready to generate: 9\nChecklist: data\\generated\\canonical-asset-checklist.md\nStill queue: data\\generated\\canonical-still-generation-queue.md\nImage generation jobs: data\\generated\\canonical-image-generation-jobs.md\nStill render jobs: data\\generated\\canonical-still-render-jobs.md\nLoop queue: data\\generated\\canonical-loop-generation-queue.md\nLoop render jobs: data\\generated\\canonical-loop-render-jobs.md\nStaged render handoff: data\\generated\\canonical-staged-render-handoff.md\nNext actions: data\\generated\\canonical-production-next-actions.md\nBatch JSON: data\\generated\\canonical-asset-batch.json\n",
-      "stderr": ""
-    },
-    {
-      "kind": "generate-loop",
-      "stateId": "state-01",
-      "variant": "b",
-      "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/run-loop-generation-jobs.mjs --state=state-01 --variant=b",
-      "code": 0,
-      "stdout": "Starting loop job state-01/b with model fal-ai/minimax/video-01/image-to-video.\nProcessed 1 loop generation job(s) with model fal-ai/minimax/video-01/image-to-video. Results written to data/generated/canonical-loop-generation-results.json.\nProvider execution was skipped because FAL_KEY is not configured.\n",
-      "stderr": ""
-    },
-    {
-      "kind": "generate-loop",
-      "stateId": "state-10",
-      "variant": "b",
-      "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/run-loop-generation-jobs.mjs --state=state-10 --variant=b",
-      "code": 0,
-      "stdout": "Starting loop job state-10/b with model fal-ai/minimax/video-01/image-to-video.\nProcessed 1 loop generation job(s) with model fal-ai/minimax/video-01/image-to-video. Results written to data/generated/canonical-loop-generation-results.json.\nProvider execution was skipped because FAL_KEY is not configured.\n",
+      "stdout": "Prepared canonical asset workspace for 20 states.\nApproved loops detected: 60\nLoop targets ready to generate: 3\nChecklist: data\\generated\\canonical-asset-checklist.md\nStill queue: data\\generated\\canonical-still-generation-queue.md\nImage generation jobs: data\\generated\\canonical-image-generation-jobs.md\nStill render jobs: data\\generated\\canonical-still-render-jobs.md\nLoop queue: data\\generated\\canonical-loop-generation-queue.md\nLoop render jobs: data\\generated\\canonical-loop-render-jobs.md\nStaged render handoff: data\\generated\\canonical-staged-render-handoff.md\nNext actions: data\\generated\\canonical-production-next-actions.md\nBatch JSON: data\\generated\\canonical-asset-batch.json\n",
       "stderr": ""
     },
     {
@@ -117,14 +72,14 @@
       "variant": "b",
       "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/run-loop-generation-jobs.mjs --state=state-20 --variant=b",
       "code": 0,
-      "stdout": "Starting loop job state-20/b with model fal-ai/minimax/video-01/image-to-video.\nProcessed 1 loop generation job(s) with model fal-ai/minimax/video-01/image-to-video. Results written to data/generated/canonical-loop-generation-results.json.\nProvider execution was skipped because FAL_KEY is not configured.\n",
+      "stdout": "Starting loop job state-20/b with model fal-ai/minimax/video-01/image-to-video.\nProcessed 1 loop generation job(s) with model fal-ai/minimax/video-01/image-to-video. Results written to data/generated/canonical-loop-generation-results.json.\n",
       "stderr": ""
     },
     {
       "kind": "review-frames",
-      "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/extract-loop-review-frames.mjs \"--states=state-01,state-10,state-20\" --variant=b --overwrite",
+      "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/extract-loop-review-frames.mjs --states=state-20 --variant=b --overwrite",
       "code": 0,
-      "stdout": "Processed 3 loop review-frame job(s): 3 extracted, 0 missing-loop-file, 0 failed.\nWrote data/generated/loop-review-frames.json and data/generated/loop-review-frames.md.\n",
+      "stdout": "Processed 1 loop review-frame job(s): 0 extracted, 1 stale-source-loop, 0 missing-loop-file, 0 failed.\nWrote data/generated/loop-review-frames.json, data/generated/loop-review-frames.md, and data/generated/loop-review-frames.html.\n",
       "stderr": ""
     }
   ]

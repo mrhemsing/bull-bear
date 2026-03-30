@@ -24,8 +24,29 @@ const regressionScanTargets = [
   path.join(outputDir, 'loop-review-frames.json'),
 ];
 
+const loadDotEnvLocal = async () => {
+  const envPath = path.join(root, '.env.local');
+  try {
+    const raw = await fs.readFile(envPath, 'utf8');
+    for (const line of raw.split(/\r?\n/)) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+      if (!match) continue;
+      const [, key, value] = match;
+      if (process.env[key] !== undefined) continue;
+      process.env[key] = value.replace(/^("|')(.*)\1$/, '$2');
+    }
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
+};
+
+await loadDotEnvLocal();
+
 const statesArg = process.argv.find((arg) => arg.startsWith('--states='));
 const variantArg = process.argv.find((arg) => arg.startsWith('--variant='));
+const timeoutArg = process.argv.find((arg) => arg.startsWith('--timeout-ms='));
 const prepOnly = process.argv.includes('--prep-only');
 const overwriteReviewFrames = process.argv.includes('--overwrite-review-frames') || process.argv.includes('--overwrite');
 const selectedStates = (statesArg ? statesArg.split('=')[1] : 'state-01,state-10,state-20')
@@ -33,6 +54,7 @@ const selectedStates = (statesArg ? statesArg.split('=')[1] : 'state-01,state-10
   .map((value) => value.trim())
   .filter(Boolean);
 const selectedVariant = (variantArg ? variantArg.split('=')[1].trim().toLowerCase() : null) || null;
+const selectedTimeoutMs = timeoutArg ? timeoutArg.split('=')[1].trim() : (process.env.FAL_VIDEO_TIMEOUT_MS?.trim() || null);
 const hasFalKey = Boolean(process.env.FAL_KEY?.trim());
 const startedAt = new Date().toISOString();
 
@@ -47,7 +69,10 @@ const runNodeScript = (scriptRelativePath, args = []) => new Promise((resolve) =
   const child = spawn(process.execPath, [scriptRelativePath, ...args], {
     cwd: root,
     stdio: ['ignore', 'pipe', 'pipe'],
-    env: process.env,
+    env: {
+      ...process.env,
+      ...(selectedTimeoutMs ? { FAL_VIDEO_TIMEOUT_MS: selectedTimeoutMs } : {}),
+    },
   });
 
   let stdout = '';
@@ -142,6 +167,7 @@ if (!prepOnly) {
   for (const state of selectedStates) {
     const generateArgs = [`--state=${state}`];
     if (selectedVariant) generateArgs.push(`--variant=${selectedVariant}`);
+    if (selectedTimeoutMs) generateArgs.push(`--timeout-ms=${selectedTimeoutMs}`);
     const stepResult = {
       kind: 'generate-loop',
       stateId: state,
@@ -220,25 +246,29 @@ const summary = {
   variant: selectedVariant,
   prepOnly,
   hasFalKey,
+  timeoutMs: selectedTimeoutMs ? Number.parseInt(selectedTimeoutMs, 10) : null,
   queueJobs: matchingQueue.length,
   generatedCount: matchingLoopResults.filter((item) => item.status === 'generated').length,
   blockedMissingFalKeyCount: matchingLoopResults.filter((item) => item.status === 'blocked-missing-fal-key').length,
   failedGenerationCount: matchingLoopResults.filter((item) => item.status === 'failed').length,
   extractedReviewFramesCount: matchingReviewResults.filter((item) => item.status === 'extracted').length,
+  staleReviewFramesCount: matchingReviewResults.filter((item) => item.status === 'stale-source-loop').length,
   missingLoopFileReviewCount: matchingReviewResults.filter((item) => item.status === 'missing-loop-file').length,
   failedReviewCount: matchingReviewResults.filter((item) => item.status === 'failed').length,
   regressionScan,
   reviewChecklist,
   reportJson: relativeFromRoot(reportJsonPath),
   reportMd: relativeFromRoot(reportMdPath),
+  reviewGallery: 'data/generated/loop-review-frames.html',
   reportJsonFilesystemPath: reportJsonPath,
   reportMdFilesystemPath: reportMdPath,
+  reviewGalleryFilesystemPath: path.join(outputDir, 'loop-review-frames.html'),
   steps,
 };
 
 await fs.writeFile(reportJsonPath, `${JSON.stringify(summary, null, 2)}\n`);
 
-const rerunCommand = `npm run rerender:paper-money -- --states=${summary.states.join(',')}${summary.variant ? ` --variant=${summary.variant}` : ''} --overwrite-review-frames`;
+const rerunCommand = `npm run rerender:paper-money -- --states=${summary.states.join(',')}${summary.variant ? ` --variant=${summary.variant}` : ''}${summary.timeoutMs ? ` --timeout-ms=${summary.timeoutMs}` : ''} --overwrite-review-frames`;
 
 const mdLines = [
   '# Paper-money rerender report',
@@ -257,11 +287,13 @@ const mdLines = [
   `Variant: ${summary.variant ?? 'all queued variants'}`,
   `Prep only: ${summary.prepOnly ? 'yes' : 'no'}`,
   `FAL_KEY present: ${summary.hasFalKey ? 'yes' : 'no'}`,
+  `Timeout override ms: ${summary.timeoutMs ?? 'default'}`,
   `Queued jobs in scope: ${summary.queueJobs}`,
   `Generated loops: ${summary.generatedCount}`,
   `Blocked (missing FAL_KEY): ${summary.blockedMissingFalKeyCount}`,
   `Failed generations: ${summary.failedGenerationCount}`,
   `Extracted review frames: ${summary.extractedReviewFramesCount}`,
+  `Stale review frames: ${summary.staleReviewFramesCount}`,
   `Missing-loop review frames: ${summary.missingLoopFileReviewCount}`,
   `Failed review frames: ${summary.failedReviewCount}`,
   `Paper-money regression matches: ${summary.regressionScan.totalMatches}`,
@@ -272,6 +304,8 @@ const mdLines = [
   `- Report file: \`${summary.reportMdFilesystemPath}\``,
   `- Report (JSON): \`${summary.reportJson}\``,
   `- Report file: \`${summary.reportJsonFilesystemPath}\``,
+  `- Review gallery (HTML): \`${summary.reviewGallery}\``,
+  `- Review gallery file: \`${summary.reviewGalleryFilesystemPath}\``,
   '',
   'Reopen this Markdown report after running the batch on a keyed host; it is the canonical acceptance artifact for the targeted rerender pass.',
   '',
@@ -301,7 +335,8 @@ const mdLines = [
   '### Acceptance notes',
   '',
   ...summary.reviewChecklist.flatMap((item) => [
-    `- ${item.stateId}${item.variant ? `/${item.variant}` : ''}: open ${item.reviewFrame ? `\`${item.reviewFrame}\`` : 'the extracted review frame'} and compare it against \`${item.target}\` before re-approval.`,
+    `- ${item.stateId}${item.variant ? `/${item.variant}` : ''}: ${item.reviewStatus === 'stale-source-loop' ? 'do not use the extracted frame as fresh acceptance proof until generation succeeds; it may still reflect the prior on-disk loop.' : `open ${item.reviewFrame ? `\`${item.reviewFrame}\`` : 'the extracted review frame'} and compare it against \`${item.target}\` before re-approval.`}`,
+    `  - Review gallery: \`${summary.reviewGallery}\``,
     `  - Loop file: \`${item.targetFilesystemPath}\``,
     ...(item.reviewFrameFilesystemPath ? [`  - Review frame file: \`${item.reviewFrameFilesystemPath}\``] : []),
     ...(item.generationNotes ? [`  - Generation: ${item.generationNotes}`] : []),
@@ -314,11 +349,18 @@ const mdLines = [
   '| --- | --- | --- | --- |',
   ...steps.map((step) => `| ${step.kind} | ${step.stateId ? `${step.stateId}${step.variant ? `/${step.variant}` : ''}` : summary.states.join(', ')} | ${step.code} | \`${step.command.replace(/\|/g, '\\|')}\` |`),
   '',
+  ...(summary.timeoutMs
+    ? [
+        `Recorded provider timeout override: \`${summary.timeoutMs}\` ms. Confirm each \`generate-loop\` command above includes \`--timeout-ms=${summary.timeoutMs}\` before trusting a failed rerun report.`,
+        '',
+      ]
+    : []),
   '## Output artifacts',
   '',
   '- `data/generated/canonical-loop-render-jobs.json`',
   '- `data/generated/canonical-loop-generation-results.json`',
   '- `data/generated/loop-review-frames.json`',
+  '- `data/generated/loop-review-frames.html`',
   `- \`${relativeFromRoot(reportJsonPath)}\``,
   `- \`${relativeFromRoot(reportMdPath)}\``,
   '',
@@ -326,15 +368,18 @@ const mdLines = [
   '',
   '- [ ] Confirm replacement generation actually ran on a host with `FAL_KEY` (the generation status should no longer be `blocked-missing-fal-key`).',
   '- [ ] Reopen this report and use it as the source of truth for acceptance (`data/generated/paper-money-rerender-report.md`).',
-  '- [ ] Open each listed review-frame PNG and confirm paper-money imagery is gone in the replacement `loop-b` output.',
+  '- [ ] If the review status is `stale-source-loop`, do not treat the extracted PNG/gallery as fresh rerender evidence; rerun generation successfully first.',
+  '- [ ] Open the review gallery (`data/generated/loop-review-frames.html`) or each listed PNG and confirm paper-money imagery is gone in the replacement `loop-b` output.',
   '- [ ] Verify the rerender metadata/results still contain 0 paper-money regressions before re-approving the loops (`Paper-money regression matches: 0` in this report).',
   '- [ ] Only widen rerender scope beyond states 01 / 10 / 20 after the targeted batch passes the visual review.',
   '',
   '## Next action',
   '',
-  hasFalKey
-    ? `Visually inspect the extracted replacement frames, then reopen \`${summary.reportMd}\` and complete the acceptance checklist before re-approving the rerendered loops.`
-    : `Run the same command on the first host with \`FAL_KEY\`, then reopen \`${summary.reportMd}\` and use the listed frame paths plus acceptance checklist before re-approval.`
+  summary.staleReviewFramesCount > 0
+    ? `Generation has not produced fresh proof yet for ${summary.staleReviewFramesCount} review item(s); rerun the same command${summary.timeoutMs ? ` with the recorded ${summary.timeoutMs}ms timeout` : ''} until generation succeeds, then use the refreshed gallery/report for acceptance.`
+    : hasFalKey
+      ? `Visually inspect the extracted replacement frames, then reopen \`${summary.reportMd}\` and complete the acceptance checklist before re-approving the rerendered loops.`
+      : `Run the same command on the first host with \`FAL_KEY\`${summary.timeoutMs ? ` using the recorded timeout override (${summary.timeoutMs}ms)` : ''}, then reopen \`${summary.reportMd}\` and use the listed frame paths plus acceptance checklist before re-approval.`
 ];
 
 await fs.writeFile(reportMdPath, `${mdLines.join('\n')}\n`);
