@@ -1,16 +1,16 @@
 {
-  "startedAt": "2026-03-30T16:01:08.085Z",
-  "finishedAt": "2026-03-30T16:02:30.659Z",
+  "startedAt": "2026-03-30T16:56:25.030Z",
+  "finishedAt": "2026-03-30T16:56:26.083Z",
   "states": [
     "state-20"
   ],
   "variant": "b",
-  "prepOnly": false,
+  "prepOnly": true,
   "hasFalKey": true,
   "model": "fal-ai/kling-video/v2.1/standard/image-to-video",
   "timeoutMs": 900000,
   "queueJobs": 1,
-  "generatedCount": 1,
+  "generatedCount": 0,
   "blockedMissingFalKeyCount": 0,
   "failedGenerationCount": 0,
   "extractedReviewFramesCount": 1,
@@ -19,6 +19,7 @@
   "failedReviewCount": 0,
   "seamReadyCount": 1,
   "seamBlockedCount": 0,
+  "seamRiskWarningCount": 1,
   "regressionScan": {
     "terms": [
       "paper money",
@@ -48,17 +49,21 @@
       "variant": "b",
       "target": "public/states/state-20/loop-b.mp4",
       "targetFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\public\\states\\state-20\\loop-b.mp4",
-      "generationStatus": "generated",
-      "generationNotes": "Generated loop and saved it to the canonical runtime target.",
+      "generationStatus": "not-recorded",
+      "generationNotes": null,
       "generationModel": "fal-ai/kling-video/v2.1/standard/image-to-video",
       "reviewFrame": "out/loop-review-frames/state-20-b/state-20-b-frame-0.png",
       "seamEndFrame": "out/loop-review-frames/state-20-b/state-20-b-frame-end.png",
+      "seamDiffFrame": "out/loop-review-frames/state-20-b/state-20-b-frame-diff.png",
       "reviewFrameFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\loop-review-frames\\state-20-b\\state-20-b-frame-0.png",
       "seamEndFrameFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\loop-review-frames\\state-20-b\\state-20-b-frame-end.png",
+      "seamDiffFrameFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\loop-review-frames\\state-20-b\\state-20-b-frame-diff.png",
       "reviewStatus": "extracted",
       "seamStatus": "ready-for-comparison",
+      "seamSimilarity": 0.591117,
+      "seamRisk": true,
       "reviewNotes": "Representative start frame extracted at 0s for visual loop review.",
-      "seamNotes": "End frame extracted 0.1s before the loop ended for seamless-loop review."
+      "seamNotes": "End frame extracted 0.1s before the loop ended for seamless-loop review. SSIM: 0.5911 (closer to 1.0 is better)."
     }
   ],
   "reportJson": "data/generated/paper-money-rerender-report.json",
@@ -73,15 +78,6 @@
       "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/prepare-canonical-assets.mjs --force-loop-states=state-20",
       "code": 0,
       "stdout": "Prepared canonical asset workspace for 20 states.\nApproved loops detected: 60\nLoop targets ready to generate: 3\nChecklist: data\\generated\\canonical-asset-checklist.md\nStill queue: data\\generated\\canonical-still-generation-queue.md\nImage generation jobs: data\\generated\\canonical-image-generation-jobs.md\nStill render jobs: data\\generated\\canonical-still-render-jobs.md\nLoop queue: data\\generated\\canonical-loop-generation-queue.md\nLoop render jobs: data\\generated\\canonical-loop-render-jobs.md\nStaged render handoff: data\\generated\\canonical-staged-render-handoff.md\nNext actions: data\\generated\\canonical-production-next-actions.md\nBatch JSON: data\\generated\\canonical-asset-batch.json\n",
-      "stderr": ""
-    },
-    {
-      "kind": "generate-loop",
-      "stateId": "state-20",
-      "variant": "b",
-      "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/run-loop-generation-jobs.mjs --state=state-20 --variant=b --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
-      "code": 0,
-      "stdout": "Starting loop job state-20/b with model fal-ai/kling-video/v2.1/standard/image-to-video.\nCompleted loop job state-20/b -> public/states/state-20/loop-b.mp4.\nProcessed 1 loop generation job(s) with model fal-ai/kling-video/v2.1/standard/image-to-video. Results written to data/generated/canonical-loop-generation-results.json.\n",
       "stderr": ""
     },
     {
