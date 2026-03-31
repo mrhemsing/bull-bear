@@ -106,6 +106,24 @@ const debrisZoneLabels = {
   lowerRight: 'lower-right foreground',
 };
 
+const quoteShellArg = (value) => {
+  const stringValue = String(value);
+  return `'${stringValue.replace(/'/g, "''")}'`;
+};
+
+const buildReviewCommand = ({ stateId, index, verdict, note }) => {
+  const args = [
+    'npm run mark:still-review --',
+    `--state=${stateId}`,
+    `--candidate=${index}`,
+    `--verdict=${verdict}`,
+  ];
+  if (note) {
+    args.push(`--note=${quoteShellArg(note)}`);
+  }
+  return args.join(' ');
+};
+
 const toFixedMetric = (value, digits = 4) => (typeof value === 'number' ? value.toFixed(digits) : null);
 
 const buildWatchZones = (metrics) => {
@@ -204,6 +222,24 @@ const pendingEntries = await Promise.all(entries.map(async (entry) => {
         debrisFocusPath: output.debrisFocusComparisonPath ?? output.debrisFocusPath ?? null,
         debrisFocusFilesystemPath: output.debrisFocusComparisonFilesystemPath ?? (output.debrisFocusComparisonPath ? path.join(root, output.debrisFocusComparisonPath.replace(/^[/\\]+/, '').replace(/\//g, path.sep)) : null),
         promoteCommand: output.promoteCommand,
+        rejectCommand: buildReviewCommand({
+          stateId: entry.stateId,
+          index: output.index,
+          verdict: 'reject',
+          note: 'Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.',
+        }),
+        holdCommand: buildReviewCommand({
+          stateId: entry.stateId,
+          index: output.index,
+          verdict: 'hold',
+          note: 'Needs more human comparison before approval or rejection.',
+        }),
+        promoteReviewCommand: buildReviewCommand({
+          stateId: entry.stateId,
+          index: output.index,
+          verdict: 'promote',
+          note: 'Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.',
+        }),
         reviewVerdict: previousReview?.reviewVerdict ?? defaultReviewVerdict,
         reviewNote: previousReview?.reviewNote ?? defaultReviewNote,
         reviewCarryForward: previousReview
@@ -404,6 +440,9 @@ const mdLines = [
                 ...candidate.watchZones.map((zone) => `  - ${zone.label} · SSIM \`${zone.ssimText}\` · change \`${zone.changeText}\` · ${zone.reviewNote}`),
               ]
               : []),
+            `- Mark reject: \`${fullCandidate?.rejectCommand ?? '—'}\``,
+            `- Mark hold: \`${fullCandidate?.holdCommand ?? '—'}\``,
+            `- Mark chosen-for-promotion: \`${fullCandidate?.promoteReviewCommand ?? '—'}\``,
             `- Promote command: \`${candidate.promoteCommand ?? '—'}\``,
             ...(candidate.candidateFilesystemPath ? [`- Open candidate: \`start "" "${candidate.candidateFilesystemPath}"\``] : []),
             ...(candidate.comparisonFilesystemPath ? [`- Open compare: \`start "" "${candidate.comparisonFilesystemPath}"\``] : []),
@@ -415,9 +454,9 @@ const mdLines = [
       : []),
     `- Next action: ${entry.nextAction}`,
     '',
-    '| Candidate | Candidate image | Fingerprint | Review status | Metrics | Watch first | Compare image | Debris-focus image | Promote command |',
-    '| --- | --- | --- | --- | --- | --- | --- | --- | --- |',
-    ...entry.candidates.map((candidate) => `| ${candidate.index} | \`${candidate.candidatePath}\` | ${candidate.fingerprint ? `sha256 \`${candidate.fingerprint.sha256}\`<br>bytes \`${candidate.fingerprint.bytes}\`<br>modified \`${candidate.fingerprint.modifiedAt}\`` : '—'} | verdict \`${candidate.reviewVerdict ?? defaultReviewVerdict}\`<br>${(candidate.reviewNote ?? defaultReviewNote).replace(/\|/g, '\\|')} | ${candidate.metrics ? `full SSIM \`${candidate.metrics.fullImageSsim}\`<br>left \`${candidate.metrics.debrisZoneSsim.left}\`<br>upper-right \`${candidate.metrics.debrisZoneSsim.upperRight}\`<br>lower-right \`${candidate.metrics.debrisZoneSsim.lowerRight}\`<br>debris change avg \`${candidate.metrics.debrisZoneChangeAverage}\`<br>triage \`${candidate.metrics.triageScore}\`` : `metrics failed: ${candidate.metricsError ?? 'unknown error'}`} | ${candidate.watchZones?.length ? candidate.watchZones.slice(0, 2).map((zone) => `${zone.label} \`${zone.ssimText}\``).join('<br>') : '—'} | \`${candidate.comparisonPath}\` | ${candidate.debrisFocusPath ? `\`${candidate.debrisFocusPath}\`` : '—'} | \`${candidate.promoteCommand}\` |`),
+    '| Candidate | Candidate image | Fingerprint | Review status | Metrics | Watch first | Compare image | Debris-focus image | Review commands | Promote command |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+    ...entry.candidates.map((candidate) => `| ${candidate.index} | \`${candidate.candidatePath}\` | ${candidate.fingerprint ? `sha256 \`${candidate.fingerprint.sha256}\`<br>bytes \`${candidate.fingerprint.bytes}\`<br>modified \`${candidate.fingerprint.modifiedAt}\`` : '—'} | verdict \`${candidate.reviewVerdict ?? defaultReviewVerdict}\`<br>${(candidate.reviewNote ?? defaultReviewNote).replace(/\|/g, '\\|')} | ${candidate.metrics ? `full SSIM \`${candidate.metrics.fullImageSsim}\`<br>left \`${candidate.metrics.debrisZoneSsim.left}\`<br>upper-right \`${candidate.metrics.debrisZoneSsim.upperRight}\`<br>lower-right \`${candidate.metrics.debrisZoneSsim.lowerRight}\`<br>debris change avg \`${candidate.metrics.debrisZoneChangeAverage}\`<br>triage \`${candidate.metrics.triageScore}\`` : `metrics failed: ${candidate.metricsError ?? 'unknown error'}`} | ${candidate.watchZones?.length ? candidate.watchZones.slice(0, 2).map((zone) => `${zone.label} \`${zone.ssimText}\``).join('<br>') : '—'} | \`${candidate.comparisonPath}\` | ${candidate.debrisFocusPath ? `\`${candidate.debrisFocusPath}\`` : '—'} | reject \`${candidate.rejectCommand}\`<br>hold \`${candidate.holdCommand}\`<br>choose \`${candidate.promoteReviewCommand}\` | \`${candidate.promoteCommand}\` |`),
     '',
   ]),
 ];
@@ -588,6 +627,9 @@ const htmlLines = [
               fullCandidate?.fingerprint
                 ? `        <p>sha256 <code>${escapeHtml(fullCandidate.fingerprint.sha256)}</code> · bytes <code>${escapeHtml(fullCandidate.fingerprint.bytes)}</code> · modified <code>${escapeHtml(fullCandidate.fingerprint.modifiedAt)}</code></p>`
                 : '',
+              `        <div class="command"><strong>Mark reject:</strong><br><code>${escapeHtml(fullCandidate?.rejectCommand ?? 'n/a')}</code></div>`,
+              `        <div class="command"><strong>Mark hold:</strong><br><code>${escapeHtml(fullCandidate?.holdCommand ?? 'n/a')}</code></div>`,
+              `        <div class="command"><strong>Mark chosen-for-promotion:</strong><br><code>${escapeHtml(fullCandidate?.promoteReviewCommand ?? 'n/a')}</code></div>`,
               '        <div class="triple">',
               candidateRelative
                 ? `          <figure><img src="${escapeHtml(candidateRelative)}" alt="${escapeHtml(`${entry.stateId} shortlist candidate ${candidate.index}`)}" /><figcaption>Candidate<br><code>${escapeHtml(candidate.candidatePath ?? 'n/a')}</code></figcaption></figure>`
@@ -627,7 +669,7 @@ const htmlLines = [
         return [
           '      <figure>',
           `        <img src="${escapeHtml(candidateRelative)}" alt="${escapeHtml(`${entry.stateId} candidate ${candidate.index}`)}" />`,
-          `        <figcaption>Candidate ${candidate.index} · <code>${escapeHtml(candidate.candidatePath)}</code>${candidate.fingerprint ? `<br>sha256 <code>${escapeHtml(candidate.fingerprint.sha256)}</code><br>bytes <code>${escapeHtml(candidate.fingerprint.bytes)}</code> · modified <code>${escapeHtml(candidate.fingerprint.modifiedAt)}</code>` : ''}<br>review verdict <code>${escapeHtml(candidate.reviewVerdict ?? defaultReviewVerdict)}</code><br>${escapeHtml(candidate.reviewNote ?? defaultReviewNote)}${candidate.metrics ? `<br>full-image SSIM <code>${escapeHtml(candidate.metrics.fullImageSsim)}</code> · debris-zone change avg <code>${escapeHtml(candidate.metrics.debrisZoneChangeAverage)}</code> · triage <code>${escapeHtml(candidate.metrics.triageScore)}</code><br>zone SSIMs: left <code>${escapeHtml(candidate.metrics.debrisZoneSsim.left)}</code> · upper-right <code>${escapeHtml(candidate.metrics.debrisZoneSsim.upperRight)}</code> · lower-right <code>${escapeHtml(candidate.metrics.debrisZoneSsim.lowerRight)}</code>${candidate.watchZones?.length ? `<br>watch first: ${candidate.watchZones.slice(0, 2).map((zone) => `${escapeHtml(zone.label)} <code>${escapeHtml(zone.ssimText)}</code>`).join(' · ')}` : ''}` : `<br>metrics failed: ${escapeHtml(candidate.metricsError ?? 'unknown error')}`}</figcaption>`,
+          `        <figcaption>Candidate ${candidate.index} · <code>${escapeHtml(candidate.candidatePath)}</code>${candidate.fingerprint ? `<br>sha256 <code>${escapeHtml(candidate.fingerprint.sha256)}</code><br>bytes <code>${escapeHtml(candidate.fingerprint.bytes)}</code> · modified <code>${escapeHtml(candidate.fingerprint.modifiedAt)}</code>` : ''}<br>review verdict <code>${escapeHtml(candidate.reviewVerdict ?? defaultReviewVerdict)}</code><br>${escapeHtml(candidate.reviewNote ?? defaultReviewNote)}${candidate.metrics ? `<br>full-image SSIM <code>${escapeHtml(candidate.metrics.fullImageSsim)}</code> · debris-zone change avg <code>${escapeHtml(candidate.metrics.debrisZoneChangeAverage)}</code> · triage <code>${escapeHtml(candidate.metrics.triageScore)}</code><br>zone SSIMs: left <code>${escapeHtml(candidate.metrics.debrisZoneSsim.left)}</code> · upper-right <code>${escapeHtml(candidate.metrics.debrisZoneSsim.upperRight)}</code> · lower-right <code>${escapeHtml(candidate.metrics.debrisZoneSsim.lowerRight)}</code>${candidate.watchZones?.length ? `<br>watch first: ${candidate.watchZones.slice(0, 2).map((zone) => `${escapeHtml(zone.label)} <code>${escapeHtml(zone.ssimText)}</code>`).join(' · ')}` : ''}<br>mark reject <code>${escapeHtml(candidate.rejectCommand ?? 'n/a')}</code><br>mark hold <code>${escapeHtml(candidate.holdCommand ?? 'n/a')}</code><br>mark chosen <code>${escapeHtml(candidate.promoteReviewCommand ?? 'n/a')}</code>` : `<br>metrics failed: ${escapeHtml(candidate.metricsError ?? 'unknown error')}`}</figcaption>`,
           `        <div class="command"><strong>Promote:</strong><br><code>${escapeHtml(candidate.promoteCommand)}</code></div>`,
           '      </figure>',
           '      <figure>',
