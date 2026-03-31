@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 
 const root = process.cwd();
 const reviewPath = path.join(root, 'data', 'generated', 'still-candidate-review.json');
@@ -19,6 +20,67 @@ const escapeHtml = (value) => String(value)
   .replace(/"/g, '&quot;')
   .replace(/'/g, '&#39;');
 
+const ensureDir = async (targetPath) => {
+  await fs.mkdir(targetPath, { recursive: true });
+};
+
+const runFfmpeg = async ({ inputPaths, filterComplex, outputPath, errorLabel }) => {
+  await ensureDir(path.dirname(outputPath));
+  const args = ['-y'];
+  for (const inputPath of inputPaths) {
+    args.push('-i', inputPath);
+  }
+  args.push('-filter_complex', filterComplex, outputPath);
+
+  const result = spawnSync('ffmpeg', args, { encoding: 'utf8' });
+  if (result.status !== 0) {
+    const stderr = (result.stderr || '').trim();
+    const stdout = (result.stdout || '').trim();
+    throw new Error(stderr || stdout || errorLabel);
+  }
+};
+
+const buildShortlistBoard = async ({ stateId, shortlist }) => {
+  if (!shortlist?.length) {
+    return { shortlistBoardPath: null, shortlistBoardFilesystemPath: null, shortlistBoardStatus: 'skipped', shortlistBoardError: null };
+  }
+
+  const candidateInputs = shortlist.map((candidate) => candidate.candidateFilesystemPath).filter(Boolean);
+  const debrisInputs = shortlist.map((candidate) => candidate.debrisFocusFilesystemPath).filter(Boolean);
+
+  if (candidateInputs.length !== shortlist.length || debrisInputs.length !== shortlist.length) {
+    return { shortlistBoardPath: null, shortlistBoardFilesystemPath: null, shortlistBoardStatus: 'missing-inputs', shortlistBoardError: 'Shortlist board requires candidate and debris-focus files for every shortlisted option.' };
+  }
+
+  const shortlistBoardPath = path.join('out', `${stateId}-still-regeneration`, `${stateId}-still-regeneration-shortlist-board.png`).replace(/\\/g, '/');
+  const shortlistBoardFilesystemPath = path.join(root, shortlistBoardPath.replace(/^[/\\]+/, '').replace(/\//g, path.sep));
+
+  try {
+    await runFfmpeg({
+      inputPaths: [...candidateInputs, ...debrisInputs],
+      filterComplex: [
+        `[0:v][1:v][2:v]hstack=inputs=${shortlist.length}[top];`,
+        '[3:v]scale=1536:-1[d0];',
+        '[4:v]scale=1536:-1[d1];',
+        '[5:v]scale=1536:-1[d2];',
+        '[d0][d1][d2]hstack=inputs=3[bottom];',
+        '[top][bottom]vstack=inputs=2',
+      ].join(''),
+      outputPath: shortlistBoardFilesystemPath,
+      errorLabel: 'ffmpeg shortlist board build failed',
+    });
+
+    return { shortlistBoardPath, shortlistBoardFilesystemPath, shortlistBoardStatus: 'generated', shortlistBoardError: null };
+  } catch (error) {
+    return {
+      shortlistBoardPath: null,
+      shortlistBoardFilesystemPath: null,
+      shortlistBoardStatus: 'failed',
+      shortlistBoardError: error instanceof Error ? error.message : String(error),
+    };
+  }
+};
+
 const defaultStatus = 'No candidate is approved by default. Treat the current batch as blocked until one candidate is explicitly chosen by human review and then survives the follow-up loop rerender acceptance check.';
 const rejectRule = 'Reject any candidate whose debris-focus sheet still shows detached rectangular scraps at the left edge, upper-right edge, or lower-right foreground.';
 const acceptRule = 'Only promote a candidate if it is truly paper-free in those debris-focus zones and still preserves the approved creature identity, framing, and environment well enough to serve as the cleaned anchor.';
@@ -33,7 +95,7 @@ if (!entries.length) {
   process.exit(0);
 }
 
-const pendingEntries = entries.map((entry) => {
+const pendingEntries = await Promise.all(entries.map(async (entry) => {
   const rankedCandidates = entry.rankedCandidates ?? [];
   const shortlist = rankedCandidates.slice(0, shortlistCount).map((candidate) => {
     const fullCandidate = entry.outputs.find((output) => output.index === candidate.index);
@@ -48,6 +110,8 @@ const pendingEntries = entries.map((entry) => {
       promoteCommand: fullCandidate?.promoteCommand ?? null,
     };
   });
+
+  const shortlistBoard = await buildShortlistBoard({ stateId: entry.stateId, shortlist });
 
   return {
     stateId: entry.stateId,
@@ -78,6 +142,10 @@ const pendingEntries = entries.map((entry) => {
     })),
     rankedCandidates,
     shortlist,
+    shortlistBoardPath: shortlistBoard.shortlistBoardPath,
+    shortlistBoardFilesystemPath: shortlistBoard.shortlistBoardFilesystemPath,
+    shortlistBoardStatus: shortlistBoard.shortlistBoardStatus,
+    shortlistBoardError: shortlistBoard.shortlistBoardError,
     shortlistSummary: shortlist.length
       ? `Start with shortlist candidates ${shortlist.map((candidate) => candidate.index).join(', ')} in that order.`
       : 'No ranked shortlist is available for this batch.',
@@ -86,12 +154,13 @@ const pendingEntries = entries.map((entry) => {
       ? `Start with shortlist candidates ${shortlist.map((candidate) => candidate.index).join(', ')} in that order, reject any option whose debris-focus sheet still shows detached rectangular scraps, then promote exactly one truly paper-free candidate and reopen the rerender report after the loop rerun.`
       : 'Use the overview + compare + debris-focus surfaces to choose exactly one truly paper-free candidate, run its listed promote:still command without --dry-run, then reopen the paper-money rerender report to review the refreshed loop acceptance evidence.',
   };
-});
+}));
 
 const pendingStartHere = pendingEntries.flatMap((entry) =>
   entry.shortlist.map((candidate) => ({
     stateId: entry.stateId,
     label: entry.label,
+    shortlistBoardPath: entry.shortlistBoardPath,
     index: candidate.index,
     triageRank: candidate.triageRank,
     triageScore: candidate.triageScore,
@@ -134,6 +203,7 @@ const mdLines = [
   ...(payload.startHere.length
     ? [
         '- Review the shortlist candidates in this order before scanning the full matrix:',
+        ...Array.from(new Set(payload.startHere.map((candidate) => candidate.shortlistBoardPath).filter(Boolean))).map((shortlistBoardPath) => `- Shared shortlist board: \`${shortlistBoardPath}\``),
         ...payload.startHere.map((candidate) => `  - ${candidate.stateId} candidate ${candidate.index} (#${candidate.triageRank}, triage \`${candidate.triageScore}\`) · compare \`${candidate.comparisonPath}\` · debris-focus \`${candidate.debrisFocusPath ?? '—'}\` · promote \`${candidate.promoteCommand ?? '—'}\``),
         '',
       ]
@@ -169,6 +239,9 @@ const mdLines = [
     ...(entry.shortlist.length
       ? [
         `- Priority shortlist: start with candidates ${entry.shortlist.map((candidate) => candidate.index).join(', ')} before reviewing the rest.`,
+        ...(entry.shortlistBoardPath ? [`- Shortlist board: \`${entry.shortlistBoardPath}\``] : []),
+        ...(entry.shortlistBoardFilesystemPath ? [`- Open shortlist board: \`start "" "${entry.shortlistBoardFilesystemPath}"\``] : []),
+        ...(entry.shortlistBoardError ? [`- Shortlist board status: \`${entry.shortlistBoardStatus}\` · ${entry.shortlistBoardError}`] : []),
         ...entry.shortlist.map((candidate) => `  - Candidate ${candidate.index} (#${candidate.triageRank}) · triage \`${candidate.triageScore}\` · compare \`${candidate.comparisonPath}\` · debris-focus \`${candidate.debrisFocusPath}\` · promote \`${candidate.promoteCommand}\``),
       ]
       : ['- Priority shortlist: unavailable (no ranked candidates recorded).']),
@@ -249,6 +322,7 @@ const htmlLines = [
   ...(payload.startHere.length
     ? [
         '    <p>Review the shortlist candidates in this order before scanning the full matrix:</p>',
+        ...Array.from(new Set(payload.startHere.map((candidate) => candidate.shortlistBoardPath).filter(Boolean))).map((shortlistBoardPath) => `    <p><strong>Shared shortlist board:</strong> <code>${escapeHtml(shortlistBoardPath)}</code></p>`),
         '    <ul>',
         ...payload.startHere.map((candidate) => `      <li>${escapeHtml(candidate.stateId)} candidate <code>${escapeHtml(candidate.index)}</code> (#${escapeHtml(candidate.triageRank)}, triage <code>${escapeHtml(candidate.triageScore)}</code>) · compare <code>${escapeHtml(candidate.comparisonPath ?? 'n/a')}</code> · debris-focus <code>${escapeHtml(candidate.debrisFocusPath ?? 'n/a')}</code> · promote <code>${escapeHtml(candidate.promoteCommand ?? 'n/a')}</code></li>`),
         '    </ul>',
@@ -269,6 +343,9 @@ const htmlLines = [
     const overviewRelative = entry.overviewFilesystemPath
       ? path.relative(path.dirname(pendingHtmlPath), entry.overviewFilesystemPath).replace(/\\/g, '/')
       : null;
+    const shortlistBoardRelative = entry.shortlistBoardFilesystemPath
+      ? path.relative(path.dirname(pendingHtmlPath), entry.shortlistBoardFilesystemPath).replace(/\\/g, '/')
+      : null;
     return [
       '  <section class="entry">',
       `    <h2>${escapeHtml(entry.stateId)} · ${escapeHtml(entry.label)}</h2>`,
@@ -283,11 +360,20 @@ const htmlLines = [
       entry.shortlist.length
         ? `    <p><strong>Priority shortlist:</strong> start with ${entry.shortlist.map((candidate) => `candidate <code>${escapeHtml(candidate.index)}</code> (#${escapeHtml(candidate.triageRank)}, triage <code>${escapeHtml(candidate.triageScore)}</code>)`).join(' · ')}</p>`
         : '    <p><strong>Priority shortlist:</strong> unavailable (no ranked candidates recorded).</p>',
+      entry.shortlistBoardPath
+        ? `    <p><strong>Shortlist board:</strong> <code>${escapeHtml(entry.shortlistBoardPath)}</code></p>`
+        : '',
       `    <p><strong>Detailed review:</strong> <code>${escapeHtml(entry.reviewHtml)}</code></p>`,
       `    <p><strong>Post-pick rerender report:</strong> <code>${escapeHtml(entry.postPickRerenderReport)}</code></p>`,
       `    <div class="command"><strong>Open rerender report:</strong><br><code>${escapeHtml(`start "" "${entry.postPickRerenderReportFilesystemPath}"`)}</code></div>`,
+      entry.shortlistBoardFilesystemPath
+        ? `    <div class="command"><strong>Open shortlist board:</strong><br><code>${escapeHtml(`start "" "${entry.shortlistBoardFilesystemPath}"`)}</code></div>`
+        : '',
       overviewRelative
         ? `    <figure style="margin: 16px 0 0;"><img src="${escapeHtml(overviewRelative)}" alt="${escapeHtml(`${entry.stateId} still overview`)}" /><figcaption>Overview image · <code>${escapeHtml(entry.overviewPath)}</code></figcaption></figure>`
+        : '',
+      shortlistBoardRelative
+        ? `    <figure style="margin: 16px 0 0;"><img src="${escapeHtml(shortlistBoardRelative)}" alt="${escapeHtml(`${entry.stateId} shortlist board`)}" /><figcaption>Shortlist board · <code>${escapeHtml(entry.shortlistBoardPath)}</code></figcaption></figure>`
         : '',
       `    <div class="command"><strong>Open overview:</strong><br><code>${escapeHtml(entry.overviewFilesystemPath ? `start "" "${entry.overviewFilesystemPath}"` : 'n/a')}</code></div>`,
       `    <div class="command"><strong>Open detailed review HTML:</strong><br><code>${escapeHtml(`start "" "${path.join(root, entry.reviewHtml.replace(/\//g, path.sep))}"`)}</code></div>`,

@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-03-31T06:27:41.860Z",
+  "recordedAt": "2026-03-31T07:01:09.256Z",
   "sourceReviewRecordedAt": "2026-03-31T03:27:42.857Z",
   "stateFilter": "state-20",
   "defaultStatus": "No candidate is approved by default. Treat the current batch as blocked until one candidate is explicitly chosen by human review and then survives the follow-up loop rerender acceptance check.",
@@ -11,6 +11,7 @@
     {
       "stateId": "state-20",
       "label": "Extremely Bullish",
+      "shortlistBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-shortlist-board.png",
       "index": 4,
       "triageRank": 1,
       "triageScore": 0.5481,
@@ -21,6 +22,7 @@
     {
       "stateId": "state-20",
       "label": "Extremely Bullish",
+      "shortlistBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-shortlist-board.png",
       "index": 6,
       "triageRank": 2,
       "triageScore": 0.5474,
@@ -31,6 +33,7 @@
     {
       "stateId": "state-20",
       "label": "Extremely Bullish",
+      "shortlistBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-shortlist-board.png",
       "index": 5,
       "triageRank": 3,
       "triageScore": 0.5456,
@@ -304,6 +307,10 @@
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
         }
       ],
+      "shortlistBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-shortlist-board.png",
+      "shortlistBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-shortlist-board.png",
+      "shortlistBoardStatus": "generated",
+      "shortlistBoardError": null,
       "shortlistSummary": "Start with shortlist candidates 4, 6, 5 in that order.",
       "decisionStatus": "pending-human-pick",
       "nextAction": "Start with shortlist candidates 4, 6, 5 in that order, reject any option whose debris-focus sheet still shows detached rectangular scraps, then promote exactly one truly paper-free candidate and reopen the rerender report after the loop rerun."
