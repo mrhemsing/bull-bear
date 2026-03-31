@@ -12,7 +12,14 @@
     .entry { background: #121a2b; border: 1px solid #25324a; border-radius: 14px; padding: 18px; margin-bottom: 24px; }
     .gate { background: #2a1d13; border: 1px solid #7a4a2a; border-radius: 14px; padding: 18px; margin-bottom: 24px; }
     .status { background: #291626; border: 1px solid #7c3658; border-radius: 14px; padding: 18px; margin-bottom: 24px; }
+    .start-here { background: #132235; border: 1px solid #2f5f94; border-radius: 14px; padding: 18px; margin-bottom: 24px; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }
+    .shortlist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; margin: 18px 0 22px; }
+    .shortlist-card { background: #18233a; border: 1px solid #35507d; border-radius: 14px; padding: 16px; }
+    .shortlist-card h4 { margin: 0 0 10px; }
+    .triple { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }
+    .triple figure { padding: 8px; }
+    .triple figcaption { font-size: 12px; }
     figure { margin: 0; background: #0f1727; border: 1px solid #2d3b57; border-radius: 12px; padding: 12px; }
     img { display: block; width: 100%; height: auto; border-radius: 8px; background: #05070d; }
     figcaption { margin-top: 10px; color: #cdd7e8; font-size: 13px; }
@@ -23,10 +30,19 @@
 </head>
 <body>
   <h1>Pending still pick</h1>
-  <p class="meta">Recorded at 2026-03-31T04:00:11.980Z · Source review recorded at 2026-03-31T03:27:42.857Z · State filter: state-20</p>
+  <p class="meta">Recorded at 2026-03-31T06:27:41.860Z · Source review recorded at 2026-03-31T03:27:42.857Z · State filter: state-20</p>
   <section class="status">
     <h2>Default status</h2>
     <p>No candidate is approved by default. Treat the current batch as blocked until one candidate is explicitly chosen by human review and then survives the follow-up loop rerender acceptance check.</p>
+  </section>
+  <section class="start-here">
+    <h2>Start here</h2>
+    <p>Review the shortlist candidates in this order before scanning the full matrix:</p>
+    <ul>
+      <li>state-20 candidate <code>4</code> (#1, triage <code>0.5481</code>) · compare <code>out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png</code> · debris-focus <code>out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png</code> · promote <code>npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></li>
+      <li>state-20 candidate <code>6</code> (#2, triage <code>0.5474</code>) · compare <code>out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png</code> · debris-focus <code>out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png</code> · promote <code>npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></li>
+      <li>state-20 candidate <code>5</code> (#3, triage <code>0.5456</code>) · compare <code>out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png</code> · debris-focus <code>out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png</code> · promote <code>npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></li>
+    </ul>
   </section>
   <section class="gate">
     <h2>Acceptance gate</h2>
@@ -42,14 +58,66 @@
     <p><strong>Canonical target:</strong> <code>/states/state-20/still.png</code></p>
     <p><strong>Contaminated reference still:</strong> <code>out/state-20-still-regeneration/state-20-still-reference.png</code><br>sha256 <code>da9e2b5a9ac802553b2e59599e8940258cc4681cb2e6fb2e535d22fa88727111</code> · bytes <code>2001181</code> · modified <code>2026-03-30T17:24:54.335Z</code></p>
     <p><strong>Automated triage ranking:</strong> candidate <code>4</code> (#1, triage <code>0.5481</code>, full-image SSIM <code>0.691</code>, debris-zone change avg <code>0.2828</code>) · candidate <code>6</code> (#2, triage <code>0.5474</code>, full-image SSIM <code>0.6874</code>, debris-zone change avg <code>0.2874</code>) · candidate <code>5</code> (#3, triage <code>0.5456</code>, full-image SSIM <code>0.6916</code>, debris-zone change avg <code>0.2746</code>) · candidate <code>2</code> (#4, triage <code>0.5447</code>, full-image SSIM <code>0.6897</code>, debris-zone change avg <code>0.2753</code>) · candidate <code>1</code> (#5, triage <code>0.5438</code>, full-image SSIM <code>0.6882</code>, debris-zone change avg <code>0.2757</code>) · candidate <code>3</code> (#6, triage <code>0.5428</code>, full-image SSIM <code>0.6807</code>, debris-zone change avg <code>0.2866</code>)</p>
+    <p><strong>Priority shortlist:</strong> start with candidate <code>4</code> (#1, triage <code>0.5481</code>) · candidate <code>6</code> (#2, triage <code>0.5474</code>) · candidate <code>5</code> (#3, triage <code>0.5456</code>)</p>
     <p><strong>Detailed review:</strong> <code>data/generated/still-candidate-review.html</code></p>
     <p><strong>Post-pick rerender report:</strong> <code>data/generated/paper-money-rerender-report.md</code></p>
     <div class="command"><strong>Open rerender report:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\data\generated\paper-money-rerender-report.md&quot;</code></div>
     <figure style="margin: 16px 0 0;"><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-overview.png" alt="state-20 still overview" /><figcaption>Overview image · <code>out/state-20-still-regeneration/state-20-still-regeneration-overview.png</code></figcaption></figure>
     <div class="command"><strong>Open overview:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\out\state-20-still-regeneration\state-20-still-regeneration-overview.png&quot;</code></div>
     <div class="command"><strong>Open detailed review HTML:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\data\generated\still-candidate-review.html&quot;</code></div>
+    <h3>Priority shortlist</h3>
+    <p>Start with shortlist candidates 4, 6, 5 in that order.</p>
+    <ul>
+      <li>Candidate <code>4</code> (#1, triage <code>0.5481</code>) · compare <code>out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png</code> · debris-focus <code>out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png</code> · promote <code>npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></li>
+      <li>Candidate <code>6</code> (#2, triage <code>0.5474</code>) · compare <code>out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png</code> · debris-focus <code>out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png</code> · promote <code>npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></li>
+      <li>Candidate <code>5</code> (#3, triage <code>0.5456</code>) · compare <code>out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png</code> · debris-focus <code>out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png</code> · promote <code>npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></li>
+    </ul>
+    <div class="shortlist-grid">
+      <section class="shortlist-card">
+        <h4>Candidate 4 · rank #1</h4>
+        <p>Triage <code>0.5481</code> · full-image SSIM <code>0.691</code> · debris-zone change avg <code>0.2828</code></p>
+        <p>sha256 <code>03bb32bc9ec7cc60089a8d9664f12512caaa6904c491303fa22ba95b812e6032</code> · bytes <code>2080308</code> · modified <code>2026-03-30T23:23:43.848Z</code></p>
+        <div class="triple">
+          <figure><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-04.png" alt="state-20 shortlist candidate 4" /><figcaption>Candidate<br><code>out/state-20-still-regeneration/state-20-still-regeneration-04.png</code></figcaption></figure>
+          <figure><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png" alt="state-20 shortlist compare 4" /><figcaption>Compare<br><code>out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png</code></figcaption></figure>
+          <figure><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png" alt="state-20 shortlist debris focus 4" /><figcaption>Debris focus<br><code>out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png</code></figcaption></figure>
+        </div>
+        <div class="command"><strong>Promote candidate 4:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
+        <div class="command"><strong>Open candidate:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\out\state-20-still-regeneration\state-20-still-regeneration-04.png&quot;</code></div>
+        <div class="command"><strong>Open compare:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\out\state-20-still-regeneration\state-20-still-regeneration-04-compare.png&quot;</code></div>
+        <div class="command"><strong>Open debris focus:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\out\state-20-still-regeneration\state-20-still-regeneration-04-debris-focus.png&quot;</code></div>
+      </section>
+      <section class="shortlist-card">
+        <h4>Candidate 6 · rank #2</h4>
+        <p>Triage <code>0.5474</code> · full-image SSIM <code>0.6874</code> · debris-zone change avg <code>0.2874</code></p>
+        <p>sha256 <code>646e902397975169abf5e15c58ba6a3fcc00893bc87a68a0bbe59231a6801a7e</code> · bytes <code>2108374</code> · modified <code>2026-03-30T23:23:44.479Z</code></p>
+        <div class="triple">
+          <figure><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-06.png" alt="state-20 shortlist candidate 6" /><figcaption>Candidate<br><code>out/state-20-still-regeneration/state-20-still-regeneration-06.png</code></figcaption></figure>
+          <figure><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png" alt="state-20 shortlist compare 6" /><figcaption>Compare<br><code>out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png</code></figcaption></figure>
+          <figure><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png" alt="state-20 shortlist debris focus 6" /><figcaption>Debris focus<br><code>out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png</code></figcaption></figure>
+        </div>
+        <div class="command"><strong>Promote candidate 6:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
+        <div class="command"><strong>Open candidate:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\out\state-20-still-regeneration\state-20-still-regeneration-06.png&quot;</code></div>
+        <div class="command"><strong>Open compare:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\out\state-20-still-regeneration\state-20-still-regeneration-06-compare.png&quot;</code></div>
+        <div class="command"><strong>Open debris focus:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\out\state-20-still-regeneration\state-20-still-regeneration-06-debris-focus.png&quot;</code></div>
+      </section>
+      <section class="shortlist-card">
+        <h4>Candidate 5 · rank #3</h4>
+        <p>Triage <code>0.5456</code> · full-image SSIM <code>0.6916</code> · debris-zone change avg <code>0.2746</code></p>
+        <p>sha256 <code>eeb1e80c2a9b01077cb5da9dc3584211b4ac11061624ad8714478c536c002b97</code> · bytes <code>2065423</code> · modified <code>2026-03-30T23:23:44.105Z</code></p>
+        <div class="triple">
+          <figure><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-05.png" alt="state-20 shortlist candidate 5" /><figcaption>Candidate<br><code>out/state-20-still-regeneration/state-20-still-regeneration-05.png</code></figcaption></figure>
+          <figure><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png" alt="state-20 shortlist compare 5" /><figcaption>Compare<br><code>out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png</code></figcaption></figure>
+          <figure><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png" alt="state-20 shortlist debris focus 5" /><figcaption>Debris focus<br><code>out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png</code></figcaption></figure>
+        </div>
+        <div class="command"><strong>Promote candidate 5:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
+        <div class="command"><strong>Open candidate:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\out\state-20-still-regeneration\state-20-still-regeneration-05.png&quot;</code></div>
+        <div class="command"><strong>Open compare:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\out\state-20-still-regeneration\state-20-still-regeneration-05-compare.png&quot;</code></div>
+        <div class="command"><strong>Open debris focus:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\out\state-20-still-regeneration\state-20-still-regeneration-05-debris-focus.png&quot;</code></div>
+      </section>
+    </div>
     <h3>Next action</h3>
-    <p>Use the overview + compare + debris-focus surfaces to choose exactly one truly paper-free candidate, run its listed promote:still command without --dry-run, then reopen the paper-money rerender report to review the refreshed loop acceptance evidence.</p>
+    <p>Start with shortlist candidates 4, 6, 5 in that order, reject any option whose debris-focus sheet still shows detached rectangular scraps, then promote exactly one truly paper-free candidate and reopen the rerender report after the loop rerun.</p>
     <div class="grid">
       <figure>
         <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-01.png" alt="state-20 candidate 1" />

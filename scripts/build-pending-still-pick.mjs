@@ -23,6 +23,7 @@ const defaultStatus = 'No candidate is approved by default. Treat the current ba
 const rejectRule = 'Reject any candidate whose debris-focus sheet still shows detached rectangular scraps at the left edge, upper-right edge, or lower-right foreground.';
 const acceptRule = 'Only promote a candidate if it is truly paper-free in those debris-focus zones and still preserves the approved creature identity, framing, and environment well enough to serve as the cleaned anchor.';
 const postPickRule = 'After promotion + rerender, reopen the listed paper-money rerender report and reject the loop again unless both paper-like debris removal and seamless-loop acceptance pass.';
+const shortlistCount = 3;
 
 const review = await readJson(reviewPath);
 const entries = review.entries.filter((entry) => !selectedState || entry.stateId === selectedState);
@@ -32,15 +33,23 @@ if (!entries.length) {
   process.exit(0);
 }
 
-const payload = {
-  recordedAt: new Date().toISOString(),
-  sourceReviewRecordedAt: review.recordedAt,
-  stateFilter: selectedState,
-  defaultStatus,
-  rejectRule,
-  acceptRule,
-  postPickRule,
-  pending: entries.map((entry) => ({
+const pendingEntries = entries.map((entry) => {
+  const rankedCandidates = entry.rankedCandidates ?? [];
+  const shortlist = rankedCandidates.slice(0, shortlistCount).map((candidate) => {
+    const fullCandidate = entry.outputs.find((output) => output.index === candidate.index);
+    return {
+      ...candidate,
+      candidatePath: fullCandidate?.path ?? null,
+      candidateFilesystemPath: fullCandidate?.filesystemPath ?? null,
+      comparisonPath: fullCandidate?.comparisonPath ?? null,
+      comparisonFilesystemPath: fullCandidate?.comparisonFilesystemPath ?? null,
+      debrisFocusPath: fullCandidate?.debrisFocusComparisonPath ?? fullCandidate?.debrisFocusPath ?? null,
+      debrisFocusFilesystemPath: fullCandidate?.debrisFocusComparisonFilesystemPath ?? null,
+      promoteCommand: fullCandidate?.promoteCommand ?? null,
+    };
+  });
+
+  return {
     stateId: entry.stateId,
     stateIndex: entry.stateIndex,
     label: entry.label,
@@ -67,10 +76,42 @@ const payload = {
       debrisFocusFilesystemPath: output.debrisFocusComparisonFilesystemPath ?? (output.debrisFocusComparisonPath ? path.join(root, output.debrisFocusComparisonPath.replace(/^[/\\]+/, '').replace(/\//g, path.sep)) : null),
       promoteCommand: output.promoteCommand,
     })),
-    rankedCandidates: entry.rankedCandidates ?? [],
+    rankedCandidates,
+    shortlist,
+    shortlistSummary: shortlist.length
+      ? `Start with shortlist candidates ${shortlist.map((candidate) => candidate.index).join(', ')} in that order.`
+      : 'No ranked shortlist is available for this batch.',
     decisionStatus: 'pending-human-pick',
-    nextAction: 'Use the overview + compare + debris-focus surfaces to choose exactly one truly paper-free candidate, run its listed promote:still command without --dry-run, then reopen the paper-money rerender report to review the refreshed loop acceptance evidence.',
-  })),
+    nextAction: shortlist.length
+      ? `Start with shortlist candidates ${shortlist.map((candidate) => candidate.index).join(', ')} in that order, reject any option whose debris-focus sheet still shows detached rectangular scraps, then promote exactly one truly paper-free candidate and reopen the rerender report after the loop rerun.`
+      : 'Use the overview + compare + debris-focus surfaces to choose exactly one truly paper-free candidate, run its listed promote:still command without --dry-run, then reopen the paper-money rerender report to review the refreshed loop acceptance evidence.',
+  };
+});
+
+const pendingStartHere = pendingEntries.flatMap((entry) =>
+  entry.shortlist.map((candidate) => ({
+    stateId: entry.stateId,
+    label: entry.label,
+    index: candidate.index,
+    triageRank: candidate.triageRank,
+    triageScore: candidate.triageScore,
+    comparisonPath: candidate.comparisonPath,
+    debrisFocusPath: candidate.debrisFocusPath,
+    promoteCommand: candidate.promoteCommand,
+  }))
+);
+
+const payload = {
+  recordedAt: new Date().toISOString(),
+  sourceReviewRecordedAt: review.recordedAt,
+  stateFilter: selectedState,
+  defaultStatus,
+  rejectRule,
+  acceptRule,
+  postPickRule,
+  shortlistCount,
+  startHere: pendingStartHere,
+  pending: pendingEntries,
 };
 
 await fs.writeFile(pendingJsonPath, `${JSON.stringify(payload, null, 2)}\n`);
@@ -88,6 +129,18 @@ const mdLines = [
   '',
   `- ${defaultStatus}`,
   '',
+  '## Start here',
+  '',
+  ...(payload.startHere.length
+    ? [
+        '- Review the shortlist candidates in this order before scanning the full matrix:',
+        ...payload.startHere.map((candidate) => `  - ${candidate.stateId} candidate ${candidate.index} (#${candidate.triageRank}, triage \`${candidate.triageScore}\`) · compare \`${candidate.comparisonPath}\` · debris-focus \`${candidate.debrisFocusPath ?? '—'}\` · promote \`${candidate.promoteCommand ?? '—'}\``),
+        '',
+      ]
+    : [
+        '- No shortlist available; use the full candidate matrix below.',
+        '',
+      ]),
   '## Acceptance gate',
   '',
   `- ${rejectRule}`,
@@ -113,6 +166,35 @@ const mdLines = [
         ...entry.rankedCandidates.map((candidate) => `  ${candidate.triageRank}. candidate ${candidate.index} · triage \`${candidate.triageScore}\` · full-image SSIM \`${candidate.fullImageSsim}\` · debris-zone change avg \`${candidate.debrisZoneChangeAverage}\``),
       ]
       : ['- Automated triage ranking: unavailable (metrics failed for all candidates).']),
+    ...(entry.shortlist.length
+      ? [
+        `- Priority shortlist: start with candidates ${entry.shortlist.map((candidate) => candidate.index).join(', ')} before reviewing the rest.`,
+        ...entry.shortlist.map((candidate) => `  - Candidate ${candidate.index} (#${candidate.triageRank}) · triage \`${candidate.triageScore}\` · compare \`${candidate.comparisonPath}\` · debris-focus \`${candidate.debrisFocusPath}\` · promote \`${candidate.promoteCommand}\``),
+      ]
+      : ['- Priority shortlist: unavailable (no ranked candidates recorded).']),
+    ...(entry.shortlist.length
+      ? [
+        '',
+        '### Shortlist review cards',
+        '',
+        ...entry.shortlist.flatMap((candidate) => {
+          const fullCandidate = entry.candidates.find((item) => item.index === candidate.index);
+          return [
+            `#### Candidate ${candidate.index} · rank #${candidate.triageRank}`,
+            '',
+            `- Candidate image: \`${candidate.candidatePath ?? '—'}\``,
+            ...(fullCandidate?.fingerprint ? [`- Fingerprint: sha256 \`${fullCandidate.fingerprint.sha256}\` · bytes \`${fullCandidate.fingerprint.bytes}\` · modified \`${fullCandidate.fingerprint.modifiedAt}\``] : []),
+            `- Compare image: \`${candidate.comparisonPath ?? '—'}\``,
+            `- Debris-focus image: \`${candidate.debrisFocusPath ?? '—'}\``,
+            `- Promote command: \`${candidate.promoteCommand ?? '—'}\``,
+            ...(candidate.candidateFilesystemPath ? [`- Open candidate: \`start "" "${candidate.candidateFilesystemPath}"\``] : []),
+            ...(candidate.comparisonFilesystemPath ? [`- Open compare: \`start "" "${candidate.comparisonFilesystemPath}"\``] : []),
+            ...(candidate.debrisFocusFilesystemPath ? [`- Open debris-focus: \`start "" "${candidate.debrisFocusFilesystemPath}"\``] : []),
+            '',
+          ];
+        }),
+      ]
+      : []),
     `- Next action: ${entry.nextAction}`,
     '',
     '| Candidate | Candidate image | Fingerprint | Metrics | Compare image | Debris-focus image | Promote command |',
@@ -139,7 +221,14 @@ const htmlLines = [
   '    .entry { background: #121a2b; border: 1px solid #25324a; border-radius: 14px; padding: 18px; margin-bottom: 24px; }',
   '    .gate { background: #2a1d13; border: 1px solid #7a4a2a; border-radius: 14px; padding: 18px; margin-bottom: 24px; }',
   '    .status { background: #291626; border: 1px solid #7c3658; border-radius: 14px; padding: 18px; margin-bottom: 24px; }',
+  '    .start-here { background: #132235; border: 1px solid #2f5f94; border-radius: 14px; padding: 18px; margin-bottom: 24px; }',
   '    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }',
+  '    .shortlist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; margin: 18px 0 22px; }',
+  '    .shortlist-card { background: #18233a; border: 1px solid #35507d; border-radius: 14px; padding: 16px; }',
+  '    .shortlist-card h4 { margin: 0 0 10px; }',
+  '    .triple { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }',
+  '    .triple figure { padding: 8px; }',
+  '    .triple figcaption { font-size: 12px; }',
   '    figure { margin: 0; background: #0f1727; border: 1px solid #2d3b57; border-radius: 12px; padding: 12px; }',
   '    img { display: block; width: 100%; height: auto; border-radius: 8px; background: #05070d; }',
   '    figcaption { margin-top: 10px; color: #cdd7e8; font-size: 13px; }',
@@ -154,6 +243,19 @@ const htmlLines = [
   '  <section class="status">',
   '    <h2>Default status</h2>',
   `    <p>${escapeHtml(defaultStatus)}</p>`,
+  '  </section>',
+  '  <section class="start-here">',
+  '    <h2>Start here</h2>',
+  ...(payload.startHere.length
+    ? [
+        '    <p>Review the shortlist candidates in this order before scanning the full matrix:</p>',
+        '    <ul>',
+        ...payload.startHere.map((candidate) => `      <li>${escapeHtml(candidate.stateId)} candidate <code>${escapeHtml(candidate.index)}</code> (#${escapeHtml(candidate.triageRank)}, triage <code>${escapeHtml(candidate.triageScore)}</code>) · compare <code>${escapeHtml(candidate.comparisonPath ?? 'n/a')}</code> · debris-focus <code>${escapeHtml(candidate.debrisFocusPath ?? 'n/a')}</code> · promote <code>${escapeHtml(candidate.promoteCommand ?? 'n/a')}</code></li>`),
+        '    </ul>',
+      ]
+    : [
+        '    <p>No shortlist available; use the full candidate matrix below.</p>',
+      ]),
   '  </section>',
   '  <section class="gate">',
   '    <h2>Acceptance gate</h2>',
@@ -178,6 +280,9 @@ const htmlLines = [
       entry.rankedCandidates.length
         ? `    <p><strong>Automated triage ranking:</strong> ${entry.rankedCandidates.map((candidate) => `candidate <code>${escapeHtml(candidate.index)}</code> (#${escapeHtml(candidate.triageRank)}, triage <code>${escapeHtml(candidate.triageScore)}</code>, full-image SSIM <code>${escapeHtml(candidate.fullImageSsim)}</code>, debris-zone change avg <code>${escapeHtml(candidate.debrisZoneChangeAverage)}</code>)`).join(' · ')}</p>`
         : '    <p><strong>Automated triage ranking:</strong> unavailable (metrics failed for all candidates).</p>',
+      entry.shortlist.length
+        ? `    <p><strong>Priority shortlist:</strong> start with ${entry.shortlist.map((candidate) => `candidate <code>${escapeHtml(candidate.index)}</code> (#${escapeHtml(candidate.triageRank)}, triage <code>${escapeHtml(candidate.triageScore)}</code>)`).join(' · ')}</p>`
+        : '    <p><strong>Priority shortlist:</strong> unavailable (no ranked candidates recorded).</p>',
       `    <p><strong>Detailed review:</strong> <code>${escapeHtml(entry.reviewHtml)}</code></p>`,
       `    <p><strong>Post-pick rerender report:</strong> <code>${escapeHtml(entry.postPickRerenderReport)}</code></p>`,
       `    <div class="command"><strong>Open rerender report:</strong><br><code>${escapeHtml(`start "" "${entry.postPickRerenderReportFilesystemPath}"`)}</code></div>`,
@@ -186,6 +291,59 @@ const htmlLines = [
         : '',
       `    <div class="command"><strong>Open overview:</strong><br><code>${escapeHtml(entry.overviewFilesystemPath ? `start "" "${entry.overviewFilesystemPath}"` : 'n/a')}</code></div>`,
       `    <div class="command"><strong>Open detailed review HTML:</strong><br><code>${escapeHtml(`start "" "${path.join(root, entry.reviewHtml.replace(/\//g, path.sep))}"`)}</code></div>`,
+      entry.shortlist.length
+        ? [
+          '    <h3>Priority shortlist</h3>',
+          `    <p>${escapeHtml(entry.shortlistSummary)}</p>`,
+          '    <ul>',
+          ...entry.shortlist.map((candidate) => `      <li>Candidate <code>${escapeHtml(candidate.index)}</code> (#${escapeHtml(candidate.triageRank)}, triage <code>${escapeHtml(candidate.triageScore)}</code>) · compare <code>${escapeHtml(candidate.comparisonPath ?? 'n/a')}</code> · debris-focus <code>${escapeHtml(candidate.debrisFocusPath ?? 'n/a')}</code> · promote <code>${escapeHtml(candidate.promoteCommand ?? 'n/a')}</code></li>`),
+          '    </ul>',
+          '    <div class="shortlist-grid">',
+          ...entry.shortlist.map((candidate) => {
+            const fullCandidate = entry.candidates.find((item) => item.index === candidate.index);
+            const candidateRelative = candidate.candidateFilesystemPath
+              ? path.relative(path.dirname(pendingHtmlPath), candidate.candidateFilesystemPath).replace(/\\/g, '/')
+              : null;
+            const comparisonRelative = candidate.comparisonFilesystemPath
+              ? path.relative(path.dirname(pendingHtmlPath), candidate.comparisonFilesystemPath).replace(/\\/g, '/')
+              : null;
+            const debrisFocusRelative = candidate.debrisFocusFilesystemPath
+              ? path.relative(path.dirname(pendingHtmlPath), candidate.debrisFocusFilesystemPath).replace(/\\/g, '/')
+              : null;
+            return [
+              '      <section class="shortlist-card">',
+              `        <h4>Candidate ${escapeHtml(candidate.index)} · rank #${escapeHtml(candidate.triageRank)}</h4>`,
+              `        <p>Triage <code>${escapeHtml(candidate.triageScore)}</code> · full-image SSIM <code>${escapeHtml(candidate.fullImageSsim)}</code> · debris-zone change avg <code>${escapeHtml(candidate.debrisZoneChangeAverage)}</code></p>`,
+              fullCandidate?.fingerprint
+                ? `        <p>sha256 <code>${escapeHtml(fullCandidate.fingerprint.sha256)}</code> · bytes <code>${escapeHtml(fullCandidate.fingerprint.bytes)}</code> · modified <code>${escapeHtml(fullCandidate.fingerprint.modifiedAt)}</code></p>`
+                : '',
+              '        <div class="triple">',
+              candidateRelative
+                ? `          <figure><img src="${escapeHtml(candidateRelative)}" alt="${escapeHtml(`${entry.stateId} shortlist candidate ${candidate.index}`)}" /><figcaption>Candidate<br><code>${escapeHtml(candidate.candidatePath ?? 'n/a')}</code></figcaption></figure>`
+                : '          <figure><figcaption>Candidate image unavailable</figcaption></figure>',
+              comparisonRelative
+                ? `          <figure><img src="${escapeHtml(comparisonRelative)}" alt="${escapeHtml(`${entry.stateId} shortlist compare ${candidate.index}`)}" /><figcaption>Compare<br><code>${escapeHtml(candidate.comparisonPath ?? 'n/a')}</code></figcaption></figure>`
+                : '          <figure><figcaption>Compare image unavailable</figcaption></figure>',
+              debrisFocusRelative
+                ? `          <figure><img src="${escapeHtml(debrisFocusRelative)}" alt="${escapeHtml(`${entry.stateId} shortlist debris focus ${candidate.index}`)}" /><figcaption>Debris focus<br><code>${escapeHtml(candidate.debrisFocusPath ?? 'n/a')}</code></figcaption></figure>`
+                : '          <figure><figcaption>Debris-focus image unavailable</figcaption></figure>',
+              '        </div>',
+              `        <div class="command"><strong>Promote candidate ${escapeHtml(candidate.index)}:</strong><br><code>${escapeHtml(candidate.promoteCommand ?? 'n/a')}</code></div>`,
+              candidate.candidateFilesystemPath
+                ? `        <div class="command"><strong>Open candidate:</strong><br><code>${escapeHtml(`start "" "${candidate.candidateFilesystemPath}"`)}</code></div>`
+                : '',
+              candidate.comparisonFilesystemPath
+                ? `        <div class="command"><strong>Open compare:</strong><br><code>${escapeHtml(`start "" "${candidate.comparisonFilesystemPath}"`)}</code></div>`
+                : '',
+              candidate.debrisFocusFilesystemPath
+                ? `        <div class="command"><strong>Open debris focus:</strong><br><code>${escapeHtml(`start "" "${candidate.debrisFocusFilesystemPath}"`)}</code></div>`
+                : '',
+              '      </section>',
+            ].filter(Boolean).join('\n');
+          }),
+          '    </div>',
+        ].join('\n')
+        : '    <h3>Priority shortlist</h3><p>No ranked shortlist available.</p>',
       '    <h3>Next action</h3>',
       `    <p>${escapeHtml(entry.nextAction)}</p>`,
       '    <div class="grid">',
