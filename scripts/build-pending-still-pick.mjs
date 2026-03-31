@@ -82,6 +82,7 @@ const buildShortlistBoard = async ({ stateId, shortlist }) => {
 };
 
 const defaultStatus = 'No candidate is approved by default. Treat the current batch as blocked until one candidate is explicitly chosen by human review and then survives the follow-up loop rerender acceptance check.';
+const shortlistDisclaimer = 'The shortlist is triage order only. It is not a recommendation, endorsement, or approval signal; every shortlisted candidate must still pass the same debris and identity checks as the rest of the batch.';
 const rejectRule = 'Reject any candidate whose debris-focus sheet still shows detached rectangular scraps at the left edge, upper-right edge, or lower-right foreground.';
 const acceptRule = 'Only promote a candidate if it is truly paper-free in those debris-focus zones and still preserves the approved creature identity, framing, and environment well enough to serve as the cleaned anchor.';
 const postPickRule = 'After promotion + rerender, reopen the listed paper-money rerender report and reject the loop again unless both paper-like debris removal and seamless-loop acceptance pass.';
@@ -188,16 +189,41 @@ const pendingEntries = await Promise.all(entries.map(async (entry) => {
   };
 }));
 
+const reviewHtmlFilesystemPath = path.join(root, 'data', 'generated', 'still-candidate-review.html');
+const reviewMarkdownFilesystemPath = path.join(root, 'data', 'generated', 'still-candidate-review.md');
+
+const pendingQuickLaunch = pendingEntries.map((entry) => ({
+  stateId: entry.stateId,
+  label: entry.label,
+  pendingHtmlPath: 'data/generated/pending-still-pick.html',
+  pendingHtmlFilesystemPath: pendingHtmlPath,
+  reviewHtmlPath: entry.reviewHtml,
+  reviewHtmlFilesystemPath,
+  reviewMarkdownPath: entry.reviewMarkdown,
+  reviewMarkdownFilesystemPath,
+  overviewPath: entry.overviewPath,
+  overviewFilesystemPath: entry.overviewFilesystemPath,
+  shortlistBoardPath: entry.shortlistBoardPath,
+  shortlistBoardFilesystemPath: entry.shortlistBoardFilesystemPath,
+  postPickRerenderReport: entry.postPickRerenderReport,
+  postPickRerenderReportFilesystemPath: entry.postPickRerenderReportFilesystemPath,
+}));
+
 const pendingStartHere = pendingEntries.flatMap((entry) =>
   entry.shortlist.map((candidate) => ({
     stateId: entry.stateId,
     label: entry.label,
     shortlistBoardPath: entry.shortlistBoardPath,
+    shortlistBoardFilesystemPath: entry.shortlistBoardFilesystemPath,
     index: candidate.index,
     triageRank: candidate.triageRank,
     triageScore: candidate.triageScore,
+    candidatePath: candidate.candidatePath,
+    candidateFilesystemPath: candidate.candidateFilesystemPath,
     comparisonPath: candidate.comparisonPath,
+    comparisonFilesystemPath: candidate.comparisonFilesystemPath,
     debrisFocusPath: candidate.debrisFocusPath,
+    debrisFocusFilesystemPath: candidate.debrisFocusFilesystemPath,
     promoteCommand: candidate.promoteCommand,
   }))
 );
@@ -207,10 +233,12 @@ const payload = {
   sourceReviewRecordedAt: review.recordedAt,
   stateFilter: selectedState,
   defaultStatus,
+  shortlistDisclaimer,
   rejectRule,
   acceptRule,
   postPickRule,
   shortlistCount,
+  quickLaunch: pendingQuickLaunch,
   startHere: pendingStartHere,
   pending: pendingEntries,
 };
@@ -232,17 +260,45 @@ const mdLines = [
   '',
   '## Start here',
   '',
+  `- ${shortlistDisclaimer}`,
+  '',
+  ...(payload.quickLaunch.length
+    ? [
+        '- Quick-launch the core review surfaces before drilling into individual candidates:',
+        ...payload.quickLaunch.flatMap((entry) => [
+          `  - ${entry.stateId} · pending-pick HTML: \`${entry.pendingHtmlPath}\``,
+          `    - Open pending-pick HTML: \`start "" "${entry.pendingHtmlFilesystemPath}"\``,
+          `    - Open detailed review HTML: \`start "" "${entry.reviewHtmlFilesystemPath}"\``,
+          `    - Open detailed review Markdown: \`start "" "${entry.reviewMarkdownFilesystemPath}"\``,
+          ...(entry.overviewFilesystemPath ? [`    - Open overview: \`start "" "${entry.overviewFilesystemPath}"\``] : []),
+          ...(entry.shortlistBoardFilesystemPath ? [`    - Open shortlist board: \`start "" "${entry.shortlistBoardFilesystemPath}"\``] : []),
+          `    - Open post-pick rerender report: \`start "" "${entry.postPickRerenderReportFilesystemPath}"\``,
+        ]),
+        '',
+      ]
+    : []),
   ...(payload.startHere.length
     ? [
         '- Review the shortlist candidates in this order before scanning the full matrix:',
-        ...Array.from(new Set(payload.startHere.map((candidate) => candidate.shortlistBoardPath).filter(Boolean))).map((shortlistBoardPath) => `- Shared shortlist board: \`${shortlistBoardPath}\``),
-        ...payload.startHere.map((candidate) => {
+        ...Array.from(new Set(payload.startHere.map((candidate) => candidate.shortlistBoardPath).filter(Boolean))).flatMap((shortlistBoardPath) => {
+          const shortlistBoardEntry = payload.startHere.find((candidate) => candidate.shortlistBoardPath === shortlistBoardPath);
+          return [
+            `- Shared shortlist board: \`${shortlistBoardPath}\``,
+            ...(shortlistBoardEntry?.shortlistBoardFilesystemPath ? [`- Open shortlist board: \`start "" "${shortlistBoardEntry.shortlistBoardFilesystemPath}"\``] : []),
+          ];
+        }),
+        ...payload.startHere.flatMap((candidate) => {
           const pendingEntry = payload.pending.find((entry) => entry.stateId === candidate.stateId);
           const shortlistCandidate = pendingEntry?.shortlist.find((item) => item.index === candidate.index);
           const watchSummary = shortlistCandidate?.watchZones?.length
             ? ` · watch first: ${shortlistCandidate.watchZones.slice(0, 2).map((zone) => `${zone.label} (${zone.ssimText})`).join(', ')}`
             : '';
-          return `  - ${candidate.stateId} candidate ${candidate.index} (#${candidate.triageRank}, triage \`${candidate.triageScore}\`) · compare \`${candidate.comparisonPath}\` · debris-focus \`${candidate.debrisFocusPath ?? '—'}\`${watchSummary} · promote \`${candidate.promoteCommand ?? '—'}\``;
+          return [
+            `  - ${candidate.stateId} candidate ${candidate.index} (#${candidate.triageRank}, triage \`${candidate.triageScore}\`) · compare \`${candidate.comparisonPath}\` · debris-focus \`${candidate.debrisFocusPath ?? '—'}\`${watchSummary} · promote \`${candidate.promoteCommand ?? '—'}\``,
+            ...(candidate.candidateFilesystemPath ? [`    - Open candidate: \`start "" "${candidate.candidateFilesystemPath}"\``] : []),
+            ...(candidate.comparisonFilesystemPath ? [`    - Open compare: \`start "" "${candidate.comparisonFilesystemPath}"\``] : []),
+            ...(candidate.debrisFocusFilesystemPath ? [`    - Open debris-focus: \`start "" "${candidate.debrisFocusFilesystemPath}"\``] : []),
+          ];
         }),
         '',
       ]
@@ -364,18 +420,46 @@ const htmlLines = [
   '  </section>',
   '  <section class="start-here">',
   '    <h2>Start here</h2>',
+  `    <p><strong>Important:</strong> ${escapeHtml(shortlistDisclaimer)}</p>`,
+  ...(payload.quickLaunch.length
+    ? [
+        '    <p><strong>Quick launch:</strong> open the core review surfaces before drilling into individual candidates.</p>',
+        '    <ul>',
+        ...payload.quickLaunch.flatMap((entry) => [
+          `      <li>${escapeHtml(entry.stateId)} · pending-pick HTML <code>${escapeHtml(entry.pendingHtmlPath)}</code></li>`,
+          `      <div class="command"><strong>Open pending-pick HTML:</strong><br><code>${escapeHtml(`start "" "${entry.pendingHtmlFilesystemPath}"`)}</code></div>`,
+          `      <div class="command"><strong>Open detailed review HTML:</strong><br><code>${escapeHtml(`start "" "${entry.reviewHtmlFilesystemPath}"`)}</code></div>`,
+          `      <div class="command"><strong>Open detailed review Markdown:</strong><br><code>${escapeHtml(`start "" "${entry.reviewMarkdownFilesystemPath}"`)}</code></div>`,
+          ...(entry.overviewFilesystemPath ? [`      <div class="command"><strong>Open overview:</strong><br><code>${escapeHtml(`start "" "${entry.overviewFilesystemPath}"`)}</code></div>`] : []),
+          ...(entry.shortlistBoardFilesystemPath ? [`      <div class="command"><strong>Open shortlist board:</strong><br><code>${escapeHtml(`start "" "${entry.shortlistBoardFilesystemPath}"`)}</code></div>`] : []),
+          `      <div class="command"><strong>Open post-pick rerender report:</strong><br><code>${escapeHtml(`start "" "${entry.postPickRerenderReportFilesystemPath}"`)}</code></div>`,
+        ]),
+        '    </ul>',
+      ]
+    : []),
   ...(payload.startHere.length
     ? [
         '    <p>Review the shortlist candidates in this order before scanning the full matrix:</p>',
-        ...Array.from(new Set(payload.startHere.map((candidate) => candidate.shortlistBoardPath).filter(Boolean))).map((shortlistBoardPath) => `    <p><strong>Shared shortlist board:</strong> <code>${escapeHtml(shortlistBoardPath)}</code></p>`),
+        ...Array.from(new Set(payload.startHere.map((candidate) => candidate.shortlistBoardPath).filter(Boolean))).flatMap((shortlistBoardPath) => {
+          const shortlistBoardEntry = payload.startHere.find((candidate) => candidate.shortlistBoardPath === shortlistBoardPath);
+          return [
+            `    <p><strong>Shared shortlist board:</strong> <code>${escapeHtml(shortlistBoardPath)}</code></p>`,
+            ...(shortlistBoardEntry?.shortlistBoardFilesystemPath ? [`    <div class="command"><strong>Open shortlist board:</strong><br><code>${escapeHtml(`start "" "${shortlistBoardEntry.shortlistBoardFilesystemPath}"`)}</code></div>`] : []),
+          ];
+        }),
         '    <ul>',
-        ...payload.startHere.map((candidate) => {
+        ...payload.startHere.flatMap((candidate) => {
           const pendingEntry = payload.pending.find((entry) => entry.stateId === candidate.stateId);
           const shortlistCandidate = pendingEntry?.shortlist.find((item) => item.index === candidate.index);
           const watchSummary = shortlistCandidate?.watchZones?.length
             ? ` · watch first ${shortlistCandidate.watchZones.slice(0, 2).map((zone) => `${zone.label} (${zone.ssimText})`).join(', ')}`
             : '';
-          return `      <li>${escapeHtml(candidate.stateId)} candidate <code>${escapeHtml(candidate.index)}</code> (#${escapeHtml(candidate.triageRank)}, triage <code>${escapeHtml(candidate.triageScore)}</code>) · compare <code>${escapeHtml(candidate.comparisonPath ?? 'n/a')}</code> · debris-focus <code>${escapeHtml(candidate.debrisFocusPath ?? 'n/a')}</code>${escapeHtml(watchSummary)} · promote <code>${escapeHtml(candidate.promoteCommand ?? 'n/a')}</code></li>`;
+          return [
+            `      <li>${escapeHtml(candidate.stateId)} candidate <code>${escapeHtml(candidate.index)}</code> (#${escapeHtml(candidate.triageRank)}, triage <code>${escapeHtml(candidate.triageScore)}</code>) · compare <code>${escapeHtml(candidate.comparisonPath ?? 'n/a')}</code> · debris-focus <code>${escapeHtml(candidate.debrisFocusPath ?? 'n/a')}</code>${escapeHtml(watchSummary)} · promote <code>${escapeHtml(candidate.promoteCommand ?? 'n/a')}</code></li>`,
+            ...(candidate.candidateFilesystemPath ? [`      <div class="command"><strong>Open candidate:</strong><br><code>${escapeHtml(`start "" "${candidate.candidateFilesystemPath}"`)}</code></div>`] : []),
+            ...(candidate.comparisonFilesystemPath ? [`      <div class="command"><strong>Open compare:</strong><br><code>${escapeHtml(`start "" "${candidate.comparisonFilesystemPath}"`)}</code></div>`] : []),
+            ...(candidate.debrisFocusFilesystemPath ? [`      <div class="command"><strong>Open debris focus:</strong><br><code>${escapeHtml(`start "" "${candidate.debrisFocusFilesystemPath}"`)}</code></div>`] : []),
+          ];
         }),
         '    </ul>',
       ]
