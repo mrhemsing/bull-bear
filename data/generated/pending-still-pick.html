@@ -30,7 +30,7 @@
 </head>
 <body>
   <h1>Pending still pick</h1>
-  <p class="meta">Recorded at 2026-03-31T07:01:09.256Z · Source review recorded at 2026-03-31T03:27:42.857Z · State filter: state-20</p>
+  <p class="meta">Recorded at 2026-03-31T07:34:15.729Z · Source review recorded at 2026-03-31T03:27:42.857Z · State filter: state-20</p>
   <section class="status">
     <h2>Default status</h2>
     <p>No candidate is approved by default. Treat the current batch as blocked until one candidate is explicitly chosen by human review and then survives the follow-up loop rerender acceptance check.</p>
@@ -40,9 +40,9 @@
     <p>Review the shortlist candidates in this order before scanning the full matrix:</p>
     <p><strong>Shared shortlist board:</strong> <code>out/state-20-still-regeneration/state-20-still-regeneration-shortlist-board.png</code></p>
     <ul>
-      <li>state-20 candidate <code>4</code> (#1, triage <code>0.5481</code>) · compare <code>out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png</code> · debris-focus <code>out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png</code> · promote <code>npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></li>
-      <li>state-20 candidate <code>6</code> (#2, triage <code>0.5474</code>) · compare <code>out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png</code> · debris-focus <code>out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png</code> · promote <code>npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></li>
-      <li>state-20 candidate <code>5</code> (#3, triage <code>0.5456</code>) · compare <code>out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png</code> · debris-focus <code>out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png</code> · promote <code>npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></li>
+      <li>state-20 candidate <code>4</code> (#1, triage <code>0.5481</code>) · compare <code>out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png</code> · debris-focus <code>out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png</code> · watch first left edge (0.7365), upper-right edge (0.7331) · promote <code>npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></li>
+      <li>state-20 candidate <code>6</code> (#2, triage <code>0.5474</code>) · compare <code>out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png</code> · debris-focus <code>out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png</code> · watch first upper-right edge (0.7379), left edge (0.7039) · promote <code>npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></li>
+      <li>state-20 candidate <code>5</code> (#3, triage <code>0.5456</code>) · compare <code>out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png</code> · debris-focus <code>out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png</code> · watch first upper-right edge (0.7406), left edge (0.7193) · promote <code>npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></li>
     </ul>
   </section>
   <section class="gate">
@@ -80,6 +80,7 @@
       <section class="shortlist-card">
         <h4>Candidate 4 · rank #1</h4>
         <p>Triage <code>0.5481</code> · full-image SSIM <code>0.691</code> · debris-zone change avg <code>0.2828</code></p>
+        <p><strong>Watch first:</strong> left edge <code>0.7365</code> · upper-right edge <code>0.7331</code> · lower-right foreground <code>0.6818</code></p>
         <p>sha256 <code>03bb32bc9ec7cc60089a8d9664f12512caaa6904c491303fa22ba95b812e6032</code> · bytes <code>2080308</code> · modified <code>2026-03-30T23:23:43.848Z</code></p>
         <div class="triple">
           <figure><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-04.png" alt="state-20 shortlist candidate 4" /><figcaption>Candidate<br><code>out/state-20-still-regeneration/state-20-still-regeneration-04.png</code></figcaption></figure>
@@ -94,6 +95,7 @@
       <section class="shortlist-card">
         <h4>Candidate 6 · rank #2</h4>
         <p>Triage <code>0.5474</code> · full-image SSIM <code>0.6874</code> · debris-zone change avg <code>0.2874</code></p>
+        <p><strong>Watch first:</strong> upper-right edge <code>0.7379</code> · left edge <code>0.7039</code> · lower-right foreground <code>0.6959</code></p>
         <p>sha256 <code>646e902397975169abf5e15c58ba6a3fcc00893bc87a68a0bbe59231a6801a7e</code> · bytes <code>2108374</code> · modified <code>2026-03-30T23:23:44.479Z</code></p>
         <div class="triple">
           <figure><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-06.png" alt="state-20 shortlist candidate 6" /><figcaption>Candidate<br><code>out/state-20-still-regeneration/state-20-still-regeneration-06.png</code></figcaption></figure>
@@ -108,6 +110,7 @@
       <section class="shortlist-card">
         <h4>Candidate 5 · rank #3</h4>
         <p>Triage <code>0.5456</code> · full-image SSIM <code>0.6916</code> · debris-zone change avg <code>0.2746</code></p>
+        <p><strong>Watch first:</strong> upper-right edge <code>0.7406</code> · left edge <code>0.7193</code> · lower-right foreground <code>0.7163</code></p>
         <p>sha256 <code>eeb1e80c2a9b01077cb5da9dc3584211b4ac11061624ad8714478c536c002b97</code> · bytes <code>2065423</code> · modified <code>2026-03-30T23:23:44.105Z</code></p>
         <div class="triple">
           <figure><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-05.png" alt="state-20 shortlist candidate 5" /><figcaption>Candidate<br><code>out/state-20-still-regeneration/state-20-still-regeneration-05.png</code></figcaption></figure>
@@ -125,7 +128,7 @@
     <div class="grid">
       <figure>
         <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-01.png" alt="state-20 candidate 1" />
-        <figcaption>Candidate 1 · <code>out/state-20-still-regeneration/state-20-still-regeneration-01.png</code><br>sha256 <code>65271016ce5769450d56efd47d58c24b8337ea4a875a6a41f2e93127434e6673</code><br>bytes <code>2064791</code> · modified <code>2026-03-30T23:23:30.907Z</code><br>full-image SSIM <code>0.6882</code> · debris-zone change avg <code>0.2757</code> · triage <code>0.5438</code><br>zone SSIMs: left <code>0.7215</code> · upper-right <code>0.7366</code> · lower-right <code>0.7149</code></figcaption>
+        <figcaption>Candidate 1 · <code>out/state-20-still-regeneration/state-20-still-regeneration-01.png</code><br>sha256 <code>65271016ce5769450d56efd47d58c24b8337ea4a875a6a41f2e93127434e6673</code><br>bytes <code>2064791</code> · modified <code>2026-03-30T23:23:30.907Z</code><br>full-image SSIM <code>0.6882</code> · debris-zone change avg <code>0.2757</code> · triage <code>0.5438</code><br>zone SSIMs: left <code>0.7215</code> · upper-right <code>0.7366</code> · lower-right <code>0.7149</code><br>watch first: upper-right edge <code>0.7366</code> · left edge <code>0.7215</code></figcaption>
         <div class="command"><strong>Promote:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=1 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
       </figure>
       <figure>
@@ -138,7 +141,7 @@
       </figure>
       <figure>
         <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-02.png" alt="state-20 candidate 2" />
-        <figcaption>Candidate 2 · <code>out/state-20-still-regeneration/state-20-still-regeneration-02.png</code><br>sha256 <code>600c9de14c951d67add0517c7c21c2a6b66fdf749ae9a5b581991b67e119ed14</code><br>bytes <code>2083980</code> · modified <code>2026-03-30T23:23:31.288Z</code><br>full-image SSIM <code>0.6897</code> · debris-zone change avg <code>0.2753</code> · triage <code>0.5447</code><br>zone SSIMs: left <code>0.7413</code> · upper-right <code>0.7158</code> · lower-right <code>0.717</code></figcaption>
+        <figcaption>Candidate 2 · <code>out/state-20-still-regeneration/state-20-still-regeneration-02.png</code><br>sha256 <code>600c9de14c951d67add0517c7c21c2a6b66fdf749ae9a5b581991b67e119ed14</code><br>bytes <code>2083980</code> · modified <code>2026-03-30T23:23:31.288Z</code><br>full-image SSIM <code>0.6897</code> · debris-zone change avg <code>0.2753</code> · triage <code>0.5447</code><br>zone SSIMs: left <code>0.7413</code> · upper-right <code>0.7158</code> · lower-right <code>0.717</code><br>watch first: left edge <code>0.7413</code> · lower-right foreground <code>0.7170</code></figcaption>
         <div class="command"><strong>Promote:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=2 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
       </figure>
       <figure>
@@ -151,7 +154,7 @@
       </figure>
       <figure>
         <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-03.png" alt="state-20 candidate 3" />
-        <figcaption>Candidate 3 · <code>out/state-20-still-regeneration/state-20-still-regeneration-03.png</code><br>sha256 <code>feedc6174fb4f3c29ea8e8bf2e3d21d5be6498494c9b608b4eaaa5f86633ef33</code><br>bytes <code>2081762</code> · modified <code>2026-03-30T23:23:31.662Z</code><br>full-image SSIM <code>0.6807</code> · debris-zone change avg <code>0.2866</code> · triage <code>0.5428</code><br>zone SSIMs: left <code>0.7124</code> · upper-right <code>0.726</code> · lower-right <code>0.7018</code></figcaption>
+        <figcaption>Candidate 3 · <code>out/state-20-still-regeneration/state-20-still-regeneration-03.png</code><br>sha256 <code>feedc6174fb4f3c29ea8e8bf2e3d21d5be6498494c9b608b4eaaa5f86633ef33</code><br>bytes <code>2081762</code> · modified <code>2026-03-30T23:23:31.662Z</code><br>full-image SSIM <code>0.6807</code> · debris-zone change avg <code>0.2866</code> · triage <code>0.5428</code><br>zone SSIMs: left <code>0.7124</code> · upper-right <code>0.726</code> · lower-right <code>0.7018</code><br>watch first: upper-right edge <code>0.7260</code> · left edge <code>0.7124</code></figcaption>
         <div class="command"><strong>Promote:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=3 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
       </figure>
       <figure>
@@ -164,7 +167,7 @@
       </figure>
       <figure>
         <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-04.png" alt="state-20 candidate 4" />
-        <figcaption>Candidate 4 · <code>out/state-20-still-regeneration/state-20-still-regeneration-04.png</code><br>sha256 <code>03bb32bc9ec7cc60089a8d9664f12512caaa6904c491303fa22ba95b812e6032</code><br>bytes <code>2080308</code> · modified <code>2026-03-30T23:23:43.848Z</code><br>full-image SSIM <code>0.691</code> · debris-zone change avg <code>0.2828</code> · triage <code>0.5481</code><br>zone SSIMs: left <code>0.7365</code> · upper-right <code>0.7331</code> · lower-right <code>0.6818</code></figcaption>
+        <figcaption>Candidate 4 · <code>out/state-20-still-regeneration/state-20-still-regeneration-04.png</code><br>sha256 <code>03bb32bc9ec7cc60089a8d9664f12512caaa6904c491303fa22ba95b812e6032</code><br>bytes <code>2080308</code> · modified <code>2026-03-30T23:23:43.848Z</code><br>full-image SSIM <code>0.691</code> · debris-zone change avg <code>0.2828</code> · triage <code>0.5481</code><br>zone SSIMs: left <code>0.7365</code> · upper-right <code>0.7331</code> · lower-right <code>0.6818</code><br>watch first: left edge <code>0.7365</code> · upper-right edge <code>0.7331</code></figcaption>
         <div class="command"><strong>Promote:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
       </figure>
       <figure>
@@ -177,7 +180,7 @@
       </figure>
       <figure>
         <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-05.png" alt="state-20 candidate 5" />
-        <figcaption>Candidate 5 · <code>out/state-20-still-regeneration/state-20-still-regeneration-05.png</code><br>sha256 <code>eeb1e80c2a9b01077cb5da9dc3584211b4ac11061624ad8714478c536c002b97</code><br>bytes <code>2065423</code> · modified <code>2026-03-30T23:23:44.105Z</code><br>full-image SSIM <code>0.6916</code> · debris-zone change avg <code>0.2746</code> · triage <code>0.5456</code><br>zone SSIMs: left <code>0.7193</code> · upper-right <code>0.7406</code> · lower-right <code>0.7163</code></figcaption>
+        <figcaption>Candidate 5 · <code>out/state-20-still-regeneration/state-20-still-regeneration-05.png</code><br>sha256 <code>eeb1e80c2a9b01077cb5da9dc3584211b4ac11061624ad8714478c536c002b97</code><br>bytes <code>2065423</code> · modified <code>2026-03-30T23:23:44.105Z</code><br>full-image SSIM <code>0.6916</code> · debris-zone change avg <code>0.2746</code> · triage <code>0.5456</code><br>zone SSIMs: left <code>0.7193</code> · upper-right <code>0.7406</code> · lower-right <code>0.7163</code><br>watch first: upper-right edge <code>0.7406</code> · left edge <code>0.7193</code></figcaption>
         <div class="command"><strong>Promote:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
       </figure>
       <figure>
@@ -190,7 +193,7 @@
       </figure>
       <figure>
         <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-06.png" alt="state-20 candidate 6" />
-        <figcaption>Candidate 6 · <code>out/state-20-still-regeneration/state-20-still-regeneration-06.png</code><br>sha256 <code>646e902397975169abf5e15c58ba6a3fcc00893bc87a68a0bbe59231a6801a7e</code><br>bytes <code>2108374</code> · modified <code>2026-03-30T23:23:44.479Z</code><br>full-image SSIM <code>0.6874</code> · debris-zone change avg <code>0.2874</code> · triage <code>0.5474</code><br>zone SSIMs: left <code>0.7039</code> · upper-right <code>0.7379</code> · lower-right <code>0.6959</code></figcaption>
+        <figcaption>Candidate 6 · <code>out/state-20-still-regeneration/state-20-still-regeneration-06.png</code><br>sha256 <code>646e902397975169abf5e15c58ba6a3fcc00893bc87a68a0bbe59231a6801a7e</code><br>bytes <code>2108374</code> · modified <code>2026-03-30T23:23:44.479Z</code><br>full-image SSIM <code>0.6874</code> · debris-zone change avg <code>0.2874</code> · triage <code>0.5474</code><br>zone SSIMs: left <code>0.7039</code> · upper-right <code>0.7379</code> · lower-right <code>0.6959</code><br>watch first: upper-right edge <code>0.7379</code> · left edge <code>0.7039</code></figcaption>
         <div class="command"><strong>Promote:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
       </figure>
       <figure>
