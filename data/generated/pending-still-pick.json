@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-03-30T21:56:47.163Z",
-  "sourceReviewRecordedAt": "2026-03-30T21:25:25.682Z",
+  "recordedAt": "2026-03-31T01:06:23.088Z",
+  "sourceReviewRecordedAt": "2026-03-31T00:27:02.964Z",
   "stateFilter": "state-20",
   "pending": [
     {
@@ -12,28 +12,54 @@
       "overviewFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-overview.png",
       "reviewHtml": "data/generated/still-candidate-review.html",
       "reviewMarkdown": "data/generated/still-candidate-review.md",
+      "postPickRerenderReport": "data/generated/paper-money-rerender-report.md",
+      "postPickRerenderReportFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\paper-money-rerender-report.md",
       "candidates": [
         {
           "index": 1,
           "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-01.png",
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-compare.png",
+          "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-debris-focus.png",
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=1 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
         },
         {
           "index": 2,
           "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-02.png",
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-compare.png",
+          "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-debris-focus.png",
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=2 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
         },
         {
           "index": 3,
           "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-03.png",
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-compare.png",
+          "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-debris-focus.png",
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=3 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+        },
+        {
+          "index": 4,
+          "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-04.png",
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png",
+          "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png",
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+        },
+        {
+          "index": 5,
+          "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-05.png",
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png",
+          "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png",
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+        },
+        {
+          "index": 6,
+          "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-06.png",
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png",
+          "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png",
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
         }
       ],
       "decisionStatus": "pending-human-pick",
-      "nextAction": "Choose exactly one candidate and run its listed promote:still command without --dry-run."
+      "nextAction": "Use the overview + compare + debris-focus surfaces to choose exactly one truly paper-free candidate, run its listed promote:still command without --dry-run, then reopen the paper-money rerender report to review the refreshed loop acceptance evidence."
     }
   ]
 }
