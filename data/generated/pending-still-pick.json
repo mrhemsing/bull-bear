@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-03-31T10:04:37.917Z",
+  "recordedAt": "2026-03-31T14:24:51.804Z",
   "sourceReviewRecordedAt": "2026-03-31T03:27:42.857Z",
   "stateFilter": "state-20",
   "defaultStatus": "No candidate is approved by default. Treat the current batch as blocked until one candidate is explicitly chosen by human review and then survives the follow-up loop rerender acceptance check.",
@@ -41,7 +41,12 @@
       "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-compare.png",
       "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png",
       "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-debris-focus.png",
-      "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+      "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+      "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=4 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
+      "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=4 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
+      "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=4 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
+      "reviewVerdict": "hold",
+      "reviewNote": "Needs more human comparison before approval or rejection."
     },
     {
       "stateId": "state-20",
@@ -57,7 +62,12 @@
       "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-compare.png",
       "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png",
       "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-debris-focus.png",
-      "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+      "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+      "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=6 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
+      "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=6 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
+      "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=6 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
+      "reviewVerdict": "unreviewed",
+      "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match."
     },
     {
       "stateId": "state-20",
@@ -73,7 +83,12 @@
       "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-compare.png",
       "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png",
       "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-debris-focus.png",
-      "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+      "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+      "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=5 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
+      "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=5 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
+      "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=5 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
+      "reviewVerdict": "unreviewed",
+      "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match."
     }
   ],
   "pending": [
@@ -149,7 +164,13 @@
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-debris-focus.png",
-          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=1 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=1 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+          "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=1 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
+          "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=1 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
+          "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=1 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
+          "reviewVerdict": "unreviewed",
+          "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match.",
+          "reviewCarryForward": null
         },
         {
           "index": 2,
@@ -204,7 +225,13 @@
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-debris-focus.png",
-          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=2 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=2 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+          "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=2 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
+          "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=2 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
+          "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=2 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
+          "reviewVerdict": "unreviewed",
+          "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match.",
+          "reviewCarryForward": null
         },
         {
           "index": 3,
@@ -259,7 +286,13 @@
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03-debris-focus.png",
-          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=3 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=3 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+          "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=3 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
+          "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=3 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
+          "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=3 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
+          "reviewVerdict": "unreviewed",
+          "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match.",
+          "reviewCarryForward": null
         },
         {
           "index": 4,
@@ -314,7 +347,17 @@
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-debris-focus.png",
-          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+          "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=4 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
+          "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=4 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
+          "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=4 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
+          "reviewVerdict": "hold",
+          "reviewNote": "Needs more human comparison before approval or rejection.",
+          "reviewCarryForward": {
+            "fromStateId": "state-20",
+            "fromCandidateIndex": 4,
+            "fingerprintSha256": "03bb32bc9ec7cc60089a8d9664f12512caaa6904c491303fa22ba95b812e6032"
+          }
         },
         {
           "index": 5,
@@ -369,7 +412,13 @@
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-debris-focus.png",
-          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+          "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=5 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
+          "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=5 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
+          "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=5 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
+          "reviewVerdict": "unreviewed",
+          "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match.",
+          "reviewCarryForward": null
         },
         {
           "index": 6,
@@ -424,7 +473,13 @@
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-debris-focus.png",
-          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+          "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=6 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
+          "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=6 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
+          "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=6 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
+          "reviewVerdict": "unreviewed",
+          "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match.",
+          "reviewCarryForward": null
         }
       ],
       "rankedCandidates": [
