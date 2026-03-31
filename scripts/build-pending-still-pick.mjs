@@ -6,11 +6,22 @@ const reviewPath = path.join(root, 'data', 'generated', 'still-candidate-review.
 const outputDir = path.join(root, 'data', 'generated');
 const pendingJsonPath = path.join(outputDir, 'pending-still-pick.json');
 const pendingMdPath = path.join(outputDir, 'pending-still-pick.md');
+const pendingHtmlPath = path.join(outputDir, 'pending-still-pick.html');
 
 const stateArg = process.argv.find((arg) => arg.startsWith('--state='));
 const selectedState = stateArg ? stateArg.split('=')[1].trim() : null;
 
 const readJson = async (targetPath) => JSON.parse(await fs.readFile(targetPath, 'utf8'));
+const escapeHtml = (value) => String(value)
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
+
+const rejectRule = 'Reject any candidate whose debris-focus sheet still shows detached rectangular scraps at the left edge, upper-right edge, or lower-right foreground.';
+const acceptRule = 'Only promote a candidate if it is truly paper-free in those debris-focus zones and still preserves the approved creature identity, framing, and environment well enough to serve as the cleaned anchor.';
+const postPickRule = 'After promotion + rerender, reopen the listed paper-money rerender report and reject the loop again unless both paper-like debris removal and seamless-loop acceptance pass.';
 
 const review = await readJson(reviewPath);
 const entries = review.entries.filter((entry) => !selectedState || entry.stateId === selectedState);
@@ -24,11 +35,17 @@ const payload = {
   recordedAt: new Date().toISOString(),
   sourceReviewRecordedAt: review.recordedAt,
   stateFilter: selectedState,
+  rejectRule,
+  acceptRule,
+  postPickRule,
   pending: entries.map((entry) => ({
     stateId: entry.stateId,
     stateIndex: entry.stateIndex,
     label: entry.label,
     canonicalTarget: entry.canonicalTarget,
+    referenceImage: entry.referenceImage ?? null,
+    referenceImageFilesystemPath: entry.referenceImageFilesystemPath ?? null,
+    referenceFingerprint: entry.referenceFingerprint ?? null,
     overviewPath: entry.overviewPath ?? null,
     overviewFilesystemPath: entry.overviewFilesystemPath ?? null,
     reviewHtml: 'data/generated/still-candidate-review.html',
@@ -38,8 +55,12 @@ const payload = {
     candidates: entry.outputs.map((output) => ({
       index: output.index,
       candidatePath: output.path,
+      candidateFilesystemPath: output.filesystemPath ?? path.join(root, output.path.replace(/^[/\\]+/, '').replace(/\//g, path.sep)),
+      fingerprint: output.fingerprint ?? null,
       comparisonPath: output.comparisonPath,
+      comparisonFilesystemPath: output.comparisonFilesystemPath ?? path.join(root, output.comparisonPath.replace(/^[/\\]+/, '').replace(/\//g, path.sep)),
       debrisFocusPath: output.debrisFocusComparisonPath ?? output.debrisFocusPath ?? null,
+      debrisFocusFilesystemPath: output.debrisFocusComparisonFilesystemPath ?? (output.debrisFocusComparisonPath ? path.join(root, output.debrisFocusComparisonPath.replace(/^[/\\]+/, '').replace(/\//g, path.sep)) : null),
       promoteCommand: output.promoteCommand,
     })),
     decisionStatus: 'pending-human-pick',
@@ -58,11 +79,19 @@ const mdLines = [
   `Source review recorded at: ${payload.sourceReviewRecordedAt}`,
   `State filter: ${selectedState ?? 'all pending still picks'}`,
   '',
+  '## Acceptance gate',
+  '',
+  `- ${rejectRule}`,
+  `- ${acceptRule}`,
+  `- ${postPickRule}`,
+  '',
   ...payload.pending.flatMap((entry) => [
     `## ${entry.stateId} · ${entry.label}`,
     '',
     `- Decision status: \`${entry.decisionStatus}\``,
     `- Canonical target: \`${entry.canonicalTarget}\``,
+    ...(entry.referenceImage ? [`- Contaminated reference still: \`${entry.referenceImage}\``] : []),
+    ...(entry.referenceFingerprint ? [`- Reference fingerprint: sha256 \`${entry.referenceFingerprint.sha256}\` · bytes \`${entry.referenceFingerprint.bytes}\` · modified \`${entry.referenceFingerprint.modifiedAt}\``] : []),
     ...(entry.overviewPath ? [`- Overview image: \`${entry.overviewPath}\``] : []),
     ...(entry.overviewFilesystemPath ? [`- Open overview: \`start "" "${entry.overviewFilesystemPath}"\``] : []),
     `- Review HTML: \`${entry.reviewHtml}\``,
@@ -71,16 +100,106 @@ const mdLines = [
     `- Open post-pick rerender report: \`start "" "${entry.postPickRerenderReportFilesystemPath}"\``,
     `- Next action: ${entry.nextAction}`,
     '',
-    '| Candidate | Candidate image | Compare image | Debris-focus image | Promote command |',
-    '| --- | --- | --- | --- | --- |',
-    ...entry.candidates.map((candidate) => `| ${candidate.index} | \`${candidate.candidatePath}\` | \`${candidate.comparisonPath}\` | ${candidate.debrisFocusPath ? `\`${candidate.debrisFocusPath}\`` : '—'} | \`${candidate.promoteCommand}\` |`),
-    '',
-    '- Reject any candidate whose debris-focus sheet still shows detached rectangular scraps at the left edge, upper-right edge, or lower-right foreground.',
-    '- After promotion + rerender, reopen the listed paper-money rerender report and reject the loop again unless both paper-like debris removal and seamless-loop acceptance pass.',
+    '| Candidate | Candidate image | Fingerprint | Compare image | Debris-focus image | Promote command |',
+    '| --- | --- | --- | --- | --- | --- |',
+    ...entry.candidates.map((candidate) => `| ${candidate.index} | \`${candidate.candidatePath}\` | ${candidate.fingerprint ? `sha256 \`${candidate.fingerprint.sha256}\`<br>bytes \`${candidate.fingerprint.bytes}\`<br>modified \`${candidate.fingerprint.modifiedAt}\`` : '—'} | \`${candidate.comparisonPath}\` | ${candidate.debrisFocusPath ? `\`${candidate.debrisFocusPath}\`` : '—'} | \`${candidate.promoteCommand}\` |`),
     '',
   ]),
 ];
 
 await fs.writeFile(pendingMdPath, `${mdLines.join('\n')}\n`);
 
-console.log(`Wrote data/generated/pending-still-pick.json and data/generated/pending-still-pick.md.`);
+const htmlLines = [
+  '<!doctype html>',
+  '<html lang="en">',
+  '<head>',
+  '  <meta charset="utf-8" />',
+  '  <meta name="viewport" content="width=device-width, initial-scale=1" />',
+  '  <title>Pending still pick</title>',
+  '  <style>',
+  '    :root { color-scheme: dark; }',
+  '    body { font-family: Inter, Segoe UI, Arial, sans-serif; margin: 24px; background: #0b1020; color: #e8ecf3; }',
+  '    h1, h2, h3, p { margin: 0 0 12px; }',
+  '    .meta { color: #aab6cc; margin-bottom: 24px; }',
+  '    .entry { background: #121a2b; border: 1px solid #25324a; border-radius: 14px; padding: 18px; margin-bottom: 24px; }',
+  '    .gate { background: #2a1d13; border: 1px solid #7a4a2a; border-radius: 14px; padding: 18px; margin-bottom: 24px; }',
+  '    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }',
+  '    figure { margin: 0; background: #0f1727; border: 1px solid #2d3b57; border-radius: 12px; padding: 12px; }',
+  '    img { display: block; width: 100%; height: auto; border-radius: 8px; background: #05070d; }',
+  '    figcaption { margin-top: 10px; color: #cdd7e8; font-size: 13px; }',
+  '    code { color: #8ee6ff; word-break: break-word; }',
+  '    .command { margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: #0b1322; border: 1px solid #2d3b57; }',
+  '    ul { color: #cdd7e8; }',
+  '  </style>',
+  '</head>',
+  '<body>',
+  '  <h1>Pending still pick</h1>',
+  `  <p class="meta">Recorded at ${escapeHtml(payload.recordedAt)} · Source review recorded at ${escapeHtml(payload.sourceReviewRecordedAt)} · State filter: ${escapeHtml(selectedState ?? 'all pending still picks')}</p>`,
+  '  <section class="gate">',
+  '    <h2>Acceptance gate</h2>',
+  '    <ul>',
+  `      <li>${escapeHtml(rejectRule)}</li>`,
+  `      <li>${escapeHtml(acceptRule)}</li>`,
+  `      <li>${escapeHtml(postPickRule)}</li>`,
+  '    </ul>',
+  '  </section>',
+  ...payload.pending.map((entry) => {
+    const overviewRelative = entry.overviewFilesystemPath
+      ? path.relative(path.dirname(pendingHtmlPath), entry.overviewFilesystemPath).replace(/\\/g, '/')
+      : null;
+    return [
+      '  <section class="entry">',
+      `    <h2>${escapeHtml(entry.stateId)} · ${escapeHtml(entry.label)}</h2>`,
+      `    <p><strong>Decision status:</strong> <code>${escapeHtml(entry.decisionStatus)}</code></p>`,
+      `    <p><strong>Canonical target:</strong> <code>${escapeHtml(entry.canonicalTarget)}</code></p>`,
+      entry.referenceImage
+        ? `    <p><strong>Contaminated reference still:</strong> <code>${escapeHtml(entry.referenceImage)}</code>${entry.referenceFingerprint ? `<br>sha256 <code>${escapeHtml(entry.referenceFingerprint.sha256)}</code> · bytes <code>${escapeHtml(entry.referenceFingerprint.bytes)}</code> · modified <code>${escapeHtml(entry.referenceFingerprint.modifiedAt)}</code>` : ''}</p>`
+        : '',
+      `    <p><strong>Detailed review:</strong> <code>${escapeHtml(entry.reviewHtml)}</code></p>`,
+      `    <p><strong>Post-pick rerender report:</strong> <code>${escapeHtml(entry.postPickRerenderReport)}</code></p>`,
+      `    <div class="command"><strong>Open rerender report:</strong><br><code>${escapeHtml(`start "" "${entry.postPickRerenderReportFilesystemPath}"`)}</code></div>`,
+      overviewRelative
+        ? `    <figure style="margin: 16px 0 0;"><img src="${escapeHtml(overviewRelative)}" alt="${escapeHtml(`${entry.stateId} still overview`)}" /><figcaption>Overview image · <code>${escapeHtml(entry.overviewPath)}</code></figcaption></figure>`
+        : '',
+      `    <div class="command"><strong>Open overview:</strong><br><code>${escapeHtml(entry.overviewFilesystemPath ? `start "" "${entry.overviewFilesystemPath}"` : 'n/a')}</code></div>`,
+      `    <div class="command"><strong>Open detailed review HTML:</strong><br><code>${escapeHtml(`start "" "${path.join(root, entry.reviewHtml.replace(/\//g, path.sep))}"`)}</code></div>`,
+      '    <h3>Next action</h3>',
+      `    <p>${escapeHtml(entry.nextAction)}</p>`,
+      '    <div class="grid">',
+      ...entry.candidates.map((candidate) => {
+        const candidateRelative = path.relative(path.dirname(pendingHtmlPath), candidate.candidateFilesystemPath).replace(/\\/g, '/');
+        const comparisonRelative = path.relative(path.dirname(pendingHtmlPath), candidate.comparisonFilesystemPath).replace(/\\/g, '/');
+        const debrisFocusRelative = candidate.debrisFocusFilesystemPath
+          ? path.relative(path.dirname(pendingHtmlPath), candidate.debrisFocusFilesystemPath).replace(/\\/g, '/')
+          : null;
+        return [
+          '      <figure>',
+          `        <img src="${escapeHtml(candidateRelative)}" alt="${escapeHtml(`${entry.stateId} candidate ${candidate.index}`)}" />`,
+          `        <figcaption>Candidate ${candidate.index} · <code>${escapeHtml(candidate.candidatePath)}</code>${candidate.fingerprint ? `<br>sha256 <code>${escapeHtml(candidate.fingerprint.sha256)}</code><br>bytes <code>${escapeHtml(candidate.fingerprint.bytes)}</code> · modified <code>${escapeHtml(candidate.fingerprint.modifiedAt)}</code>` : ''}</figcaption>`,
+          `        <div class="command"><strong>Promote:</strong><br><code>${escapeHtml(candidate.promoteCommand)}</code></div>`,
+          '      </figure>',
+          '      <figure>',
+          `        <img src="${escapeHtml(comparisonRelative)}" alt="${escapeHtml(`${entry.stateId} candidate ${candidate.index} comparison`)}" />`,
+          `        <figcaption>Compare ${candidate.index} · <code>${escapeHtml(candidate.comparisonPath)}</code></figcaption>`,
+          '      </figure>',
+          '      <figure>',
+          debrisFocusRelative
+            ? `        <img src="${escapeHtml(debrisFocusRelative)}" alt="${escapeHtml(`${entry.stateId} candidate ${candidate.index} debris focus`)}" />`
+            : '        <div style="min-height: 180px; display:flex; align-items:center; justify-content:center; border-radius:8px; background:#05070d; color:#ffb4b4; padding:12px; text-align:center;">No debris-focus artifact recorded</div>',
+          debrisFocusRelative
+            ? `        <figcaption>Debris focus ${candidate.index} · <code>${escapeHtml(candidate.debrisFocusPath)}</code></figcaption>`
+            : '        <figcaption>No debris-focus artifact recorded</figcaption>',
+          '      </figure>',
+        ].join('\n');
+      }),
+      '    </div>',
+      '  </section>',
+    ].join('\n');
+  }),
+  '</body>',
+  '</html>',
+];
+
+await fs.writeFile(pendingHtmlPath, `${htmlLines.join('\n')}\n`);
+
+console.log(`Wrote data/generated/pending-still-pick.json, data/generated/pending-still-pick.md, and data/generated/pending-still-pick.html.`);

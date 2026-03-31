@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pending still pick</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { font-family: Inter, Segoe UI, Arial, sans-serif; margin: 24px; background: #0b1020; color: #e8ecf3; }
+    h1, h2, h3, p { margin: 0 0 12px; }
+    .meta { color: #aab6cc; margin-bottom: 24px; }
+    .entry { background: #121a2b; border: 1px solid #25324a; border-radius: 14px; padding: 18px; margin-bottom: 24px; }
+    .gate { background: #2a1d13; border: 1px solid #7a4a2a; border-radius: 14px; padding: 18px; margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }
+    figure { margin: 0; background: #0f1727; border: 1px solid #2d3b57; border-radius: 12px; padding: 12px; }
+    img { display: block; width: 100%; height: auto; border-radius: 8px; background: #05070d; }
+    figcaption { margin-top: 10px; color: #cdd7e8; font-size: 13px; }
+    code { color: #8ee6ff; word-break: break-word; }
+    .command { margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: #0b1322; border: 1px solid #2d3b57; }
+    ul { color: #cdd7e8; }
+  </style>
+</head>
+<body>
+  <h1>Pending still pick</h1>
+  <p class="meta">Recorded at 2026-03-31T03:05:08.315Z · Source review recorded at 2026-03-31T02:24:31.391Z · State filter: state-20</p>
+  <section class="gate">
+    <h2>Acceptance gate</h2>
+    <ul>
+      <li>Reject any candidate whose debris-focus sheet still shows detached rectangular scraps at the left edge, upper-right edge, or lower-right foreground.</li>
+      <li>Only promote a candidate if it is truly paper-free in those debris-focus zones and still preserves the approved creature identity, framing, and environment well enough to serve as the cleaned anchor.</li>
+      <li>After promotion + rerender, reopen the listed paper-money rerender report and reject the loop again unless both paper-like debris removal and seamless-loop acceptance pass.</li>
+    </ul>
+  </section>
+  <section class="entry">
+    <h2>state-20 · Extremely Bullish</h2>
+    <p><strong>Decision status:</strong> <code>pending-human-pick</code></p>
+    <p><strong>Canonical target:</strong> <code>/states/state-20/still.png</code></p>
+    <p><strong>Contaminated reference still:</strong> <code>out/state-20-still-regeneration/state-20-still-reference.png</code><br>sha256 <code>da9e2b5a9ac802553b2e59599e8940258cc4681cb2e6fb2e535d22fa88727111</code> · bytes <code>2001181</code> · modified <code>2026-03-30T17:24:54.335Z</code></p>
+    <p><strong>Detailed review:</strong> <code>data/generated/still-candidate-review.html</code></p>
+    <p><strong>Post-pick rerender report:</strong> <code>data/generated/paper-money-rerender-report.md</code></p>
+    <div class="command"><strong>Open rerender report:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\data\generated\paper-money-rerender-report.md&quot;</code></div>
+    <figure style="margin: 16px 0 0;"><img src="../../out/state-20-still-regeneration/state-20-still-regeneration-overview.png" alt="state-20 still overview" /><figcaption>Overview image · <code>out/state-20-still-regeneration/state-20-still-regeneration-overview.png</code></figcaption></figure>
+    <div class="command"><strong>Open overview:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\out\state-20-still-regeneration\state-20-still-regeneration-overview.png&quot;</code></div>
+    <div class="command"><strong>Open detailed review HTML:</strong><br><code>start &quot;&quot; &quot;C:\Users\Matt\.openclaw\workspace-sora\bull-bear\data\generated\still-candidate-review.html&quot;</code></div>
+    <h3>Next action</h3>
+    <p>Use the overview + compare + debris-focus surfaces to choose exactly one truly paper-free candidate, run its listed promote:still command without --dry-run, then reopen the paper-money rerender report to review the refreshed loop acceptance evidence.</p>
+    <div class="grid">
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-01.png" alt="state-20 candidate 1" />
+        <figcaption>Candidate 1 · <code>out/state-20-still-regeneration/state-20-still-regeneration-01.png</code><br>sha256 <code>65271016ce5769450d56efd47d58c24b8337ea4a875a6a41f2e93127434e6673</code><br>bytes <code>2064791</code> · modified <code>2026-03-30T23:23:30.907Z</code></figcaption>
+        <div class="command"><strong>Promote:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=1 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-01-compare.png" alt="state-20 candidate 1 comparison" />
+        <figcaption>Compare 1 · <code>out/state-20-still-regeneration/state-20-still-regeneration-01-compare.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-01-debris-focus.png" alt="state-20 candidate 1 debris focus" />
+        <figcaption>Debris focus 1 · <code>out/state-20-still-regeneration/state-20-still-regeneration-01-debris-focus.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-02.png" alt="state-20 candidate 2" />
+        <figcaption>Candidate 2 · <code>out/state-20-still-regeneration/state-20-still-regeneration-02.png</code><br>sha256 <code>600c9de14c951d67add0517c7c21c2a6b66fdf749ae9a5b581991b67e119ed14</code><br>bytes <code>2083980</code> · modified <code>2026-03-30T23:23:31.288Z</code></figcaption>
+        <div class="command"><strong>Promote:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=2 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-02-compare.png" alt="state-20 candidate 2 comparison" />
+        <figcaption>Compare 2 · <code>out/state-20-still-regeneration/state-20-still-regeneration-02-compare.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-02-debris-focus.png" alt="state-20 candidate 2 debris focus" />
+        <figcaption>Debris focus 2 · <code>out/state-20-still-regeneration/state-20-still-regeneration-02-debris-focus.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-03.png" alt="state-20 candidate 3" />
+        <figcaption>Candidate 3 · <code>out/state-20-still-regeneration/state-20-still-regeneration-03.png</code><br>sha256 <code>feedc6174fb4f3c29ea8e8bf2e3d21d5be6498494c9b608b4eaaa5f86633ef33</code><br>bytes <code>2081762</code> · modified <code>2026-03-30T23:23:31.662Z</code></figcaption>
+        <div class="command"><strong>Promote:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=3 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-03-compare.png" alt="state-20 candidate 3 comparison" />
+        <figcaption>Compare 3 · <code>out/state-20-still-regeneration/state-20-still-regeneration-03-compare.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-03-debris-focus.png" alt="state-20 candidate 3 debris focus" />
+        <figcaption>Debris focus 3 · <code>out/state-20-still-regeneration/state-20-still-regeneration-03-debris-focus.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-04.png" alt="state-20 candidate 4" />
+        <figcaption>Candidate 4 · <code>out/state-20-still-regeneration/state-20-still-regeneration-04.png</code><br>sha256 <code>03bb32bc9ec7cc60089a8d9664f12512caaa6904c491303fa22ba95b812e6032</code><br>bytes <code>2080308</code> · modified <code>2026-03-30T23:23:43.848Z</code></figcaption>
+        <div class="command"><strong>Promote:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png" alt="state-20 candidate 4 comparison" />
+        <figcaption>Compare 4 · <code>out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png" alt="state-20 candidate 4 debris focus" />
+        <figcaption>Debris focus 4 · <code>out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-05.png" alt="state-20 candidate 5" />
+        <figcaption>Candidate 5 · <code>out/state-20-still-regeneration/state-20-still-regeneration-05.png</code><br>sha256 <code>eeb1e80c2a9b01077cb5da9dc3584211b4ac11061624ad8714478c536c002b97</code><br>bytes <code>2065423</code> · modified <code>2026-03-30T23:23:44.105Z</code></figcaption>
+        <div class="command"><strong>Promote:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png" alt="state-20 candidate 5 comparison" />
+        <figcaption>Compare 5 · <code>out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png" alt="state-20 candidate 5 debris focus" />
+        <figcaption>Debris focus 5 · <code>out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-06.png" alt="state-20 candidate 6" />
+        <figcaption>Candidate 6 · <code>out/state-20-still-regeneration/state-20-still-regeneration-06.png</code><br>sha256 <code>646e902397975169abf5e15c58ba6a3fcc00893bc87a68a0bbe59231a6801a7e</code><br>bytes <code>2108374</code> · modified <code>2026-03-30T23:23:44.479Z</code></figcaption>
+        <div class="command"><strong>Promote:</strong><br><code>npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video</code></div>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png" alt="state-20 candidate 6 comparison" />
+        <figcaption>Compare 6 · <code>out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png</code></figcaption>
+      </figure>
+      <figure>
+        <img src="../../out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png" alt="state-20 candidate 6 debris focus" />
+        <figcaption>Debris focus 6 · <code>out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png</code></figcaption>
+      </figure>
+    </div>
+  </section>
+</body>
+</html>
