@@ -163,9 +163,10 @@ function buildCommand(job, options) {
   args.push('--session', job.sessionTarget);
   args.push('--message', compactCronMessage);
 
-  if (typeof job.payload.timeoutSeconds === 'number') {
-    args.push('--timeout-seconds', String(job.payload.timeoutSeconds));
-  }
+  const timeoutSeconds = typeof job.payload.timeoutSeconds === 'number'
+    ? job.payload.timeoutSeconds
+    : 420;
+  args.push('--timeout-seconds', String(timeoutSeconds));
 
   if ((options.enabled ?? job.enabled) === false) {
     args.push('--disabled');
