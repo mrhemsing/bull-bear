@@ -13,7 +13,7 @@ function resolveOpenClawCommand() {
 
 const projectRoot = process.cwd();
 const artifactPath = path.join(projectRoot, 'docs', 'openclaw-hourly-capture-cron.json');
-const compactCronMessage = 'Capture once and summarize result.';
+const compactCronMessage = 'Bull Bear: call /api/capture once; report state, provider, shouldPersist, persisted, and failures.';
 
 function parseArgs(argv) {
   const options = {
