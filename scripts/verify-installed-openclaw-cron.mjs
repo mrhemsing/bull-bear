@@ -96,17 +96,16 @@ function validateArtifact(job) {
   assert(job.enabled === true, 'Cron artifact must default to enabled.');
 }
 
-function quoteCmdArg(value) {
-  if (value.length === 0) return '""';
-  if (!/[\s"]/u.test(value)) return value;
-  return '"' + value.replace(/"/g, '""') + '"';
+function quotePowerShellArg(value) {
+  if (value.length === 0) return "''";
+  return `'${value.replace(/'/g, "''")}'`;
 }
 
 function runJson(command, args) {
   return new Promise((resolve, reject) => {
     const isWindowsCmd = process.platform === 'win32' && /\.cmd$/i.test(command);
     const child = isWindowsCmd
-      ? spawn('cmd.exe', ['/d', '/s', '/c', [quoteCmdArg(command), ...args.map(quoteCmdArg)].join(' ')], {
+      ? spawn('powershell.exe', ['-NoProfile', '-Command', `& ${quotePowerShellArg(command)} ${args.map(quotePowerShellArg).join(' ')}`], {
           stdio: ['ignore', 'pipe', 'pipe'],
           shell: false
         })
