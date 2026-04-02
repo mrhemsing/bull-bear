@@ -96,13 +96,24 @@ function validateArtifact(job) {
   assert(job.enabled === true, 'Cron artifact must default to enabled.');
 }
 
+function quoteCmdArg(value) {
+  if (value.length === 0) return '""';
+  if (!/[\s"]/u.test(value)) return value;
+  return '"' + value.replace(/"/g, '""') + '"';
+}
+
 function runJson(command, args) {
   return new Promise((resolve, reject) => {
     const isWindowsCmd = process.platform === 'win32' && /\.cmd$/i.test(command);
-    const child = spawn(command, args, {
-      stdio: ['ignore', 'pipe', 'pipe'],
-      shell: isWindowsCmd
-    });
+    const child = isWindowsCmd
+      ? spawn('cmd.exe', ['/d', '/s', '/c', [quoteCmdArg(command), ...args.map(quoteCmdArg)].join(' ')], {
+          stdio: ['ignore', 'pipe', 'pipe'],
+          shell: false
+        })
+      : spawn(command, args, {
+          stdio: ['ignore', 'pipe', 'pipe'],
+          shell: false
+        });
 
     let stdout = '';
     let stderr = '';

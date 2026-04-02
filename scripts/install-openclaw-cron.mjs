@@ -13,6 +13,7 @@ function resolveOpenClawCommand() {
 
 const projectRoot = process.cwd();
 const artifactPath = path.join(projectRoot, 'docs', 'openclaw-hourly-capture-cron.json');
+const compactCronMessage = 'Capture once and summarize result.';
 
 function parseArgs(argv) {
   const options = {
@@ -160,7 +161,7 @@ function buildCommand(job, options) {
   args.push('--cron', job.schedule.expr);
   args.push('--tz', job.schedule.tz);
   args.push('--session', job.sessionTarget);
-  args.push('--message', job.payload.message);
+  args.push('--message', compactCronMessage);
 
   if (typeof job.payload.timeoutSeconds === 'number') {
     args.push('--timeout-seconds', String(job.payload.timeoutSeconds));
@@ -206,13 +207,24 @@ function formatCommand(command, args) {
   return [command, ...args].map(quoteForDisplay).join(' ');
 }
 
+function quoteCmdArg(value) {
+  if (value.length === 0) return '""';
+  if (!/[\s"]/u.test(value)) return value;
+  return '"' + value.replace(/"/g, '""') + '"';
+}
+
 function run(command, args) {
   return new Promise((resolve, reject) => {
     const isWindowsCmd = process.platform === 'win32' && /\.cmd$/i.test(command);
-    const child = spawn(command, args, {
-      stdio: 'inherit',
-      shell: isWindowsCmd
-    });
+    const child = isWindowsCmd
+      ? spawn('cmd.exe', ['/d', '/s', '/c', [quoteCmdArg(command), ...args.map(quoteCmdArg)].join(' ')], {
+          stdio: 'inherit',
+          shell: false
+        })
+      : spawn(command, args, {
+          stdio: 'inherit',
+          shell: false
+        });
 
     child.on('error', reject);
     child.on('exit', (code) => {
