@@ -132,6 +132,37 @@ async function fetchJson<T>(url: string) {
   return response.json() as Promise<T>;
 }
 
+function getFallbackCompositeMarketSnapshot(): CompositeMarketSnapshot {
+  const fallbackScore = 0;
+  const state = resolveState(fallbackScore);
+
+  return {
+    timestamp: new Date().toISOString(),
+    source: 'Fallback snapshot (live market sources temporarily unavailable)',
+    currentPrice: 0,
+    ma7: 0,
+    ma30: 0,
+    priceChange24h: 0,
+    priceChange7d: 0,
+    fearAndGreed: 50,
+    fearGreedScore: 0,
+    marketBiasScore: 0,
+    momentumScore: 0,
+    derivativesScore: 0,
+    sentimentScore: 0,
+    trend7Score: 0,
+    trend30Score: 0,
+    fundingRate: 0,
+    basisPct: 0,
+    openInterestChangePct1h: 0,
+    takerBuySellRatio: 1,
+    finalScore: fallbackScore,
+    stateIndex: state.index,
+    stateLabel: state.label,
+    stateId: state.id
+  };
+}
+
 async function getCoinbaseCandles() {
   const data = await fetchJson<Array<[number, string, string, string, string, string] | [number, number, number, number, number, number]>>(COINBASE_CANDLES_URL);
   return [...data]
@@ -147,14 +178,26 @@ async function getCoinbaseCandles() {
 }
 
 export async function getCompositeMarketSnapshot(): Promise<CompositeMarketSnapshot> {
-  const [candles, premium, openInterestNow, openInterestHist, takerData, fearGreedData] = await Promise.all([
-    getCoinbaseCandles(),
-    fetchJson<{ markPrice: string; indexPrice: string; lastFundingRate: string }>(BINANCE_PREMIUM_URL),
-    fetchJson<{ openInterest: string }>(BINANCE_OPEN_INTEREST_URL),
-    fetchJson<Array<{ sumOpenInterestValue: string }>>(BINANCE_OPEN_INTEREST_HIST_URL),
-    fetchJson<Array<{ buySellRatio?: string; buyVol?: string; sellVol?: string }>>(BINANCE_TAKER_RATIO_URL),
-    fetchJson<{ data?: Array<{ value?: string; value_classification?: string }> }>(FEAR_AND_GREED_URL)
-  ]);
+  let candles;
+  let premium;
+  let openInterestNow;
+  let openInterestHist;
+  let takerData;
+  let fearGreedData;
+
+  try {
+    [candles, premium, openInterestNow, openInterestHist, takerData, fearGreedData] = await Promise.all([
+      getCoinbaseCandles(),
+      fetchJson<{ markPrice: string; indexPrice: string; lastFundingRate: string }>(BINANCE_PREMIUM_URL),
+      fetchJson<{ openInterest: string }>(BINANCE_OPEN_INTEREST_URL),
+      fetchJson<Array<{ sumOpenInterestValue: string }>>(BINANCE_OPEN_INTEREST_HIST_URL),
+      fetchJson<Array<{ buySellRatio?: string; buyVol?: string; sellVol?: string }>>(BINANCE_TAKER_RATIO_URL),
+      fetchJson<{ data?: Array<{ value?: string; value_classification?: string }> }>(FEAR_AND_GREED_URL)
+    ]);
+  } catch (error) {
+    console.error('Falling back to neutral composite market snapshot:', error);
+    return getFallbackCompositeMarketSnapshot();
+  }
 
   const closes = candles.map((candle) => candle.close);
   const currentPrice = closes[closes.length - 1] ?? 0;
