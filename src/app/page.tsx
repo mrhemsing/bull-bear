@@ -1,6 +1,8 @@
 import { getLiveMarketBeastState } from '@/lib/live-state';
 import { LiveSnapshot } from './live-snapshot';
 
+export const dynamic = 'force-dynamic';
+
 const badgeBaseStyle = {
   display: 'inline-block',
   fontFamily: 'Arial, Helvetica, sans-serif',
