@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-03-31T14:24:51.804Z",
-  "sourceReviewRecordedAt": "2026-03-31T03:27:42.857Z",
+  "recordedAt": "2026-04-01T11:24:03.511Z",
+  "sourceReviewRecordedAt": "2026-04-01T11:23:35.931Z",
   "stateFilter": "state-20",
   "defaultStatus": "No candidate is approved by default. Treat the current batch as blocked until one candidate is explicitly chosen by human review and then survives the follow-up loop rerender acceptance check.",
   "shortlistDisclaimer": "The shortlist is triage order only. It is not a recommendation, endorsement, or approval signal; every shortlisted candidate must still pass the same debris and identity checks as the rest of the batch.",
@@ -18,14 +18,31 @@
       "reviewHtmlFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\still-candidate-review.html",
       "reviewMarkdownPath": "data/generated/still-candidate-review.md",
       "reviewMarkdownFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\still-candidate-review.md",
+      "referenceImagePath": "out/state-20-still-regeneration/state-20-still-reference-scrubbed.png",
+      "referenceImageFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-reference-scrubbed.png",
       "overviewPath": "out/state-20-still-regeneration/state-20-still-regeneration-overview.png",
       "overviewFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-overview.png",
       "shortlistBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-shortlist-board.png",
       "shortlistBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-shortlist-board.png",
+      "actionNowBoardPath": null,
+      "actionNowBoardFilesystemPath": null,
       "postPickRerenderReport": "data/generated/paper-money-rerender-report.md",
-      "postPickRerenderReportFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\paper-money-rerender-report.md"
+      "postPickRerenderReportFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\paper-money-rerender-report.md",
+      "quickReviewLauncher": {
+        "path": "data/generated/state-20-quick-review.cmd",
+        "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\state-20-quick-review.cmd",
+        "command": "start \"\" \"C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\state-20-quick-review.cmd\""
+      },
+      "actionNowLauncher": {
+        "path": "data/generated/state-20-action-now-review.cmd",
+        "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\state-20-action-now-review.cmd",
+        "command": "start \"\" \"C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\state-20-action-now-review.cmd\""
+      }
     }
   ],
+  "actionNow": [],
+  "nextReviewMoves": [],
+  "regenerateBatchNow": [],
   "startHere": [
     {
       "stateId": "state-20",
@@ -34,61 +51,175 @@
       "shortlistBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-shortlist-board.png",
       "index": 4,
       "triageRank": 1,
-      "triageScore": 0.5481,
+      "triageScore": 0.5125,
       "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-04.png",
       "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04.png",
+      "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-review-board.png",
+      "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-review-board.png",
       "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png",
       "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-compare.png",
       "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png",
       "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-debris-focus.png",
+      "diffPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-diff.png",
+      "diffFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-diff.png",
       "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
       "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=4 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
       "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=4 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
       "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=4 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
-      "reviewVerdict": "hold",
-      "reviewNote": "Needs more human comparison before approval or rejection."
+      "reviewVerdict": "reject",
+      "reviewNote": "Rejected in image-assisted final approval pass. Lower-right foreground still shows a detached rectangular/paper-like scrap.",
+      "watchZones": [
+        {
+          "zoneKey": "left",
+          "label": "left edge",
+          "ssim": 0.5454,
+          "rank": 1,
+          "ssimText": "0.5454",
+          "changeText": "0.4546",
+          "reviewNote": "left edge still looks 0.545 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+        },
+        {
+          "zoneKey": "lowerRight",
+          "label": "lower-right foreground",
+          "ssim": 0.5374,
+          "rank": 2,
+          "ssimText": "0.5374",
+          "changeText": "0.4626",
+          "reviewNote": "lower-right foreground still looks 0.537 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+        },
+        {
+          "zoneKey": "upperRight",
+          "label": "upper-right edge",
+          "ssim": 0.5332,
+          "rank": 3,
+          "ssimText": "0.5332",
+          "changeText": "0.4668",
+          "reviewNote": "upper-right edge still looks 0.533 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+        }
+      ],
+      "reviewSurfaceLauncher": {
+        "path": "data/generated/state-20-candidate-04-review.cmd",
+        "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\state-20-candidate-04-review.cmd",
+        "command": "start \"\" \"C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\state-20-candidate-04-review.cmd\""
+      }
     },
     {
       "stateId": "state-20",
       "label": "Extremely Bullish",
       "shortlistBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-shortlist-board.png",
       "shortlistBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-shortlist-board.png",
-      "index": 6,
+      "index": 1,
       "triageRank": 2,
-      "triageScore": 0.5474,
-      "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-06.png",
-      "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06.png",
-      "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png",
-      "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-compare.png",
-      "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png",
-      "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-debris-focus.png",
-      "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
-      "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=6 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
-      "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=6 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
-      "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=6 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
-      "reviewVerdict": "unreviewed",
-      "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match."
+      "triageScore": 0.5088,
+      "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-01.png",
+      "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01.png",
+      "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-review-board.png",
+      "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-review-board.png",
+      "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-compare.png",
+      "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-compare.png",
+      "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-debris-focus.png",
+      "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-debris-focus.png",
+      "diffPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-diff.png",
+      "diffFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-diff.png",
+      "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=1 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+      "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=1 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
+      "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=1 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
+      "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=1 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
+      "reviewVerdict": "reject",
+      "reviewNote": "Rejected in image-assisted review. Candidate is too soft/blurred to serve as a clean still anchor even though obvious paper scraps are not prominent.",
+      "watchZones": [
+        {
+          "zoneKey": "upperRight",
+          "label": "upper-right edge",
+          "ssim": 0.6054,
+          "rank": 1,
+          "ssimText": "0.6054",
+          "changeText": "0.3946",
+          "reviewNote": "upper-right edge still looks 0.605 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+        },
+        {
+          "zoneKey": "left",
+          "label": "left edge",
+          "ssim": 0.5597,
+          "rank": 2,
+          "ssimText": "0.5597",
+          "changeText": "0.4403",
+          "reviewNote": "left edge still looks 0.560 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+        },
+        {
+          "zoneKey": "lowerRight",
+          "label": "lower-right foreground",
+          "ssim": 0.5296,
+          "rank": 3,
+          "ssimText": "0.5296",
+          "changeText": "0.4704",
+          "reviewNote": "lower-right foreground still looks 0.530 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+        }
+      ],
+      "reviewSurfaceLauncher": {
+        "path": "data/generated/state-20-candidate-01-review.cmd",
+        "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\state-20-candidate-01-review.cmd",
+        "command": "start \"\" \"C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\state-20-candidate-01-review.cmd\""
+      }
     },
     {
       "stateId": "state-20",
       "label": "Extremely Bullish",
       "shortlistBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-shortlist-board.png",
       "shortlistBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-shortlist-board.png",
-      "index": 5,
+      "index": 2,
       "triageRank": 3,
-      "triageScore": 0.5456,
-      "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-05.png",
-      "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05.png",
-      "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png",
-      "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-compare.png",
-      "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png",
-      "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-debris-focus.png",
-      "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
-      "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=5 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
-      "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=5 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
-      "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=5 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
-      "reviewVerdict": "unreviewed",
-      "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match."
+      "triageScore": 0.507,
+      "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-02.png",
+      "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02.png",
+      "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-review-board.png",
+      "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-review-board.png",
+      "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-compare.png",
+      "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-compare.png",
+      "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-debris-focus.png",
+      "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-debris-focus.png",
+      "diffPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-diff.png",
+      "diffFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-diff.png",
+      "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=2 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+      "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=2 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
+      "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=2 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
+      "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=2 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
+      "reviewVerdict": "reject",
+      "reviewNote": "Rejected in image-assisted final approval pass. Lower-right foreground still shows a partial detached paper-like scrap.",
+      "watchZones": [
+        {
+          "zoneKey": "upperRight",
+          "label": "upper-right edge",
+          "ssim": 0.5713,
+          "rank": 1,
+          "ssimText": "0.5713",
+          "changeText": "0.4287",
+          "reviewNote": "upper-right edge still looks 0.571 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+        },
+        {
+          "zoneKey": "left",
+          "label": "left edge",
+          "ssim": 0.5512,
+          "rank": 2,
+          "ssimText": "0.5512",
+          "changeText": "0.4488",
+          "reviewNote": "left edge still looks 0.551 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+        },
+        {
+          "zoneKey": "lowerRight",
+          "label": "lower-right foreground",
+          "ssim": 0.5485,
+          "rank": 3,
+          "ssimText": "0.5485",
+          "changeText": "0.4515",
+          "reviewNote": "lower-right foreground still looks 0.548 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+        }
+      ],
+      "reviewSurfaceLauncher": {
+        "path": "data/generated/state-20-candidate-02-review.cmd",
+        "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\state-20-candidate-02-review.cmd",
+        "command": "start \"\" \"C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\state-20-candidate-02-review.cmd\""
+      }
     }
   ],
   "pending": [
@@ -97,12 +228,12 @@
       "stateIndex": 20,
       "label": "Extremely Bullish",
       "canonicalTarget": "/states/state-20/still.png",
-      "referenceImage": "out/state-20-still-regeneration/state-20-still-reference.png",
-      "referenceImageFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-reference.png",
+      "referenceImage": "out/state-20-still-regeneration/state-20-still-reference-scrubbed.png",
+      "referenceImageFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-reference-scrubbed.png",
       "referenceFingerprint": {
-        "sha256": "da9e2b5a9ac802553b2e59599e8940258cc4681cb2e6fb2e535d22fa88727111",
-        "bytes": 2001181,
-        "modifiedAt": "2026-03-30T17:24:54.335Z"
+        "sha256": "cdc77ce770b82a78a8e44c1ea9cffc20f2118d67bde862c670895176402f171d",
+        "bytes": 762245,
+        "modifiedAt": "2026-04-01T09:10:30.678Z"
       },
       "overviewPath": "out/state-20-still-regeneration/state-20-still-regeneration-overview.png",
       "overviewFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-overview.png",
@@ -115,177 +246,197 @@
           "index": 1,
           "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-01.png",
           "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01.png",
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-review-board.png",
           "fingerprint": {
-            "sha256": "65271016ce5769450d56efd47d58c24b8337ea4a875a6a41f2e93127434e6673",
-            "bytes": 2064791,
-            "modifiedAt": "2026-03-30T23:23:30.907Z"
+            "sha256": "0c977fe0d21dd95c78787a07f0d46fc284e138ca5f906c2789f619cf66ee0689",
+            "bytes": 2576197,
+            "modifiedAt": "2026-04-01T09:11:41.365Z"
           },
           "metrics": {
-            "fullImageSsim": 0.6882,
+            "fullImageSsim": 0.5485,
             "debrisZoneSsim": {
-              "left": 0.7215,
-              "upperRight": 0.7366,
-              "lowerRight": 0.7149
+              "left": 0.5597,
+              "upperRight": 0.6054,
+              "lowerRight": 0.5296
             },
-            "debrisZoneChangeAverage": 0.2757,
-            "triageScore": 0.5438
+            "debrisZoneChangeAverage": 0.4351,
+            "triageScore": 0.5088
           },
           "metricsError": null,
           "watchZones": [
             {
               "zoneKey": "upperRight",
               "label": "upper-right edge",
-              "ssim": 0.7366,
+              "ssim": 0.6054,
               "rank": 1,
-              "ssimText": "0.7366",
-              "changeText": "0.2634",
-              "reviewNote": "upper-right edge still looks 0.737 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.6054",
+              "changeText": "0.3946",
+              "reviewNote": "upper-right edge still looks 0.605 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "left",
               "label": "left edge",
-              "ssim": 0.7215,
+              "ssim": 0.5597,
               "rank": 2,
-              "ssimText": "0.7215",
-              "changeText": "0.2785",
-              "reviewNote": "left edge still looks 0.722 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5597",
+              "changeText": "0.4403",
+              "reviewNote": "left edge still looks 0.560 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "lowerRight",
               "label": "lower-right foreground",
-              "ssim": 0.7149,
+              "ssim": 0.5296,
               "rank": 3,
-              "ssimText": "0.7149",
-              "changeText": "0.2851",
-              "reviewNote": "lower-right foreground still looks 0.715 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5296",
+              "changeText": "0.4704",
+              "reviewNote": "lower-right foreground still looks 0.530 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             }
           ],
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-compare.png",
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-debris-focus.png",
+          "diffPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-diff.png",
+          "diffFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-diff.png",
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=1 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
           "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=1 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
           "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=1 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
           "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=1 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
-          "reviewVerdict": "unreviewed",
-          "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match.",
-          "reviewCarryForward": null
+          "reviewVerdict": "reject",
+          "reviewNote": "Rejected in image-assisted review. Candidate is too soft/blurred to serve as a clean still anchor even though obvious paper scraps are not prominent.",
+          "reviewCarryForward": {
+            "fromStateId": "state-20",
+            "fromCandidateIndex": 1,
+            "fingerprintSha256": "0c977fe0d21dd95c78787a07f0d46fc284e138ca5f906c2789f619cf66ee0689"
+          }
         },
         {
           "index": 2,
           "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-02.png",
           "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02.png",
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-review-board.png",
           "fingerprint": {
-            "sha256": "600c9de14c951d67add0517c7c21c2a6b66fdf749ae9a5b581991b67e119ed14",
-            "bytes": 2083980,
-            "modifiedAt": "2026-03-30T23:23:31.288Z"
+            "sha256": "8063336e913b8f9e82fed4376578a0976c76ab0555fe5ba227773dd15cf01a09",
+            "bytes": 2490404,
+            "modifiedAt": "2026-04-01T09:11:41.370Z"
           },
           "metrics": {
-            "fullImageSsim": 0.6897,
+            "fullImageSsim": 0.5415,
             "debrisZoneSsim": {
-              "left": 0.7413,
-              "upperRight": 0.7158,
-              "lowerRight": 0.717
+              "left": 0.5512,
+              "upperRight": 0.5713,
+              "lowerRight": 0.5485
             },
-            "debrisZoneChangeAverage": 0.2753,
-            "triageScore": 0.5447
+            "debrisZoneChangeAverage": 0.443,
+            "triageScore": 0.507
           },
           "metricsError": null,
           "watchZones": [
             {
+              "zoneKey": "upperRight",
+              "label": "upper-right edge",
+              "ssim": 0.5713,
+              "rank": 1,
+              "ssimText": "0.5713",
+              "changeText": "0.4287",
+              "reviewNote": "upper-right edge still looks 0.571 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+            },
+            {
               "zoneKey": "left",
               "label": "left edge",
-              "ssim": 0.7413,
-              "rank": 1,
-              "ssimText": "0.7413",
-              "changeText": "0.2587",
-              "reviewNote": "left edge still looks 0.741 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssim": 0.5512,
+              "rank": 2,
+              "ssimText": "0.5512",
+              "changeText": "0.4488",
+              "reviewNote": "left edge still looks 0.551 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "lowerRight",
               "label": "lower-right foreground",
-              "ssim": 0.717,
-              "rank": 2,
-              "ssimText": "0.7170",
-              "changeText": "0.2830",
-              "reviewNote": "lower-right foreground still looks 0.717 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
-            },
-            {
-              "zoneKey": "upperRight",
-              "label": "upper-right edge",
-              "ssim": 0.7158,
+              "ssim": 0.5485,
               "rank": 3,
-              "ssimText": "0.7158",
-              "changeText": "0.2842",
-              "reviewNote": "upper-right edge still looks 0.716 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5485",
+              "changeText": "0.4515",
+              "reviewNote": "lower-right foreground still looks 0.548 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             }
           ],
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-compare.png",
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-debris-focus.png",
+          "diffPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-diff.png",
+          "diffFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-diff.png",
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=2 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
           "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=2 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
           "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=2 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
           "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=2 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
-          "reviewVerdict": "unreviewed",
-          "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match.",
-          "reviewCarryForward": null
+          "reviewVerdict": "reject",
+          "reviewNote": "Rejected in image-assisted final approval pass. Lower-right foreground still shows a partial detached paper-like scrap.",
+          "reviewCarryForward": {
+            "fromStateId": "state-20",
+            "fromCandidateIndex": 2,
+            "fingerprintSha256": "8063336e913b8f9e82fed4376578a0976c76ab0555fe5ba227773dd15cf01a09"
+          }
         },
         {
           "index": 3,
           "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-03.png",
           "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03.png",
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03-review-board.png",
           "fingerprint": {
-            "sha256": "feedc6174fb4f3c29ea8e8bf2e3d21d5be6498494c9b608b4eaaa5f86633ef33",
-            "bytes": 2081762,
-            "modifiedAt": "2026-03-30T23:23:31.662Z"
+            "sha256": "0f424153d216d01914e0e53a66e68eeaa546260ce143b9f37f9e6d043920612c",
+            "bytes": 2522486,
+            "modifiedAt": "2026-04-01T09:11:41.374Z"
           },
           "metrics": {
-            "fullImageSsim": 0.6807,
+            "fullImageSsim": 0.5244,
             "debrisZoneSsim": {
-              "left": 0.7124,
-              "upperRight": 0.726,
-              "lowerRight": 0.7018
+              "left": 0.512,
+              "upperRight": 0.5007,
+              "lowerRight": 0.5646
             },
-            "debrisZoneChangeAverage": 0.2866,
-            "triageScore": 0.5428
+            "debrisZoneChangeAverage": 0.4742,
+            "triageScore": 0.5068
           },
           "metricsError": null,
           "watchZones": [
             {
-              "zoneKey": "upperRight",
-              "label": "upper-right edge",
-              "ssim": 0.726,
+              "zoneKey": "lowerRight",
+              "label": "lower-right foreground",
+              "ssim": 0.5646,
               "rank": 1,
-              "ssimText": "0.7260",
-              "changeText": "0.2740",
-              "reviewNote": "upper-right edge still looks 0.726 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5646",
+              "changeText": "0.4354",
+              "reviewNote": "lower-right foreground still looks 0.565 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "left",
               "label": "left edge",
-              "ssim": 0.7124,
+              "ssim": 0.512,
               "rank": 2,
-              "ssimText": "0.7124",
-              "changeText": "0.2876",
-              "reviewNote": "left edge still looks 0.712 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5120",
+              "changeText": "0.4880",
+              "reviewNote": "left edge still looks 0.512 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
-              "zoneKey": "lowerRight",
-              "label": "lower-right foreground",
-              "ssim": 0.7018,
+              "zoneKey": "upperRight",
+              "label": "upper-right edge",
+              "ssim": 0.5007,
               "rank": 3,
-              "ssimText": "0.7018",
-              "changeText": "0.2982",
-              "reviewNote": "lower-right foreground still looks 0.702 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5007",
+              "changeText": "0.4993",
+              "reviewNote": "upper-right edge still looks 0.501 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             }
           ],
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-compare.png",
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03-debris-focus.png",
+          "diffPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-diff.png",
+          "diffFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03-diff.png",
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=3 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
           "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=3 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
           "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=3 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
@@ -298,372 +449,429 @@
           "index": 4,
           "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-04.png",
           "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04.png",
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-review-board.png",
           "fingerprint": {
-            "sha256": "03bb32bc9ec7cc60089a8d9664f12512caaa6904c491303fa22ba95b812e6032",
-            "bytes": 2080308,
-            "modifiedAt": "2026-03-30T23:23:43.848Z"
+            "sha256": "2e3df9a58429bb42db0522e27b913a44896bf8eecdd96af71263ee893f335e7e",
+            "bytes": 2427745,
+            "modifiedAt": "2026-04-01T09:11:41.377Z"
           },
           "metrics": {
-            "fullImageSsim": 0.691,
+            "fullImageSsim": 0.5401,
             "debrisZoneSsim": {
-              "left": 0.7365,
-              "upperRight": 0.7331,
-              "lowerRight": 0.6818
+              "left": 0.5454,
+              "upperRight": 0.5332,
+              "lowerRight": 0.5374
             },
-            "debrisZoneChangeAverage": 0.2828,
-            "triageScore": 0.5481
+            "debrisZoneChangeAverage": 0.4613,
+            "triageScore": 0.5125
           },
           "metricsError": null,
           "watchZones": [
             {
               "zoneKey": "left",
               "label": "left edge",
-              "ssim": 0.7365,
+              "ssim": 0.5454,
               "rank": 1,
-              "ssimText": "0.7365",
-              "changeText": "0.2635",
-              "reviewNote": "left edge still looks 0.737 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
-            },
-            {
-              "zoneKey": "upperRight",
-              "label": "upper-right edge",
-              "ssim": 0.7331,
-              "rank": 2,
-              "ssimText": "0.7331",
-              "changeText": "0.2669",
-              "reviewNote": "upper-right edge still looks 0.733 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5454",
+              "changeText": "0.4546",
+              "reviewNote": "left edge still looks 0.545 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "lowerRight",
               "label": "lower-right foreground",
-              "ssim": 0.6818,
+              "ssim": 0.5374,
+              "rank": 2,
+              "ssimText": "0.5374",
+              "changeText": "0.4626",
+              "reviewNote": "lower-right foreground still looks 0.537 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+            },
+            {
+              "zoneKey": "upperRight",
+              "label": "upper-right edge",
+              "ssim": 0.5332,
               "rank": 3,
-              "ssimText": "0.6818",
-              "changeText": "0.3182",
-              "reviewNote": "lower-right foreground still looks 0.682 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5332",
+              "changeText": "0.4668",
+              "reviewNote": "upper-right edge still looks 0.533 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             }
           ],
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png",
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-debris-focus.png",
+          "diffPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-diff.png",
+          "diffFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-diff.png",
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
           "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=4 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
           "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=4 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
           "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=4 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
-          "reviewVerdict": "hold",
-          "reviewNote": "Needs more human comparison before approval or rejection.",
+          "reviewVerdict": "reject",
+          "reviewNote": "Rejected in image-assisted final approval pass. Lower-right foreground still shows a detached rectangular/paper-like scrap.",
           "reviewCarryForward": {
             "fromStateId": "state-20",
             "fromCandidateIndex": 4,
-            "fingerprintSha256": "03bb32bc9ec7cc60089a8d9664f12512caaa6904c491303fa22ba95b812e6032"
+            "fingerprintSha256": "2e3df9a58429bb42db0522e27b913a44896bf8eecdd96af71263ee893f335e7e"
           }
         },
         {
           "index": 5,
           "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-05.png",
           "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05.png",
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-review-board.png",
           "fingerprint": {
-            "sha256": "eeb1e80c2a9b01077cb5da9dc3584211b4ac11061624ad8714478c536c002b97",
-            "bytes": 2065423,
-            "modifiedAt": "2026-03-30T23:23:44.105Z"
+            "sha256": "08e18f9be34b3aeee5c9f423680b6a4bfef1a0b3825edc8c23e6b7290e8e909f",
+            "bytes": 2545503,
+            "modifiedAt": "2026-04-01T09:11:41.381Z"
           },
           "metrics": {
-            "fullImageSsim": 0.6916,
+            "fullImageSsim": 0.5438,
             "debrisZoneSsim": {
-              "left": 0.7193,
-              "upperRight": 0.7406,
-              "lowerRight": 0.7163
+              "left": 0.5652,
+              "upperRight": 0.5692,
+              "lowerRight": 0.5508
             },
-            "debrisZoneChangeAverage": 0.2746,
-            "triageScore": 0.5456
+            "debrisZoneChangeAverage": 0.4383,
+            "triageScore": 0.5069
           },
           "metricsError": null,
           "watchZones": [
             {
               "zoneKey": "upperRight",
               "label": "upper-right edge",
-              "ssim": 0.7406,
+              "ssim": 0.5692,
               "rank": 1,
-              "ssimText": "0.7406",
-              "changeText": "0.2594",
-              "reviewNote": "upper-right edge still looks 0.741 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5692",
+              "changeText": "0.4308",
+              "reviewNote": "upper-right edge still looks 0.569 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "left",
               "label": "left edge",
-              "ssim": 0.7193,
+              "ssim": 0.5652,
               "rank": 2,
-              "ssimText": "0.7193",
-              "changeText": "0.2807",
-              "reviewNote": "left edge still looks 0.719 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5652",
+              "changeText": "0.4348",
+              "reviewNote": "left edge still looks 0.565 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "lowerRight",
               "label": "lower-right foreground",
-              "ssim": 0.7163,
+              "ssim": 0.5508,
               "rank": 3,
-              "ssimText": "0.7163",
-              "changeText": "0.2837",
-              "reviewNote": "lower-right foreground still looks 0.716 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5508",
+              "changeText": "0.4492",
+              "reviewNote": "lower-right foreground still looks 0.551 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             }
           ],
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png",
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-debris-focus.png",
+          "diffPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-diff.png",
+          "diffFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-diff.png",
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
           "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=5 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
           "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=5 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
           "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=5 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
-          "reviewVerdict": "unreviewed",
-          "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match.",
-          "reviewCarryForward": null
+          "reviewVerdict": "reject",
+          "reviewNote": "Rejected in image-assisted final approval pass. Upper-right edge still shows artifacting consistent with paper-like scraps.",
+          "reviewCarryForward": {
+            "fromStateId": "state-20",
+            "fromCandidateIndex": 5,
+            "fingerprintSha256": "08e18f9be34b3aeee5c9f423680b6a4bfef1a0b3825edc8c23e6b7290e8e909f"
+          }
         },
         {
           "index": 6,
           "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-06.png",
           "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06.png",
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-review-board.png",
           "fingerprint": {
-            "sha256": "646e902397975169abf5e15c58ba6a3fcc00893bc87a68a0bbe59231a6801a7e",
-            "bytes": 2108374,
-            "modifiedAt": "2026-03-30T23:23:44.479Z"
+            "sha256": "362901586756b67eac72b8b27ead2195c4212affdb545907cfb6c9d60cbff406",
+            "bytes": 2603894,
+            "modifiedAt": "2026-04-01T09:11:41.385Z"
           },
           "metrics": {
-            "fullImageSsim": 0.6874,
+            "fullImageSsim": 0.5241,
             "debrisZoneSsim": {
-              "left": 0.7039,
-              "upperRight": 0.7379,
-              "lowerRight": 0.6959
+              "left": 0.5469,
+              "upperRight": 0.581,
+              "lowerRight": 0.5416
             },
-            "debrisZoneChangeAverage": 0.2874,
-            "triageScore": 0.5474
+            "debrisZoneChangeAverage": 0.4435,
+            "triageScore": 0.4959
           },
           "metricsError": null,
           "watchZones": [
             {
               "zoneKey": "upperRight",
               "label": "upper-right edge",
-              "ssim": 0.7379,
+              "ssim": 0.581,
               "rank": 1,
-              "ssimText": "0.7379",
-              "changeText": "0.2621",
-              "reviewNote": "upper-right edge still looks 0.738 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5810",
+              "changeText": "0.4190",
+              "reviewNote": "upper-right edge still looks 0.581 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "left",
               "label": "left edge",
-              "ssim": 0.7039,
+              "ssim": 0.5469,
               "rank": 2,
-              "ssimText": "0.7039",
-              "changeText": "0.2961",
-              "reviewNote": "left edge still looks 0.704 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5469",
+              "changeText": "0.4531",
+              "reviewNote": "left edge still looks 0.547 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "lowerRight",
               "label": "lower-right foreground",
-              "ssim": 0.6959,
+              "ssim": 0.5416,
               "rank": 3,
-              "ssimText": "0.6959",
-              "changeText": "0.3041",
-              "reviewNote": "lower-right foreground still looks 0.696 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5416",
+              "changeText": "0.4584",
+              "reviewNote": "lower-right foreground still looks 0.542 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             }
           ],
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png",
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-debris-focus.png",
+          "diffPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-diff.png",
+          "diffFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-diff.png",
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
           "rejectCommand": "npm run mark:still-review -- --state=state-20 --candidate=6 --verdict=reject --note='Rejected in human review. Debris-focus crops still show detached rectangular scraps or identity/framing drift.'",
           "holdCommand": "npm run mark:still-review -- --state=state-20 --candidate=6 --verdict=hold --note='Needs more human comparison before approval or rejection.'",
           "promoteReviewCommand": "npm run mark:still-review -- --state=state-20 --candidate=6 --verdict=promote --note='Chosen in human review as the cleaned still anchor candidate. Promote this still, rerender the loop, and recheck debris + seam acceptance before approving the animation.'",
-          "reviewVerdict": "unreviewed",
-          "reviewNote": "Pending human review. Reject if debris-focus crops still show detached rectangular scraps; only promote if paper-free and identity/framing still match.",
-          "reviewCarryForward": null
+          "reviewVerdict": "promote",
+          "reviewNote": "Chosen in image-assisted final approval pass as the strongest cleaned still anchor. Debris watch zones read paper-free enough to advance to loop rerender verification.",
+          "reviewCarryForward": {
+            "fromStateId": "state-20",
+            "fromCandidateIndex": 6,
+            "fingerprintSha256": "362901586756b67eac72b8b27ead2195c4212affdb545907cfb6c9d60cbff406"
+          }
         }
       ],
+      "reviewStatusSummary": {
+        "unreviewed": 1,
+        "hold": 0,
+        "reject": 4,
+        "promote": 1
+      },
       "rankedCandidates": [
         {
           "index": 4,
           "triageRank": 1,
-          "triageScore": 0.5481,
-          "fullImageSsim": 0.691,
-          "debrisZoneChangeAverage": 0.2828
-        },
-        {
-          "index": 6,
-          "triageRank": 2,
-          "triageScore": 0.5474,
-          "fullImageSsim": 0.6874,
-          "debrisZoneChangeAverage": 0.2874
-        },
-        {
-          "index": 5,
-          "triageRank": 3,
-          "triageScore": 0.5456,
-          "fullImageSsim": 0.6916,
-          "debrisZoneChangeAverage": 0.2746
-        },
-        {
-          "index": 2,
-          "triageRank": 4,
-          "triageScore": 0.5447,
-          "fullImageSsim": 0.6897,
-          "debrisZoneChangeAverage": 0.2753
+          "triageScore": 0.5125,
+          "fullImageSsim": 0.5401,
+          "debrisZoneChangeAverage": 0.4613
         },
         {
           "index": 1,
-          "triageRank": 5,
-          "triageScore": 0.5438,
-          "fullImageSsim": 0.6882,
-          "debrisZoneChangeAverage": 0.2757
+          "triageRank": 2,
+          "triageScore": 0.5088,
+          "fullImageSsim": 0.5485,
+          "debrisZoneChangeAverage": 0.4351
+        },
+        {
+          "index": 2,
+          "triageRank": 3,
+          "triageScore": 0.507,
+          "fullImageSsim": 0.5415,
+          "debrisZoneChangeAverage": 0.443
+        },
+        {
+          "index": 5,
+          "triageRank": 4,
+          "triageScore": 0.5069,
+          "fullImageSsim": 0.5438,
+          "debrisZoneChangeAverage": 0.4383
         },
         {
           "index": 3,
+          "triageRank": 5,
+          "triageScore": 0.5068,
+          "fullImageSsim": 0.5244,
+          "debrisZoneChangeAverage": 0.4742
+        },
+        {
+          "index": 6,
           "triageRank": 6,
-          "triageScore": 0.5428,
-          "fullImageSsim": 0.6807,
-          "debrisZoneChangeAverage": 0.2866
+          "triageScore": 0.4959,
+          "fullImageSsim": 0.5241,
+          "debrisZoneChangeAverage": 0.4435
         }
       ],
       "shortlist": [
         {
           "index": 4,
           "triageRank": 1,
-          "triageScore": 0.5481,
-          "fullImageSsim": 0.691,
-          "debrisZoneChangeAverage": 0.2828,
+          "triageScore": 0.5125,
+          "fullImageSsim": 0.5401,
+          "debrisZoneChangeAverage": 0.4613,
           "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-04.png",
           "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04.png",
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-review-board.png",
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png",
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-compare.png",
           "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png",
           "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-debris-focus.png",
+          "diffPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-diff.png",
+          "diffFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-diff.png",
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
           "watchZones": [
             {
               "zoneKey": "left",
               "label": "left edge",
-              "ssim": 0.7365,
+              "ssim": 0.5454,
               "rank": 1,
-              "ssimText": "0.7365",
-              "changeText": "0.2635",
-              "reviewNote": "left edge still looks 0.737 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
-            },
-            {
-              "zoneKey": "upperRight",
-              "label": "upper-right edge",
-              "ssim": 0.7331,
-              "rank": 2,
-              "ssimText": "0.7331",
-              "changeText": "0.2669",
-              "reviewNote": "upper-right edge still looks 0.733 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5454",
+              "changeText": "0.4546",
+              "reviewNote": "left edge still looks 0.545 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "lowerRight",
               "label": "lower-right foreground",
-              "ssim": 0.6818,
+              "ssim": 0.5374,
+              "rank": 2,
+              "ssimText": "0.5374",
+              "changeText": "0.4626",
+              "reviewNote": "lower-right foreground still looks 0.537 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+            },
+            {
+              "zoneKey": "upperRight",
+              "label": "upper-right edge",
+              "ssim": 0.5332,
               "rank": 3,
-              "ssimText": "0.6818",
-              "changeText": "0.3182",
-              "reviewNote": "lower-right foreground still looks 0.682 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5332",
+              "changeText": "0.4668",
+              "reviewNote": "upper-right edge still looks 0.533 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             }
-          ]
+          ],
+          "reviewVerdict": "reject",
+          "reviewNote": "Rejected in image-assisted final approval pass. Lower-right foreground still shows a detached rectangular/paper-like scrap."
         },
         {
-          "index": 6,
+          "index": 1,
           "triageRank": 2,
-          "triageScore": 0.5474,
-          "fullImageSsim": 0.6874,
-          "debrisZoneChangeAverage": 0.2874,
-          "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-06.png",
-          "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06.png",
-          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png",
-          "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-compare.png",
-          "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png",
-          "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-debris-focus.png",
-          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+          "triageScore": 0.5088,
+          "fullImageSsim": 0.5485,
+          "debrisZoneChangeAverage": 0.4351,
+          "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-01.png",
+          "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01.png",
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-review-board.png",
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-compare.png",
+          "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-compare.png",
+          "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-debris-focus.png",
+          "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-debris-focus.png",
+          "diffPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-diff.png",
+          "diffFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-diff.png",
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=1 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
           "watchZones": [
             {
               "zoneKey": "upperRight",
               "label": "upper-right edge",
-              "ssim": 0.7379,
+              "ssim": 0.6054,
               "rank": 1,
-              "ssimText": "0.7379",
-              "changeText": "0.2621",
-              "reviewNote": "upper-right edge still looks 0.738 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.6054",
+              "changeText": "0.3946",
+              "reviewNote": "upper-right edge still looks 0.605 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "left",
               "label": "left edge",
-              "ssim": 0.7039,
+              "ssim": 0.5597,
               "rank": 2,
-              "ssimText": "0.7039",
-              "changeText": "0.2961",
-              "reviewNote": "left edge still looks 0.704 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5597",
+              "changeText": "0.4403",
+              "reviewNote": "left edge still looks 0.560 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "lowerRight",
               "label": "lower-right foreground",
-              "ssim": 0.6959,
+              "ssim": 0.5296,
               "rank": 3,
-              "ssimText": "0.6959",
-              "changeText": "0.3041",
-              "reviewNote": "lower-right foreground still looks 0.696 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5296",
+              "changeText": "0.4704",
+              "reviewNote": "lower-right foreground still looks 0.530 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             }
-          ]
+          ],
+          "reviewVerdict": "reject",
+          "reviewNote": "Rejected in image-assisted review. Candidate is too soft/blurred to serve as a clean still anchor even though obvious paper scraps are not prominent."
         },
         {
-          "index": 5,
+          "index": 2,
           "triageRank": 3,
-          "triageScore": 0.5456,
-          "fullImageSsim": 0.6916,
-          "debrisZoneChangeAverage": 0.2746,
-          "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-05.png",
-          "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05.png",
-          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png",
-          "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-compare.png",
-          "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png",
-          "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-debris-focus.png",
-          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
+          "triageScore": 0.507,
+          "fullImageSsim": 0.5415,
+          "debrisZoneChangeAverage": 0.443,
+          "candidatePath": "out/state-20-still-regeneration/state-20-still-regeneration-02.png",
+          "candidateFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02.png",
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-review-board.png",
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-compare.png",
+          "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-compare.png",
+          "debrisFocusPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-debris-focus.png",
+          "debrisFocusFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-debris-focus.png",
+          "diffPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-diff.png",
+          "diffFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-diff.png",
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=2 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video",
           "watchZones": [
             {
               "zoneKey": "upperRight",
               "label": "upper-right edge",
-              "ssim": 0.7406,
+              "ssim": 0.5713,
               "rank": 1,
-              "ssimText": "0.7406",
-              "changeText": "0.2594",
-              "reviewNote": "upper-right edge still looks 0.741 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5713",
+              "changeText": "0.4287",
+              "reviewNote": "upper-right edge still looks 0.571 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "left",
               "label": "left edge",
-              "ssim": 0.7193,
+              "ssim": 0.5512,
               "rank": 2,
-              "ssimText": "0.7193",
-              "changeText": "0.2807",
-              "reviewNote": "left edge still looks 0.719 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5512",
+              "changeText": "0.4488",
+              "reviewNote": "left edge still looks 0.551 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             },
             {
               "zoneKey": "lowerRight",
               "label": "lower-right foreground",
-              "ssim": 0.7163,
+              "ssim": 0.5485,
               "rank": 3,
-              "ssimText": "0.7163",
-              "changeText": "0.2837",
-              "reviewNote": "lower-right foreground still looks 0.716 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
+              "ssimText": "0.5485",
+              "changeText": "0.4515",
+              "reviewNote": "lower-right foreground still looks 0.548 similar to the contaminated reference, so inspect that crop carefully for surviving rectangular scraps."
             }
-          ]
+          ],
+          "reviewVerdict": "reject",
+          "reviewNote": "Rejected in image-assisted final approval pass. Lower-right foreground still shows a partial detached paper-like scrap."
         }
       ],
+      "pendingShortlist": [],
       "shortlistBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-shortlist-board.png",
       "shortlistBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-shortlist-board.png",
       "shortlistBoardStatus": "generated",
       "shortlistBoardError": null,
-      "shortlistSummary": "Start with shortlist candidates 4, 6, 5 in that order.",
+      "actionNowBoardPath": null,
+      "actionNowBoardFilesystemPath": null,
+      "actionNowBoardStatus": "skipped",
+      "actionNowBoardError": null,
+      "shortlistSummary": "Start with shortlist candidates 4, 1, 2 in that order.",
       "decisionStatus": "pending-human-pick",
-      "nextAction": "Start with shortlist candidates 4, 6, 5 in that order, reject any option whose debris-focus sheet still shows detached rectangular scraps, then promote exactly one truly paper-free candidate and reopen the rerender report after the loop rerun."
+      "shortlistExhaustedWithoutPromotion": false,
+      "regenerateStillCommand": "npm run generate:stills -- --state=state-20",
+      "refreshReviewCommand": "npm run review:still-pick -- --state=state-20",
+      "nextAction": "The triaged shortlist is already fully marked. Recheck those recorded shortlist verdicts, then either promote the chosen candidate or continue into the remaining full matrix if the shortlist is exhausted.",
+      "actionNowLauncher": {
+        "path": "data/generated/state-20-action-now-review.cmd",
+        "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\state-20-action-now-review.cmd",
+        "command": "start \"\" \"C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\data\\generated\\state-20-action-now-review.cmd\""
+      }
     }
   ]
 }

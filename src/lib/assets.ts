@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import type { FrameRecord, StateManifestEntry } from './types';
 
 export interface ResolvedStateAssets {
@@ -16,11 +18,13 @@ export function resolveStateAssets(params: {
   const { manifest, latestTransition, timestamp } = params;
 
   if (manifest) {
-    const loops = manifest.loops ?? [];
+    const flatAssets = resolveFlatStateAssets(manifest.index);
+    const loops = flatAssets?.loops?.length ? flatAssets.loops : (manifest.loops ?? []);
+    const still = flatAssets?.still ?? manifest.still;
     const loopVariantIndex = loops.length ? resolveLoopVariantIndex(timestamp, loops.length) : null;
 
     return {
-      still: manifest.still,
+      still,
       loops,
       activeLoop: loopVariantIndex === null ? null : loops[loopVariantIndex] ?? null,
       loopVariantIndex,
@@ -44,6 +48,23 @@ export function resolveStateAssets(params: {
     activeLoop: null,
     loopVariantIndex: null,
     source: 'placeholder'
+  };
+}
+
+export function resolveFlatStateAssets(index: number) {
+  const baseDir = path.join(process.cwd(), 'public', 'states');
+  const key = String(index).padStart(2, '0');
+  const stillPath = path.join(baseDir, `${key}.png`);
+  const loopCandidates = ['a', 'b', 'c'].map((suffix) => `/states/${key}-${suffix}.mp4`);
+  const existingLoops = loopCandidates.filter((loopPath) => fs.existsSync(path.join(process.cwd(), 'public', loopPath.replace(/^\//, ''))));
+
+  if (!fs.existsSync(stillPath) && !existingLoops.length) {
+    return null;
+  }
+
+  return {
+    still: fs.existsSync(stillPath) ? `/states/${key}.png` : null,
+    loops: existingLoops
   };
 }
 

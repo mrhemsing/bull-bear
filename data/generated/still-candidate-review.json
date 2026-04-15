@@ -1,54 +1,305 @@
 {
-  "recordedAt": "2026-03-30T19:56:39.774Z",
-  "stateFilter": "state-20",
+  "recordedAt": "2026-04-01T11:23:35.931Z",
+  "stateFilter": null,
   "entries": [
     {
       "stateId": "state-20",
       "stateIndex": 20,
       "label": "Extremely Bullish",
-      "provider": "fal.ai",
-      "model": "fal-ai/flux/dev/image-to-image",
+      "provider": "openai-images-edits",
+      "model": "openai/gpt-image-1",
       "canonicalTarget": "/states/state-20/still.png",
-      "referenceImage": "out/state-20-still-regeneration/state-20-still-reference.png",
-      "referenceImageFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-reference.png",
+      "referenceImage": "out/state-20-still-regeneration/state-20-still-reference-scrubbed.png",
+      "referenceImageFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-reference-scrubbed.png",
+      "referenceFingerprint": {
+        "sha256": "cdc77ce770b82a78a8e44c1ea9cffc20f2118d67bde862c670895176402f171d",
+        "bytes": 762245,
+        "modifiedAt": "2026-04-01T09:10:30.678Z"
+      },
       "renderManifestPath": "out/state-20-still-regeneration/render-manifest.json",
       "renderPromptPath": "out/state-20-still-regeneration/render-prompt.txt",
       "defaultLoopVariant": "b",
       "defaultLoopTimeoutMs": "900000",
       "defaultLoopModel": "fal-ai/kling-video/v2.1/standard/image-to-video",
+      "overviewPath": "out/state-20-still-regeneration/state-20-still-regeneration-overview.png",
+      "overviewFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-overview.png",
+      "overviewStatus": "generated",
+      "overviewError": null,
       "outputs": [
         {
           "index": 1,
           "path": "out/state-20-still-regeneration/state-20-still-regeneration-01.png",
           "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01.png",
+          "fingerprint": {
+            "sha256": "0c977fe0d21dd95c78787a07f0d46fc284e138ca5f906c2789f619cf66ee0689",
+            "bytes": 2576197,
+            "modifiedAt": "2026-04-01T09:11:41.365Z"
+          },
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-compare.png",
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-compare.png",
           "comparisonStatus": "generated",
           "comparisonError": null,
+          "debrisFocusComparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-debris-focus.png",
+          "debrisFocusComparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-debris-focus.png",
+          "debrisFocusStatus": "generated",
+          "debrisFocusError": null,
+          "diffComparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-diff.png",
+          "diffComparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-diff.png",
+          "diffComparisonStatus": "generated",
+          "diffComparisonError": null,
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-01-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-01-review-board.png",
+          "reviewBoardStatus": "generated",
+          "reviewBoardError": null,
+          "metrics": {
+            "fullImageSsim": 0.5485,
+            "debrisZoneSsim": {
+              "left": 0.5597,
+              "upperRight": 0.6054,
+              "lowerRight": 0.5296
+            },
+            "debrisZoneChangeAverage": 0.4351,
+            "triageScore": 0.5088
+          },
+          "metricsError": null,
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=1 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
         },
         {
           "index": 2,
           "path": "out/state-20-still-regeneration/state-20-still-regeneration-02.png",
           "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02.png",
+          "fingerprint": {
+            "sha256": "8063336e913b8f9e82fed4376578a0976c76ab0555fe5ba227773dd15cf01a09",
+            "bytes": 2490404,
+            "modifiedAt": "2026-04-01T09:11:41.370Z"
+          },
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-compare.png",
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-compare.png",
           "comparisonStatus": "generated",
           "comparisonError": null,
+          "debrisFocusComparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-debris-focus.png",
+          "debrisFocusComparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-debris-focus.png",
+          "debrisFocusStatus": "generated",
+          "debrisFocusError": null,
+          "diffComparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-diff.png",
+          "diffComparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-diff.png",
+          "diffComparisonStatus": "generated",
+          "diffComparisonError": null,
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-02-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-02-review-board.png",
+          "reviewBoardStatus": "generated",
+          "reviewBoardError": null,
+          "metrics": {
+            "fullImageSsim": 0.5415,
+            "debrisZoneSsim": {
+              "left": 0.5512,
+              "upperRight": 0.5713,
+              "lowerRight": 0.5485
+            },
+            "debrisZoneChangeAverage": 0.443,
+            "triageScore": 0.507
+          },
+          "metricsError": null,
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=2 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
         },
         {
           "index": 3,
           "path": "out/state-20-still-regeneration/state-20-still-regeneration-03.png",
           "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03.png",
+          "fingerprint": {
+            "sha256": "0f424153d216d01914e0e53a66e68eeaa546260ce143b9f37f9e6d043920612c",
+            "bytes": 2522486,
+            "modifiedAt": "2026-04-01T09:11:41.374Z"
+          },
           "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-compare.png",
           "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03-compare.png",
           "comparisonStatus": "generated",
           "comparisonError": null,
+          "debrisFocusComparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-debris-focus.png",
+          "debrisFocusComparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03-debris-focus.png",
+          "debrisFocusStatus": "generated",
+          "debrisFocusError": null,
+          "diffComparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-diff.png",
+          "diffComparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03-diff.png",
+          "diffComparisonStatus": "generated",
+          "diffComparisonError": null,
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-03-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-03-review-board.png",
+          "reviewBoardStatus": "generated",
+          "reviewBoardError": null,
+          "metrics": {
+            "fullImageSsim": 0.5244,
+            "debrisZoneSsim": {
+              "left": 0.512,
+              "upperRight": 0.5007,
+              "lowerRight": 0.5646
+            },
+            "debrisZoneChangeAverage": 0.4742,
+            "triageScore": 0.5068
+          },
+          "metricsError": null,
           "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=3 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+        },
+        {
+          "index": 4,
+          "path": "out/state-20-still-regeneration/state-20-still-regeneration-04.png",
+          "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04.png",
+          "fingerprint": {
+            "sha256": "2e3df9a58429bb42db0522e27b913a44896bf8eecdd96af71263ee893f335e7e",
+            "bytes": 2427745,
+            "modifiedAt": "2026-04-01T09:11:41.377Z"
+          },
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-compare.png",
+          "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-compare.png",
+          "comparisonStatus": "generated",
+          "comparisonError": null,
+          "debrisFocusComparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-debris-focus.png",
+          "debrisFocusComparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-debris-focus.png",
+          "debrisFocusStatus": "generated",
+          "debrisFocusError": null,
+          "diffComparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-diff.png",
+          "diffComparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-diff.png",
+          "diffComparisonStatus": "generated",
+          "diffComparisonError": null,
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-04-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-04-review-board.png",
+          "reviewBoardStatus": "generated",
+          "reviewBoardError": null,
+          "metrics": {
+            "fullImageSsim": 0.5401,
+            "debrisZoneSsim": {
+              "left": 0.5454,
+              "upperRight": 0.5332,
+              "lowerRight": 0.5374
+            },
+            "debrisZoneChangeAverage": 0.4613,
+            "triageScore": 0.5125
+          },
+          "metricsError": null,
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=4 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+        },
+        {
+          "index": 5,
+          "path": "out/state-20-still-regeneration/state-20-still-regeneration-05.png",
+          "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05.png",
+          "fingerprint": {
+            "sha256": "08e18f9be34b3aeee5c9f423680b6a4bfef1a0b3825edc8c23e6b7290e8e909f",
+            "bytes": 2545503,
+            "modifiedAt": "2026-04-01T09:11:41.381Z"
+          },
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-compare.png",
+          "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-compare.png",
+          "comparisonStatus": "generated",
+          "comparisonError": null,
+          "debrisFocusComparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-debris-focus.png",
+          "debrisFocusComparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-debris-focus.png",
+          "debrisFocusStatus": "generated",
+          "debrisFocusError": null,
+          "diffComparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-diff.png",
+          "diffComparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-diff.png",
+          "diffComparisonStatus": "generated",
+          "diffComparisonError": null,
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-05-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-05-review-board.png",
+          "reviewBoardStatus": "generated",
+          "reviewBoardError": null,
+          "metrics": {
+            "fullImageSsim": 0.5438,
+            "debrisZoneSsim": {
+              "left": 0.5652,
+              "upperRight": 0.5692,
+              "lowerRight": 0.5508
+            },
+            "debrisZoneChangeAverage": 0.4383,
+            "triageScore": 0.5069
+          },
+          "metricsError": null,
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=5 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
+        },
+        {
+          "index": 6,
+          "path": "out/state-20-still-regeneration/state-20-still-regeneration-06.png",
+          "filesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06.png",
+          "fingerprint": {
+            "sha256": "362901586756b67eac72b8b27ead2195c4212affdb545907cfb6c9d60cbff406",
+            "bytes": 2603894,
+            "modifiedAt": "2026-04-01T09:11:41.385Z"
+          },
+          "comparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-compare.png",
+          "comparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-compare.png",
+          "comparisonStatus": "generated",
+          "comparisonError": null,
+          "debrisFocusComparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-debris-focus.png",
+          "debrisFocusComparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-debris-focus.png",
+          "debrisFocusStatus": "generated",
+          "debrisFocusError": null,
+          "diffComparisonPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-diff.png",
+          "diffComparisonFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-diff.png",
+          "diffComparisonStatus": "generated",
+          "diffComparisonError": null,
+          "reviewBoardPath": "out/state-20-still-regeneration/state-20-still-regeneration-06-review-board.png",
+          "reviewBoardFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\state-20-still-regeneration\\state-20-still-regeneration-06-review-board.png",
+          "reviewBoardStatus": "generated",
+          "reviewBoardError": null,
+          "metrics": {
+            "fullImageSsim": 0.5241,
+            "debrisZoneSsim": {
+              "left": 0.5469,
+              "upperRight": 0.581,
+              "lowerRight": 0.5416
+            },
+            "debrisZoneChangeAverage": 0.4435,
+            "triageScore": 0.4959
+          },
+          "metricsError": null,
+          "promoteCommand": "npm run promote:still -- --state=state-20 --candidate=6 --variant=b --stage-loop-rerender --timeout-ms=900000 --model=fal-ai/kling-video/v2.1/standard/image-to-video"
         }
       ],
-      "notes": "Generated 3 still candidate(s)."
+      "rankedCandidates": [
+        {
+          "index": 4,
+          "triageRank": 1,
+          "triageScore": 0.5125,
+          "fullImageSsim": 0.5401,
+          "debrisZoneChangeAverage": 0.4613
+        },
+        {
+          "index": 1,
+          "triageRank": 2,
+          "triageScore": 0.5088,
+          "fullImageSsim": 0.5485,
+          "debrisZoneChangeAverage": 0.4351
+        },
+        {
+          "index": 2,
+          "triageRank": 3,
+          "triageScore": 0.507,
+          "fullImageSsim": 0.5415,
+          "debrisZoneChangeAverage": 0.443
+        },
+        {
+          "index": 5,
+          "triageRank": 4,
+          "triageScore": 0.5069,
+          "fullImageSsim": 0.5438,
+          "debrisZoneChangeAverage": 0.4383
+        },
+        {
+          "index": 3,
+          "triageRank": 5,
+          "triageScore": 0.5068,
+          "fullImageSsim": 0.5244,
+          "debrisZoneChangeAverage": 0.4742
+        },
+        {
+          "index": 6,
+          "triageRank": 6,
+          "triageScore": 0.4959,
+          "fullImageSsim": 0.5241,
+          "debrisZoneChangeAverage": 0.4435
+        }
+      ],
+      "notes": "Generated 6 still candidate(s)."
     }
   ]
 }

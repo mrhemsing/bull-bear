@@ -1,0 +1,28 @@
+{
+  "reason": "Bull Bear loops that still need paper-money cleanup rerenders while preserving already-completed state bundles.",
+  "states": [
+    "state-02",
+    "state-03",
+    "state-04",
+    "state-05",
+    "state-06",
+    "state-07",
+    "state-08",
+    "state-09",
+    "state-11",
+    "state-12",
+    "state-13",
+    "state-14",
+    "state-15",
+    "state-16",
+    "state-17",
+    "state-18",
+    "state-19"
+  ],
+  "completedStates": [
+    "state-01",
+    "state-10",
+    "state-20"
+  ],
+  "updatedAt": "2026-04-08T18:11:00Z"
+}

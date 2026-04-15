@@ -5,11 +5,11 @@
     "label": "Extremely Bearish",
     "scoreMin": -100,
     "scoreMax": -85,
-    "still": "/states/state-01/still.png",
+    "still": "/states/01.png",
     "loops": [
-      "/states/state-01/loop-a.mp4",
-      "/states/state-01/loop-b.mp4",
-      "/states/state-01/loop-c.mp4"
+      "/states/01-a.mp4",
+      "/states/01-b.mp4",
+      "/states/01-c.mp4"
     ]
   },
   {
@@ -18,8 +18,12 @@
     "label": "Very Strong Bearish",
     "scoreMin": -84,
     "scoreMax": -75,
-    "still": "/states/state-02/still.png",
-    "loops": ["/states/state-02/loop-a.mp4", "/states/state-02/loop-b.mp4", "/states/state-02/loop-c.mp4"]
+    "still": "/states/02.png",
+    "loops": [
+      "/states/02-a.mp4",
+      "/states/02-b.mp4",
+      "/states/02-c.mp4"
+    ]
   },
   {
     "id": "state-03",
@@ -27,8 +31,12 @@
     "label": "Strong Bearish",
     "scoreMin": -74,
     "scoreMax": -65,
-    "still": "/states/state-03/still.png",
-    "loops": ["/states/state-03/loop-a.mp4", "/states/state-03/loop-b.mp4", "/states/state-03/loop-c.mp4"]
+    "still": "/states/03.png",
+    "loops": [
+      "/states/03-a.mp4",
+      "/states/03-b.mp4",
+      "/states/03-c.mp4"
+    ]
   },
   {
     "id": "state-04",
@@ -36,8 +44,12 @@
     "label": "Firmly Bearish",
     "scoreMin": -64,
     "scoreMax": -55,
-    "still": "/states/state-04/still.png",
-    "loops": ["/states/state-04/loop-a.mp4", "/states/state-04/loop-b.mp4", "/states/state-04/loop-c.mp4"]
+    "still": "/states/04.png",
+    "loops": [
+      "/states/04-a.mp4",
+      "/states/04-b.mp4",
+      "/states/04-c.mp4"
+    ]
   },
   {
     "id": "state-05",
@@ -45,8 +57,12 @@
     "label": "Bearish",
     "scoreMin": -54,
     "scoreMax": -45,
-    "still": "/states/state-05/still.png",
-    "loops": ["/states/state-05/loop-a.mp4", "/states/state-05/loop-b.mp4", "/states/state-05/loop-c.mp4"]
+    "still": "/states/05.png",
+    "loops": [
+      "/states/05-a.mp4",
+      "/states/05-b.mp4",
+      "/states/05-c.mp4"
+    ]
   },
   {
     "id": "state-06",
@@ -54,8 +70,12 @@
     "label": "Moderately Bearish",
     "scoreMin": -44,
     "scoreMax": -35,
-    "still": "/states/state-06/still.png",
-    "loops": ["/states/state-06/loop-a.mp4", "/states/state-06/loop-b.mp4", "/states/state-06/loop-c.mp4"]
+    "still": "/states/06.png",
+    "loops": [
+      "/states/06-a.mp4",
+      "/states/06-b.mp4",
+      "/states/06-c.mp4"
+    ]
   },
   {
     "id": "state-07",
@@ -63,8 +83,12 @@
     "label": "Lean Bearish",
     "scoreMin": -34,
     "scoreMax": -25,
-    "still": "/states/state-07/still.png",
-    "loops": ["/states/state-07/loop-a.mp4", "/states/state-07/loop-b.mp4", "/states/state-07/loop-c.mp4"]
+    "still": "/states/07.png",
+    "loops": [
+      "/states/07-a.mp4",
+      "/states/07-b.mp4",
+      "/states/07-c.mp4"
+    ]
   },
   {
     "id": "state-08",
@@ -72,8 +96,12 @@
     "label": "Slightly Bearish",
     "scoreMin": -24,
     "scoreMax": -15,
-    "still": "/states/state-08/still.png",
-    "loops": ["/states/state-08/loop-a.mp4", "/states/state-08/loop-b.mp4", "/states/state-08/loop-c.mp4"]
+    "still": "/states/08.png",
+    "loops": [
+      "/states/08-a.mp4",
+      "/states/08-b.mp4",
+      "/states/08-c.mp4"
+    ]
   },
   {
     "id": "state-09",
@@ -81,8 +109,12 @@
     "label": "Mildly Bearish",
     "scoreMin": -14,
     "scoreMax": -5,
-    "still": "/states/state-09/still.png",
-    "loops": ["/states/state-09/loop-a.mp4", "/states/state-09/loop-b.mp4", "/states/state-09/loop-c.mp4"]
+    "still": "/states/09.png",
+    "loops": [
+      "/states/09-a.mp4",
+      "/states/09-b.mp4",
+      "/states/09-c.mp4"
+    ]
   },
   {
     "id": "state-10",
@@ -90,8 +122,12 @@
     "label": "Neutral",
     "scoreMin": -4,
     "scoreMax": 4,
-    "still": "/states/state-10/still.png",
-    "loops": ["/states/state-10/loop-a.mp4", "/states/state-10/loop-b.mp4", "/states/state-10/loop-c.mp4"]
+    "still": "/states/10.png",
+    "loops": [
+      "/states/10-a.mp4",
+      "/states/10-b.mp4",
+      "/states/10-c.mp4"
+    ]
   },
   {
     "id": "state-11",
@@ -99,8 +135,12 @@
     "label": "Mildly Bullish",
     "scoreMin": 5,
     "scoreMax": 14,
-    "still": "/states/state-11/still.png",
-    "loops": ["/states/state-11/loop-a.mp4", "/states/state-11/loop-b.mp4", "/states/state-11/loop-c.mp4"]
+    "still": "/states/11.png",
+    "loops": [
+      "/states/11-a.mp4",
+      "/states/11-b.mp4",
+      "/states/11-c.mp4"
+    ]
   },
   {
     "id": "state-12",
@@ -108,8 +148,12 @@
     "label": "Slightly Bullish",
     "scoreMin": 15,
     "scoreMax": 24,
-    "still": "/states/state-12/still.png",
-    "loops": ["/states/state-12/loop-a.mp4", "/states/state-12/loop-b.mp4", "/states/state-12/loop-c.mp4"]
+    "still": "/states/12.png",
+    "loops": [
+      "/states/12-a.mp4",
+      "/states/12-b.mp4",
+      "/states/12-c.mp4"
+    ]
   },
   {
     "id": "state-13",
@@ -117,8 +161,12 @@
     "label": "Lean Bullish",
     "scoreMin": 25,
     "scoreMax": 34,
-    "still": "/states/state-13/still.png",
-    "loops": ["/states/state-13/loop-a.mp4", "/states/state-13/loop-b.mp4", "/states/state-13/loop-c.mp4"]
+    "still": "/states/13.png",
+    "loops": [
+      "/states/13-a.mp4",
+      "/states/13-b.mp4",
+      "/states/13-c.mp4"
+    ]
   },
   {
     "id": "state-14",
@@ -126,8 +174,12 @@
     "label": "Moderately Bullish",
     "scoreMin": 35,
     "scoreMax": 44,
-    "still": "/states/state-14/still.png",
-    "loops": ["/states/state-14/loop-a.mp4", "/states/state-14/loop-b.mp4", "/states/state-14/loop-c.mp4"]
+    "still": "/states/14.png",
+    "loops": [
+      "/states/14-a.mp4",
+      "/states/14-b.mp4",
+      "/states/14-c.mp4"
+    ]
   },
   {
     "id": "state-15",
@@ -135,8 +187,12 @@
     "label": "Bullish",
     "scoreMin": 45,
     "scoreMax": 54,
-    "still": "/states/state-15/still.png",
-    "loops": ["/states/state-15/loop-a.mp4", "/states/state-15/loop-b.mp4", "/states/state-15/loop-c.mp4"]
+    "still": "/states/15.png",
+    "loops": [
+      "/states/15-a.mp4",
+      "/states/15-b.mp4",
+      "/states/15-c.mp4"
+    ]
   },
   {
     "id": "state-16",
@@ -144,8 +200,12 @@
     "label": "Firmly Bullish",
     "scoreMin": 55,
     "scoreMax": 64,
-    "still": "/states/state-16/still.png",
-    "loops": ["/states/state-16/loop-a.mp4", "/states/state-16/loop-b.mp4", "/states/state-16/loop-c.mp4"]
+    "still": "/states/16.png",
+    "loops": [
+      "/states/16-a.mp4",
+      "/states/16-b.mp4",
+      "/states/16-c.mp4"
+    ]
   },
   {
     "id": "state-17",
@@ -153,8 +213,12 @@
     "label": "Strong Bullish",
     "scoreMin": 65,
     "scoreMax": 74,
-    "still": "/states/state-17/still.png",
-    "loops": ["/states/state-17/loop-a.mp4", "/states/state-17/loop-b.mp4", "/states/state-17/loop-c.mp4"]
+    "still": "/states/17.png",
+    "loops": [
+      "/states/17-a.mp4",
+      "/states/17-b.mp4",
+      "/states/17-c.mp4"
+    ]
   },
   {
     "id": "state-18",
@@ -162,8 +226,12 @@
     "label": "Very Strong Bullish",
     "scoreMin": 75,
     "scoreMax": 84,
-    "still": "/states/state-18/still.png",
-    "loops": ["/states/state-18/loop-a.mp4", "/states/state-18/loop-b.mp4", "/states/state-18/loop-c.mp4"]
+    "still": "/states/18.png",
+    "loops": [
+      "/states/18-a.mp4",
+      "/states/18-b.mp4",
+      "/states/18-c.mp4"
+    ]
   },
   {
     "id": "state-19",
@@ -171,8 +239,12 @@
     "label": "Exceptionally Bullish",
     "scoreMin": 85,
     "scoreMax": 94,
-    "still": "/states/state-19/still.png",
-    "loops": ["/states/state-19/loop-a.mp4", "/states/state-19/loop-b.mp4", "/states/state-19/loop-c.mp4"]
+    "still": "/states/19.png",
+    "loops": [
+      "/states/19-a.mp4",
+      "/states/19-b.mp4",
+      "/states/19-c.mp4"
+    ]
   },
   {
     "id": "state-20",
@@ -180,7 +252,11 @@
     "label": "Extremely Bullish",
     "scoreMin": 95,
     "scoreMax": 100,
-    "still": "/states/state-20/still.png",
-    "loops": ["/states/state-20/loop-a.mp4", "/states/state-20/loop-b.mp4", "/states/state-20/loop-c.mp4"]
+    "still": "/states/20.png",
+    "loops": [
+      "/states/20-a.mp4",
+      "/states/20-b.mp4",
+      "/states/20-c.mp4"
+    ]
   }
 ]

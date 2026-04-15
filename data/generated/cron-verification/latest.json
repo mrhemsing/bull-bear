@@ -1,0 +1,114 @@
+{
+  "checkedAt": "2026-04-14T07:42:45.922Z",
+  "artifactPath": "docs\\openclaw-hourly-capture-cron.json",
+  "expectedName": "bull-bear-hourly-capture",
+  "totalJobsSeen": 8,
+  "matchCount": 1,
+  "duplicateCount": 1,
+  "duplicatesDetected": false,
+  "installedJobs": [
+    {
+      "id": "f0c7937f-1771-4b2b-80c6-268738cd6ae8",
+      "name": "bull-bear-hourly-capture",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 * * * *",
+        "tz": "America/Los_Angeles",
+        "staggerMs": 300000
+      },
+      "sessionTarget": "isolated",
+      "payloadKind": "agentTurn",
+      "timeoutSeconds": 420,
+      "deliveryMode": "none"
+    }
+  ],
+  "disabledMatches": [
+    {
+      "id": "0a36c34b-d64c-4ed9-9970-63142d7848a6",
+      "name": "bull-bear-hourly-capture",
+      "enabled": false,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 * * * *",
+        "tz": "America/Los_Angeles",
+        "staggerMs": 300000
+      },
+      "sessionTarget": "isolated",
+      "payloadKind": "agentTurn",
+      "timeoutSeconds": 420,
+      "deliveryMode": "announce"
+    },
+    {
+      "id": "1bc0cc28-f8d3-4d66-8fc1-3f4f9600b52e",
+      "name": "bull-bear-hourly-capture",
+      "enabled": false,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 * * * *",
+        "tz": "America/Los_Angeles",
+        "staggerMs": 300000
+      },
+      "sessionTarget": "isolated",
+      "payloadKind": "agentTurn",
+      "timeoutSeconds": 420,
+      "deliveryMode": "announce"
+    }
+  ],
+  "recentRuns": {
+    "inspected": true,
+    "total": 0,
+    "limit": 5,
+    "entries": [],
+    "warnings": [
+      "Unable to load cron run history from CLI: Command timed out after 35000ms",
+      "No run-history entries were returned for the installed job yet."
+    ]
+  },
+  "runHealth": {
+    "verdict": "no-history",
+    "reason": "No cron runs have been recorded for the installed job yet.",
+    "latestRunAgeMs": null,
+    "latestRunAge": null,
+    "staleThresholdHours": 2
+  },
+  "warnings": [
+    "Unable to load cron run history from CLI: Command timed out after 35000ms",
+    "No run-history entries were returned for the installed job yet.",
+    "Loaded installed cron jobs from local file ..\\..\\cron\\jobs.json for local verification."
+  ],
+  "errors": [],
+  "options": {
+    "strict": false,
+    "skipRuns": false,
+    "runsLimit": 5,
+    "staleHours": 2
+  },
+  "artifactPaths": {
+    "dir": "data\\generated\\cron-verification",
+    "latest": {
+      "path": "data\\generated\\cron-verification\\latest.json",
+      "sizeBytes": 3237,
+      "sizeHuman": "3.2 KB",
+      "updatedAt": "2026-04-14T07:42:45.944Z"
+    },
+    "latestText": {
+      "path": "data\\generated\\cron-verification\\latest.txt",
+      "sizeBytes": 1212,
+      "sizeHuman": "1.2 KB",
+      "updatedAt": "2026-04-14T07:42:45.944Z"
+    },
+    "latestMarkdown": {
+      "path": "data\\generated\\cron-verification\\latest.md",
+      "sizeBytes": 1177,
+      "sizeHuman": "1.1 KB",
+      "updatedAt": "2026-04-14T07:42:45.945Z"
+    },
+    "history": {
+      "path": "data\\generated\\cron-verification\\history.ndjson",
+      "sizeBytes": 147059,
+      "sizeHuman": "143.6 KB",
+      "updatedAt": "2026-04-14T07:42:45.942Z"
+    }
+  }
+}

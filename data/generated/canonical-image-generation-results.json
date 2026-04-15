@@ -3,21 +3,33 @@
     "stateId": "state-20",
     "stateIndex": 20,
     "label": "Extremely Bullish",
-    "provider": "openclaw-image-generate",
+    "provider": "openai-images-edits",
     "mode": "edit",
     "model": "openai/gpt-image-1",
-    "image": "out/state-20-still-regeneration/state-20-still-reference.png",
+    "image": "out/state-20-still-regeneration/state-20-still-reference-scrubbed.png",
     "outputDir": "out/state-20-still-regeneration",
     "canonicalTarget": "/states/state-20/still.png",
     "suggestedOutputs": [
       "state-20-still-regeneration-01.png",
       "state-20-still-regeneration-02.png",
-      "state-20-still-regeneration-03.png"
+      "state-20-still-regeneration-03.png",
+      "state-20-still-regeneration-04.png",
+      "state-20-still-regeneration-05.png",
+      "state-20-still-regeneration-06.png"
     ],
     "renderManifestPath": "out/state-20-still-regeneration/render-manifest.json",
     "renderPromptPath": "out/state-20-still-regeneration/render-prompt.txt",
-    "recordedAt": "2026-03-30T15:25:20.115Z",
-    "status": "failed",
-    "notes": "OpenAI image edit failed for state-20: 400 Bad Request - {\n  \"error\": {\n    \"message\": \"Billing hard limit has been reached.\",\n    \"type\": \"billing_limit_user_error\",\n    \"param\": null,\n    \"code\": \"billing_hard_limit_reached\"\n  }\n}"
+    "falOverrides": null,
+    "recordedAt": "2026-04-01T09:10:31.311Z",
+    "status": "generated",
+    "outputs": [
+      "out/state-20-still-regeneration/state-20-still-regeneration-01.png",
+      "out/state-20-still-regeneration/state-20-still-regeneration-02.png",
+      "out/state-20-still-regeneration/state-20-still-regeneration-03.png",
+      "out/state-20-still-regeneration/state-20-still-regeneration-04.png",
+      "out/state-20-still-regeneration/state-20-still-regeneration-05.png",
+      "out/state-20-still-regeneration/state-20-still-regeneration-06.png"
+    ],
+    "notes": "Generated 6 still candidate(s)."
   }
 ]

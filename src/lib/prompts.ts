@@ -4,7 +4,7 @@ export const MASTER_STYLE_PROMPT = [
   'colossal cinematic market beast portrait',
   'hyper-detailed semi-photoreal dark fantasy creature',
   'Wall Street financial district destruction',
-  'smoke, dust, debris, money swirling in the air',
+  'smoke, dust, ember grit, and atmospheric haze swirling in the air',
   'low-angle hero composition',
   'dramatic blockbuster lighting',
   'high-contrast atmosphere',

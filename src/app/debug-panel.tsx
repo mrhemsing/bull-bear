@@ -32,9 +32,10 @@ export function DebugPanel({
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 16 }}>
         <div style={{ display: 'grid', gap: 12 }}>
-          <ContributionRow label="Fear & Greed" raw={String(snapshot.fearAndGreed)} score={snapshot.sentimentScore} weight="35%" contribution={snapshot.sentimentScore * 0.35} />
-          <ContributionRow label="BTC vs MA7" raw={formatSignedNumber(((snapshot.currentPrice / snapshot.ma7) - 1) * 100)} score={snapshot.trend7Score} weight="40%" contribution={snapshot.trend7Score * 0.4} suffix="%" />
-          <ContributionRow label="BTC vs MA30" raw={formatSignedNumber(((snapshot.currentPrice / snapshot.ma30) - 1) * 100)} score={snapshot.trend30Score} weight="25%" contribution={snapshot.trend30Score * 0.25} suffix="%" />
+          <ContributionRow label="Fear & Greed" raw={String(snapshot.fearAndGreed)} score={snapshot.fearGreedScore} weight="15 pts" contribution={snapshot.fearGreedScore} />
+          <ContributionRow label="Market bias" raw={`24h ${formatSignedNumber(snapshot.priceChange24h)}% · 7d ${formatSignedNumber(snapshot.priceChange7d)}%`} score={snapshot.marketBiasScore} weight="35 pts" contribution={snapshot.marketBiasScore} />
+          <ContributionRow label="Momentum" raw={`RSI/MACD on Coinbase 1h candles`} score={snapshot.momentumScore} weight="25 pts" contribution={snapshot.momentumScore} />
+          <ContributionRow label="Derivatives" raw={`Funding ${formatSignedNumber(snapshot.fundingRate)}% · Basis ${formatSignedNumber(snapshot.basisPct)}% · OI ${formatSignedNumber(snapshot.openInterestChangePct1h)}% · Taker ${formatSignedNumber(snapshot.takerBuySellRatio, 3)}`} score={snapshot.derivativesScore} weight="25 pts" contribution={snapshot.derivativesScore} />
         </div>
 
         <div style={{ display: 'grid', gap: 12 }}>

@@ -1,0 +1,21 @@
+# Bull Bear Release Status
+
+- Verdict: **WATCH**
+- Base URL: `http://127.0.0.1:3078`
+- Summary source: `app-release-status`
+- Summary URL: `http://127.0.0.1:3078/api/release-status`
+- Newest evidence: `2026-04-08T17:24:06.297Z` (0m ago)
+- Active workstream: Asset coverage is complete and the active lane is rollout / scheduler proof only.
+
+## Headline
+
+- Operator: operator=WATCH snapshot=fresh run=healthy audit=fresh
+- Assets: coverage=complete stills=20/20 loops=60 pending=0
+
+## Cautions
+
+- Operator status is WATCH.
+
+## Recommended Next Actions
+
+- npm run verify:cron -- --strict (priority=high, area=scheduler) — Resolve duplicate installed Bull Bear cron jobs so only one production scheduler remains.

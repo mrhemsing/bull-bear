@@ -3,26 +3,66 @@ import path from 'node:path';
 import frames from '@/../data/frames.json';
 import stateManifest from '@/../data/state-manifest.json';
 import type { FrameRecord, StateManifestEntry } from './types';
+import { resolveFlatStateAssets } from './assets';
 
 const FRAMES_PATH = path.join(process.cwd(), 'data', 'frames.json');
 const PUBLIC_FRAMES_DIR = path.join(process.cwd(), 'public', 'frames');
 const STATE_MANIFEST = stateManifest as StateManifestEntry[];
 
+function withResolvedFrameAssets(frame: FrameRecord): FrameRecord {
+  if (!frame.stateIndex) return { ...frame };
+
+  const flatAssets = resolveFlatStateAssets(frame.stateIndex);
+  const normalizedSource = frame.provider === 'manifest'
+    ? 'Coinbase spot candles + Binance futures positioning + Alternative.me Fear & Greed'
+    : frame.source;
+  const normalizedNotes = frame.provider === 'manifest'
+    ? `Persisted Matt's shipped canonical still for state-${String(frame.stateIndex).padStart(2, '0')}; Bull Bear does not generate runtime media.`
+    : frame.notes;
+
+  if (!flatAssets?.still) {
+    return {
+      ...frame,
+      source: normalizedSource,
+      notes: normalizedNotes
+    };
+  }
+
+  return {
+    ...frame,
+    imageUrl: flatAssets.still,
+    source: normalizedSource,
+    notes: normalizedNotes
+  };
+}
+
 export function getFrames(): FrameRecord[] {
-  return [...(frames as FrameRecord[])].sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1));
+  return [...(frames as FrameRecord[])].map(withResolvedFrameAssets).sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1));
 }
 
 export function getLatestFrame(): FrameRecord | null {
   return getFrames()[0] ?? null;
 }
 
+function withResolvedRuntimeAssets(entry: StateManifestEntry): StateManifestEntry {
+  const flatAssets = resolveFlatStateAssets(entry.index);
+  if (!flatAssets) return { ...entry };
+
+  return {
+    ...entry,
+    still: flatAssets.still ?? entry.still,
+    loops: flatAssets.loops.length ? flatAssets.loops : entry.loops
+  };
+}
+
 export function getStateManifest(): StateManifestEntry[] {
-  return [...STATE_MANIFEST];
+  return STATE_MANIFEST.map(withResolvedRuntimeAssets);
 }
 
 export function getStateManifestEntry(stateIndex?: number): StateManifestEntry | null {
   if (!stateIndex) return null;
-  return STATE_MANIFEST.find((entry) => entry.index === stateIndex) ?? null;
+  const entry = STATE_MANIFEST.find((entry) => entry.index === stateIndex) ?? null;
+  return entry ? withResolvedRuntimeAssets(entry) : null;
 }
 
 export async function readFramesFromDisk(): Promise<FrameRecord[]> {

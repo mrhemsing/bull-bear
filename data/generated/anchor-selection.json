@@ -1,0 +1,10 @@
+{
+  "selectedNeutralAnchor": {
+    "state": 10,
+    "label": "Neutral",
+    "sourceFile": "out/state-10-anchor/state-10-anchor-02.png",
+    "canonicalTarget": "public/states/state-10/still.png",
+    "status": "approved-by-matt",
+    "notes": "Chosen as the recurring identity anchor for Bull Bear. Use as the visual reference point for adjacent state generation."
+  }
+}

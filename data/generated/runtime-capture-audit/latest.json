@@ -1,0 +1,26 @@
+{
+  "capturedAt": "2026-04-14T09:39:26.166Z",
+  "url": "http://127.0.0.1:3078/api/capture",
+  "httpStatus": 200,
+  "ok": true,
+  "mode": "scheduled-capture",
+  "shouldPersist": true,
+  "persisted": true,
+  "stateId": "state-10",
+  "stateLabel": "Neutral",
+  "provider": "manifest",
+  "generationStatus": "configured",
+  "imageUrl": "/states/10.png",
+  "frameTimestamp": "2026-04-14T23:59:59.999Z",
+  "note": "Persisted the shipped canonical still for state-10 instead of generating a new runtime image.",
+  "failures": [],
+  "cronProofLines": [
+    "state: state-10 (Neutral)",
+    "provider: manifest",
+    "shouldPersist: true",
+    "persisted: true",
+    "failures: none"
+  ],
+  "cronProof": "state: state-10 (Neutral)\nprovider: manifest\nshouldPersist: true\npersisted: true\nfailures: none",
+  "error": null
+}

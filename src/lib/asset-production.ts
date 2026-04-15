@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
+import type { StateManifestEntry } from './types';
 
 interface ChecklistStillEntry {
   target: string;
@@ -392,6 +393,31 @@ function getAssetProductionArtifactEntries(): AssetProductionArtifactEntry[] {
   });
 }
 
+function normalizeImportedStateAssetPath(value: string) {
+  return value
+    .replace(/(^|\/)states\/state-(\d{2})$/i, '$1states/$2')
+    .replace(/(^|\/)states\/state-(\d{2})\/still\.png$/i, '$1states/$2.png')
+    .replace(/(^|\/)states\/state-(\d{2})\/loop-([abc])\.mp4$/i, '$1states/$2-$3.mp4');
+}
+
+function normalizeImportedStateAssetPaths<T>(value: T): T {
+  if (typeof value === 'string') {
+    return normalizeImportedStateAssetPath(value) as T;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => normalizeImportedStateAssetPaths(entry)) as T;
+  }
+
+  if (!value || typeof value !== 'object') {
+    return value;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).map(([key, entry]) => [key, normalizeImportedStateAssetPaths(entry)])
+  ) as T;
+}
+
 function getReviewSourceSummary() {
   const sourceEntries = reviewStatusSourceFiles.map((fileName) => {
     const resolvedPath = path.join(generatedDataDir, fileName);
@@ -482,8 +508,38 @@ function buildContiguousRange(indexes: number[], seed: number) {
   return { start, end };
 }
 
+function readStateManifest() {
+  return readGeneratedJson<StateManifestEntry[]>(path.join('..', 'state-manifest.json'), []);
+}
+
+function getImportedRuntimeCoverage(manifest: StateManifestEntry[]) {
+  const publicDir = path.join(process.cwd(), 'public');
+  const stateCoverage = manifest.map((entry) => {
+    const stillExists = typeof entry.still === 'string' && existsSync(path.join(publicDir, entry.still.replace(/^\//, '').replace(/\//g, path.sep)));
+    const existingLoops = (entry.loops ?? []).filter((loopPath) => typeof loopPath === 'string' && existsSync(path.join(publicDir, loopPath.replace(/^\//, '').replace(/\//g, path.sep))));
+
+    return {
+      entry,
+      stillExists,
+      existingLoops,
+      hasFullLoopSet: existingLoops.length === 3
+    };
+  });
+
+  return {
+    totalStates: manifest.length,
+    approvedStills: stateCoverage.filter((item) => item.stillExists).length,
+    approvedLoops: stateCoverage.reduce((sum, item) => sum + item.existingLoops.length, 0),
+    pendingStates: stateCoverage.filter((item) => !item.stillExists || !item.hasFullLoopSet).length,
+    statesMissingAnyLoops: stateCoverage.filter((item) => item.stillExists && !item.hasFullLoopSet).length,
+    fullCoverageComplete: manifest.length > 0 && stateCoverage.every((item) => item.stillExists && item.hasFullLoopSet)
+  };
+}
+
 export function getAssetProductionSummary(): AssetProductionSummary {
   const canonicalChecklist = readGeneratedJson<ChecklistEntry[]>('canonical-asset-checklist.json', []);
+  const stateManifest = readStateManifest();
+  const importedCoverage = getImportedRuntimeCoverage(stateManifest);
   const canonicalLoopQueue = readGeneratedJson<LoopQueueEntry[]>('canonical-loop-generation-queue.json', []);
   const canonicalNextActions = readGeneratedJson<NextActionEntry[]>('canonical-production-next-actions.json', []);
   const canonicalReviewQueue = readGeneratedJson<ReviewQueueEntry[]>('canonical-review-queue.json', []);
@@ -492,6 +548,7 @@ export function getAssetProductionSummary(): AssetProductionSummary {
   const canonicalImageGenerationJobs = readGeneratedJson<ImageGenerationJobEntry[]>('canonical-image-generation-jobs.json', []);
   const canonicalImageGenerationResults = readGeneratedJson<ImageGenerationResultEntry[]>('canonical-image-generation-results.json', []);
   const canonicalLoopGenerationResults = readGeneratedJson<LoopGenerationResultEntry[]>('canonical-loop-generation-results.json', []);
+  const assetNextActions = importedCoverage.fullCoverageComplete ? [] : canonicalNextActions;
 
   const approvedStates = canonicalChecklist
     .filter((entry) => entry.still.selectedAnchor)
@@ -599,17 +656,23 @@ export function getAssetProductionSummary(): AssetProductionSummary {
   const loopGenerationImplementationPendingCount = canonicalLoopGenerationResults.filter((entry) => entry.status === 'ready-for-provider-implementation').length;
   const latestLoopGenerationStatus = loopGenerationSummary.latestStatus;
   const latestLoopGenerationRecordedAt = loopGenerationSummary.latestRecordedAt;
-  const fullCoverageComplete = approvedStates.length === canonicalChecklist.length && approvedLoopTargets.length === canonicalChecklist.length * 3;
+  const fullCoverageComplete = importedCoverage.fullCoverageComplete;
+  const totalStates = importedCoverage.totalStates || canonicalChecklist.length;
+  const approvedStills = importedCoverage.approvedStills;
+  const approvedLoops = importedCoverage.approvedLoops;
+  const pendingStates = importedCoverage.pendingStates;
+  const statesMissingAnyLoopsCount = importedCoverage.statesMissingAnyLoops;
+  const readyForLoopGeneration = statesMissingAnyLoopsCount;
 
-  return {
-    totalStates: canonicalChecklist.length,
-    approvedStills: approvedStates.length,
+  return normalizeImportedStateAssetPaths({
+    totalStates,
+    approvedStills,
     candidateStates: candidateStatesList.length,
-    pendingStates: pendingStatesList.length,
-    readyForLoopGeneration: statesMissingAnyLoops.length,
-    approvedLoops: approvedLoopTargets.length,
+    pendingStates,
+    readyForLoopGeneration,
+    approvedLoops,
     readyLoopTargets: readyLoopTargets.length,
-    statesMissingAnyLoops: statesMissingAnyLoops.length,
+    statesMissingAnyLoops: statesMissingAnyLoopsCount,
     totalCandidateImages: candidateStatesList.reduce((sum, entry) => sum + entry.candidateFiles.length, 0),
     reviewSourceExpectedCount: reviewSourceSummary.expectedCount,
     reviewSourceExpectedFiles: reviewSourceSummary.expectedFiles,
@@ -632,7 +695,7 @@ export function getAssetProductionSummary(): AssetProductionSummary {
     pendingStatesPreview: pendingStatesList.slice(0, 6).map(({ id, index, label }) => ({ id, index, label })),
     reviewQueue: canonicalReviewQueue.map((entry) => ({
       ...entry,
-      canonicalTarget: canonicalChecklist.find((item) => item.id === entry.stateId)?.still.target ?? `/states/${entry.stateId}/still.png`
+      canonicalTarget: canonicalChecklist.find((item) => item.id === entry.stateId)?.still.target ?? `/states/${String(entry.stateId).replace(/^state-/, '')}.png`
     })),
     activeRange,
     frontierStates,
@@ -640,8 +703,8 @@ export function getAssetProductionSummary(): AssetProductionSummary {
     stillQueuePreview: canonicalStillQueue.slice(0, 6),
     loopQueue: canonicalLoopQueue,
     loopQueuePreview: canonicalLoopQueue.slice(0, 6),
-    nextActions: canonicalNextActions,
-    nextActionsPreview: canonicalNextActions.slice(0, 8),
+    nextActions: assetNextActions,
+    nextActionsPreview: assetNextActions.slice(0, 8),
     stagedRenderHandoff: canonicalStagedRenderHandoff,
     stagedRenderHandoffPreview: canonicalStagedRenderHandoff.slice(0, 8),
     imageGenerationJobs: canonicalImageGenerationJobs,
@@ -664,5 +727,5 @@ export function getAssetProductionSummary(): AssetProductionSummary {
     latestLoopGenerationRecordedAt,
     loopGenerationSummary,
     fullCoverageComplete,
-  };
+  });
 }

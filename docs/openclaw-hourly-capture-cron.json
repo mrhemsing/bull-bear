@@ -1,0 +1,18 @@
+{
+  "name": "bull-bear-hourly-capture",
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 * * * *",
+    "tz": "America/Los_Angeles"
+  },
+  "sessionTarget": "isolated",
+  "payload": {
+    "kind": "agentTurn",
+    "message": "Bull Bear local only. Make exactly one GET request to http://127.0.0.1:3078/api/capture-proof?format=text and output that single response body exactly, byte for byte, with nothing added, removed, summarized, translated, reformatted, or explained. Do not browse, search, infer, or use any other tool, source, URL, or endpoint. Do not call cash-grab.vercel.app. The response body is already the final five-line Bull Bear proof, so echo it verbatim and stop.",
+    "timeoutSeconds": 420
+  },
+  "delivery": {
+    "mode": "none"
+  },
+  "enabled": true
+}

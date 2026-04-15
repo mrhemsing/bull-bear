@@ -8,9 +8,10 @@
 - [x] Add sample archived frames
 
 ## Milestone 2 - live market signal engine
-- [x] Fetch Fear & Greed index
-- [x] Fetch BTC price history for MA7 / MA30
-- [x] Compute weighted composite score
+- [x] Fetch Alternative.me Fear & Greed
+- [x] Fetch Coinbase BTC-USD hourly candles
+- [x] Fetch Binance BTC perpetual funding, basis, open interest, and taker flow inputs
+- [x] Compute the current-market composite score
 - [x] Map composite score to 20 canonical bands
 - [x] Persist hourly evaluation records only when state changes
 

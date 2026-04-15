@@ -39,7 +39,11 @@ if (!selectedState || !selectedCandidate || Number.isNaN(selectedCandidate) || !
 }
 
 const readJson = async (targetPath) => JSON.parse(await fs.readFile(targetPath, 'utf8'));
-const writeJson = async (targetPath, value) => fs.writeFile(targetPath, `${JSON.stringify(value, null, 2)}\n`);
+const writeJson = async (targetPath, value) => {
+  const tempPath = `${targetPath}.tmp`;
+  await fs.writeFile(tempPath, `${JSON.stringify(value, null, 2)}\n`);
+  await fs.rename(tempPath, targetPath);
+};
 
 const runNodeScript = (scriptRelativePath, args = []) => new Promise((resolve) => {
   const child = spawn(process.execPath, [scriptRelativePath, ...args], {

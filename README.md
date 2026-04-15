@@ -1,6 +1,6 @@
 # Bull Bear
 
-A BTC market-beast app that turns Bitcoin sentiment and trend into a cinematic recurring creature.
+A BTC market-beast app that turns current Bitcoin spot, derivatives, and sentiment data into a cinematic recurring creature.
 
 ## Concept
 
@@ -8,13 +8,13 @@ Bull Bear represents Bitcoin market psychology as a single recurring hybrid bull
 
 The creature is driven by a **composite market score** based on:
 
-- Fear & Greed sentiment
-- BTC price vs 7-day moving average
-- BTC price vs 30-day moving average
+- Alternative.me Fear & Greed
+- Coinbase BTC-USD hourly spot structure and momentum
+- Binance BTC perpetual funding, basis, open interest, and taker flow
 
 That score is mapped into **20 canonical market states** ranging from deeply bearish to extremely bullish.
 
-Instead of generating a brand new image every hour, V1 uses a pre-generated canonical asset library:
+Instead of generating a brand new image every hour, V1 uses Matt's pre-generated canonical asset library:
 
 - **20 still hero images**
 - **3 looped animations per state**
@@ -40,6 +40,8 @@ Instead of generating a brand new image every hour, V1 uses a pre-generated cano
 - A cron-artifact validator now ships as `npm run check:cron`, so operators can confirm the committed OpenClaw job still targets the local capture route and includes the required summary fields before installing it.
 - A dry-run/apply installer helper now ships as `npm run install:cron`, which turns the validated cron artifact into an exact `openclaw cron add ...` command, can execute it directly with `-- --apply`, can emit a machine-readable rollout plan with `-- --json`, can read host defaults from `OPENCLAW_GATEWAY_URL`, `OPENCLAW_GATEWAY_TOKEN`, `BULL_BEAR_CRON_NAME`, `BULL_BEAR_CAPTURE_URL`, and `BULL_BEAR_CAPTURE_TIMEOUT_MS`, and can chain straight into post-install verification, a fresh capture-audit proof, and a final recorded operator-status snapshot with `-- --apply --verify --audit --status --status-record`.
 - A post-install verifier now ships as `npm run verify:cron`, which checks the installed OpenClaw cron list for exactly one Bull Bear job, compares it back to the committed artifact, flags duplicate-job drift before launch, summarizes recent scheduler run history from `openclaw cron runs`, and classifies the latest run as healthy, stale, failing, running, queued, unknown, or no-history so operators can spot rollout trouble faster without misreading an in-flight run as an opaque unknown state. The latest-run summary now also carries finished-at and duration fields so rollout evidence shows how long the most recent scheduler pass actually took, not only that it started. The scheduler stale threshold is now overrideable with `-- --stale-hours=<n>`.
+- That installed-cron verifier now also supports `-- --record`, which persists the scheduler acceptance snapshot to `data/generated/cron-verification/latest.json`, `latest.txt`, `latest.md`, and `history.ndjson` so target-host rollout leaves behind durable cron proof instead of only terminal output. The installer helper also exposes the same behavior through `npm run install:cron -- --apply --verify-record`.
+- The recommended first target-host rollout chain is now `npm run install:cron -- --apply --verify-record --audit --status --status-record`, so one acceptance pass can leave behind recorded installed-cron proof, a fresh runtime capture audit, and the final recorded operator snapshot together.
 - A single operator-status summary now ships as `npm run status:operator`, which rolls runtime health, cron artifact validity, installed-cron/run-health, the latest installed scheduler run details (now including finished-at and duration when present), and the latest capture-audit proof into one pre/post-launch snapshot; its suggested follow-up audit command now targets `BULL_BEAR_CAPTURE_URL` (or the local default) instead of mistakenly deriving from the OpenClaw gateway URL, and it now avoids redundant standalone audit follow-ups when the recommended install flow already includes `--audit --status`.
 - A one-shot release gate now ships as `npm run status:release`, which prefers the app-native `/api/release-status` summary route when it is available and automatically falls back to `/api/operator-status` plus `/api/asset-production-status` on older hosts, merging the result into a single PASS/WATCH/FAIL verdict. It can hard-fail on any non-PASS result with `-- --fail-on-watch`, and its output now reports which summary source it used so rollout automation can block on the same machine-readable proof surfaces operators already review in the UI. When a rollout should require the combined app-native route instead of silently accepting the older fallback path, `-- --require-app-route` now fails the check unless `/api/release-status` is the active summary source. Add `-- --record` to persist the latest release gate as `data/generated/release-status/latest.json`, `latest.txt`, `latest.md`, and `history.ndjson`, giving operators a durable machine-readable + human-readable handoff trail just like the recorded operator snapshot flow. The app exposes that combined summary directly at `/api/release-status`, with JSON on `GET`, lightweight verdict/evidence/blocker metadata on `HEAD`, and stable conditional revalidation support (`ETag` plus `If-None-Match` / `If-Modified-Since`) so dashboards, lightweight monitors, and the CLI gate can all consume one stable release surface without extra route fan-out or repeated full-body downloads when nothing changed. Those recorded release handoff files are now also exposed directly in-app through `/api/release-artifact/[artifactName]`, so the saved JSON/text/Markdown/history proof can be opened or revalidated from the dashboard without filesystem access. That recorded release-artifact surface now also returns label / relative-path / freshness / age / threshold headers and the homepage shows the same freshness metadata inline, so operators and lightweight monitors can tell whether a saved rollout verdict is still current before trusting it. For automation that wants one cheap machine-readable summary of the recorded release proof itself instead of checking each saved file individually, the app now also exposes `/api/release-artifact-status` with JSON on `GET` plus lightweight `HEAD` metadata headers for recorded artifact counts, expected-count / missing-count / all-present completeness, the expected and currently missing saved filenames, fresh/stale totals, the active stale-threshold hours, and latest/oldest saved-proof freshness. The release-artifact freshness window defaults to 24h and can be tuned with `BULL_BEAR_RELEASE_ARTIFACT_STALE_HOURS`.
 - The operator-status snapshot now also classifies the latest capture-audit artifact as `fresh`, `stale`, `error`, or `missing`, so operators can tell whether proof evidence is current instead of merely present, and its run/audit freshness thresholds are now overrideable with `-- --run-stale-hours=<n>` and `-- --audit-stale-hours=<n>`. The recorded operator snapshot freshness threshold is now host-tunable too via `-- --snapshot-stale-hours=<n>` or `BULL_BEAR_OPERATOR_SNAPSHOT_STALE_HOURS`, so the saved handoff itself can follow stricter or looser rollout expectations without editing code.
@@ -83,13 +85,15 @@ Instead of generating a brand new image every hour, V1 uses a pre-generated cano
 
 ### Live signal engine
 Current live data sources:
-- Fear & Greed API (`alternative.me`)
-- CoinGecko daily BTC price history
+- Alternative.me Fear & Greed API
+- Coinbase BTC-USD hourly candles
+- Binance BTC perpetual premium, funding, open interest, and taker ratio feeds
 
 Current calculations:
-- Fear & Greed sentiment score
-- price vs MA7 score
-- price vs MA30 score
+- Fear & Greed contribution score
+- market bias score from Coinbase regime plus 24h and 7d spot change
+- momentum score from Coinbase RSI and MACD
+- derivatives score from Binance funding, basis, open interest, and taker flow
 - weighted final score
 - 20-state band resolution
 

@@ -1,15 +1,1 @@
-[
-  {
-    "stateId": "state-20",
-    "stateIndex": 20,
-    "label": "Extremely Bullish",
-    "direction": "forced-regeneration",
-    "prompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, maximum bullish dominance, gigantic horns, maximum chest and shoulder power, heavy hoof impact, blazing emerald eyes, heated gold-ember atmosphere, unstoppable upward market fury, only the slightest trace of bear ancestry",
-    "stillTarget": "/states/state-20/still.png",
-    "outputDir": "out/state-20-still-regeneration",
-    "referenceStateId": "state-20",
-    "referenceStillTarget": "/states/state-20/still.png",
-    "priorityGroup": "forced-regeneration",
-    "notes": "Regenerate canonical still candidates for Extremely Bullish because the approved still contains paper-like debris that contaminates loop rerenders."
-  }
-]
+[]

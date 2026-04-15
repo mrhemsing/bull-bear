@@ -2,12 +2,12 @@
   {
     "stateId": "state-01",
     "label": "Extremely Bearish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, maximum bearish dominance, enormous claws, massive bear jaw, broad skull, thick shadow-heavy fur, low crushing predator posture, cold blue-black atmosphere, blazing crimson eyes, overwhelming menace, only faint residual bull traits",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, maximum bearish dominance, enormous claws, massive bear jaw, broad skull, thick shadow-heavy fur, low crushing predator posture, cold blue-black atmosphere, blazing crimson eyes, overwhelming menace, only faint residual bull traits",
     "stillTarget": "/states/state-01/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, slight eye glow pulsing, restrained body tension, minimal movement, premium hero loop, same Wall Street atmosphere, same low-angle composition, heavier bearish breathing, claw emphasis, cold looming predator energy.",
-      "b": "Subtle drifting smoke, floating paper money, haze movement, environmental pressure, faint motion in fur and lighting, creature remains imposing and controlled, same hero composition, dark finance-apocalypse atmosphere, red eye pulse.",
+      "b": "Subtle drifting smoke, rolling haze, ember grit, environmental pressure, faint motion in fur and lighting, creature remains imposing and controlled, same hero composition, dark finance-apocalypse atmosphere, red eye pulse.",
       "c": "Slight head movement, stronger body tension, subtle claw highlight flicker, controlled intimidation, contained power, still loopable, still in the same fixed hero framing, low crushing predator readiness."
     },
     "loopTargets": [
@@ -19,12 +19,12 @@
   {
     "stateId": "state-02",
     "label": "Very Strong Bearish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, very strong bearish dominance, huge claws, heavy bear skull, looming posture, dense fur, red eyes, cold finance-apocalypse atmosphere, bull traits still present but suppressed",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, very strong bearish dominance, huge claws, heavy bear skull, looming posture, dense fur, red eyes, cold finance-apocalypse atmosphere, bull traits still present but suppressed",
     "stillTarget": "/states/state-02/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, slight eye glow pulsing, restrained body tension, minimal movement, premium hero loop, same Wall Street atmosphere, same low-angle composition, bearish mass and claw dominance.",
-      "b": "Subtle drifting smoke, floating paper money, haze movement, environmental pressure, faint motion in fur and lighting, creature remains imposing and controlled, same hero composition, red eye pulse, cold atmosphere.",
+      "b": "Subtle drifting smoke, rolling haze, ember grit, environmental pressure, faint motion in fur and lighting, creature remains imposing and controlled, same hero composition, red eye pulse, cold atmosphere.",
       "c": "Slight head movement, stronger body tension, subtle claw highlight flicker, controlled intimidation, contained power, still loopable, looming bearish menace."
     },
     "loopTargets": [
@@ -36,12 +36,12 @@
   {
     "stateId": "state-03",
     "label": "Strong Bearish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, strong bearish dominance, clear bear morphology, heavier claws and forelimbs, red eyes, lowered stalking posture, colder shadow-rich environment, meaningful but reduced bull presence",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, strong bearish dominance, clear bear morphology, heavier claws and forelimbs, red eyes, lowered stalking posture, colder shadow-rich environment, meaningful but reduced bull presence",
     "stillTarget": "/states/state-03/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, slight red eye glow pulsing, restrained body tension, premium hero loop, stalking predator calm.",
-      "b": "Subtle drifting smoke, floating money, haze movement, environmental pressure, shadow-rich atmosphere, same hero composition.",
+      "b": "Subtle drifting smoke, rolling haze, ember grit, environmental pressure, shadow-rich atmosphere, same hero composition.",
       "c": "Slight head movement, stronger claw-led body tension, contained intimidation, loopable bearish energy."
     },
     "loopTargets": [
@@ -53,12 +53,12 @@
   {
     "stateId": "state-04",
     "label": "Firmly Bearish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, firmly bearish, bearish mass and jaw dominate, claws prominent, horns smaller and less emphasized, red eyes, dark atmospheric pressure, restrained but dangerous forward tension",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, firmly bearish, bearish mass and jaw dominate, claws prominent, horns smaller and less emphasized, red eyes, dark atmospheric pressure, restrained but dangerous forward tension",
     "stillTarget": "/states/state-04/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, restrained body tension, red eye pulse, premium hero loop.",
-      "b": "Smoke drift, floating paper money, dark haze movement, atmospheric bearish pressure.",
+      "b": "Smoke drift, rolling haze, ember grit, atmospheric bearish pressure.",
       "c": "Slight head movement, claw highlight flicker, contained predator intimidation."
     },
     "loopTargets": [
@@ -70,12 +70,12 @@
   {
     "stateId": "state-05",
     "label": "Bearish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, bear-dominant hybrid, broad jaw, claw-led forelimbs, denser fur, cooler atmosphere, red eye glow, horns remain visible but secondary",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, bear-dominant hybrid, broad jaw, claw-led forelimbs, denser fur, cooler atmosphere, red eye glow, horns remain visible but secondary",
     "stillTarget": "/states/state-05/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, light red eye pulse, restrained tension, premium hero loop.",
-      "b": "Cold smoke and haze drift, money movement, controlled environmental pressure.",
+      "b": "Cold smoke and rolling haze, ember grit, controlled environmental pressure.",
       "c": "Minor head motion, claw emphasis, contained bearish intensity."
     },
     "loopTargets": [
@@ -87,9 +87,9 @@
   {
     "stateId": "state-06",
     "label": "Moderately Bearish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, moderately bearish, bear side still leads, claws and fur heavier than hoofs and horn power, red eyes softer, atmosphere still cold but less extreme",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, moderately bearish, bear side still leads, claws and fur heavier than hoofs and horn power, red eyes softer, atmosphere still cold but less extreme",
     "stillTarget": "/states/state-06/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, restrained menace, softer red eye pulse.",
       "b": "Smoke drift, haze motion, mild cold environmental pressure.",
@@ -104,9 +104,9 @@
   {
     "stateId": "state-07",
     "label": "Lean Bearish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, lean bearish, slightly more bear than bull, visible claws and heavier jawline, subdued red glow, balanced but shadow-biased market beast",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, lean bearish, slightly more bear than bull, visible claws and heavier jawline, subdued red glow, balanced but shadow-biased market beast",
     "stillTarget": "/states/state-07/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, subdued red eye pulse, restrained body tension.",
       "b": "Mild smoke drift and atmospheric shadow movement, same composition.",
@@ -121,9 +121,9 @@
   {
     "stateId": "state-08",
     "label": "Slightly Bearish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, slightly bearish, small bear edge in fur mass, claws, and posture, restrained crimson eyes, hybrid anatomy remains highly visible",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, slightly bearish, small bear edge in fur mass, claws, and posture, restrained crimson eyes, hybrid anatomy remains highly visible",
     "stillTarget": "/states/state-08/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, restrained crimson eye pulse, slight bearish tension.",
       "b": "Mild haze and smoke drift, gentle environmental pressure.",
@@ -138,12 +138,12 @@
   {
     "stateId": "state-09",
     "label": "Mildly Bearish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, mildly bearish, nearly balanced hybrid with a light bear tilt, subtle claw emphasis, gentle red eye glow, minimal cold shadow influence",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, mildly bearish, nearly balanced hybrid with a light bear tilt, subtle claw emphasis, gentle red eye glow, minimal cold shadow influence",
     "stillTarget": "/states/state-09/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, gentle red eye pulse, almost balanced tension.",
-      "b": "Light smoke drift and floating bills, minimal cold haze.",
+      "b": "Light smoke drift, soft haze movement, minimal cold pressure.",
       "c": "Slight head movement, subtle claw emphasis, restrained."
     },
     "loopTargets": [
@@ -155,12 +155,12 @@
   {
     "stateId": "state-10",
     "label": "Neutral",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, perfectly balanced 50-50 bull-bear hybrid, equal bull and bear anatomy, believable integration of hoof and claw structure, amber-white eyes, controlled cinematic menace, no side dominates",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, perfectly balanced 50-50 bull-bear hybrid, equal bull and bear anatomy, believable integration of hoof and claw structure, amber-white eyes, controlled cinematic menace, no side dominates",
     "stillTarget": "/states/state-10/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Balanced breathing, amber-white eye pulse, restrained centered power.",
-      "b": "Neutral smoke and haze drift, subtle floating money, controlled atmosphere.",
+      "b": "Neutral smoke and haze drift, ember grit shimmer, controlled atmosphere.",
       "c": "Slight head movement, symmetrical body tension, contained hybrid power."
     },
     "loopTargets": [
@@ -172,12 +172,12 @@
   {
     "stateId": "state-11",
     "label": "Mildly Bullish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, mildly bullish, nearly balanced hybrid with a light bull tilt, subtle horn growth, slight hoof emphasis, gentle green eye glow, minimal warm uplift in the atmosphere",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, mildly bullish, nearly balanced hybrid with a light bull tilt, subtle horn growth, slight hoof emphasis, gentle green eye glow, minimal warm uplift in the atmosphere",
     "stillTarget": "/states/state-11/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, gentle green eye pulse, almost balanced bullish tension.",
-      "b": "Light warm haze drift, floating bills, subtle atmospheric uplift.",
+      "b": "Light warm haze drift, ember grit shimmer, subtle atmospheric uplift.",
       "c": "Slight head movement, subtle horn highlight, restrained."
     },
     "loopTargets": [
@@ -189,9 +189,9 @@
   {
     "stateId": "state-12",
     "label": "Slightly Bullish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, slightly bullish, small bull edge in horn power, shoulder strength, and hoof structure, restrained emerald eyes, hybrid anatomy remains highly visible",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, slightly bullish, small bull edge in horn power, shoulder strength, and hoof structure, restrained emerald eyes, hybrid anatomy remains highly visible",
     "stillTarget": "/states/state-12/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, restrained emerald eye pulse, slight bullish tension.",
       "b": "Warm haze and smoke drift, controlled environmental lift.",
@@ -206,12 +206,12 @@
   {
     "stateId": "state-13",
     "label": "Lean Bullish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, lean bullish, slightly more bull than bear, visible horn emphasis, stronger chest, green eye glow, balanced but heat-biased market beast",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, lean bullish, slightly more bull than bear, visible horn emphasis, stronger chest, green eye glow, balanced but heat-biased market beast",
     "stillTarget": "/states/state-13/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, green eye pulse, restrained forward bullish tension.",
-      "b": "Warm smoke drift, floating money, slight heat-biased atmospheric motion.",
+      "b": "Warm smoke drift, rolling haze, slight heat-biased atmospheric motion.",
       "c": "Slight head movement, subtle horn highlight, controlled bullish energy."
     },
     "loopTargets": [
@@ -223,12 +223,12 @@
   {
     "stateId": "state-14",
     "label": "Moderately Bullish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, moderately bullish, bull side leads, horn size and shoulder structure stronger than claws and fur mass, green eyes, warmer atmosphere, forward tension increasing",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, moderately bullish, bull side leads, horn size and shoulder structure stronger than claws and fur mass, green eyes, warmer atmosphere, forward tension increasing",
     "stillTarget": "/states/state-14/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, green eye pulse, increasing bullish body tension.",
-      "b": "Warm smoke drift, money motion, atmospheric upward pressure.",
+      "b": "Warm smoke drift, ember grit shimmer, atmospheric upward pressure.",
       "c": "Slight head movement, horn highlight flicker, controlled charge readiness."
     },
     "loopTargets": [
@@ -240,12 +240,12 @@
   {
     "stateId": "state-15",
     "label": "Bullish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, bull-dominant hybrid, clear horn power, more muscular shoulders, hoof impact emphasis, brighter green eye glow, the bear side still present but secondary",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, bull-dominant hybrid, clear horn power, more muscular shoulders, hoof impact emphasis, brighter green eye glow, the bear side still present but secondary",
     "stillTarget": "/states/state-15/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, bright green eye pulse, restrained bullish power.",
-      "b": "Warm haze, drifting smoke, floating bills, energetic but controlled atmosphere.",
+      "b": "Warm haze, drifting smoke, ember grit, energetic but controlled atmosphere.",
       "c": "Slight head movement, hoof-ready body tension, contained bullish intimidation."
     },
     "loopTargets": [
@@ -257,12 +257,12 @@
   {
     "stateId": "state-16",
     "label": "Firmly Bullish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, firmly bullish, bullish chest and horn dominance, hoof-led lower limbs, hotter atmosphere, green eyes, restrained but powerful charge energy",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, firmly bullish, bullish chest and horn dominance, hoof-led lower limbs, hotter atmosphere, green eyes, restrained but powerful charge energy",
     "stillTarget": "/states/state-16/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, green eye pulse, charge-ready tension, premium hero loop.",
-      "b": "Hot haze and smoke drift, money flutter, controlled bullish atmosphere.",
+      "b": "Hot haze and smoke drift, ember grit shimmer, controlled bullish atmosphere.",
       "c": "Slight head movement, horn flicker, contained forward force."
     },
     "loopTargets": [
@@ -274,12 +274,12 @@
   {
     "stateId": "state-17",
     "label": "Strong Bullish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, strong bullish dominance, clear bull morphology, larger horns, stronger chest and shoulders, green eyes, heated atmosphere, meaningful but reduced bear presence",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, strong bullish dominance, clear bull morphology, larger horns, stronger chest and shoulders, green eyes, heated atmosphere, meaningful but reduced bear presence",
     "stillTarget": "/states/state-17/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, intense green eye pulse, restrained bullish force.",
-      "b": "Heated smoke drift, floating bills, stronger atmospheric pressure upward.",
+      "b": "Heated smoke drift, rolling haze, stronger atmospheric pressure upward.",
       "c": "Slight head movement, stronger horn emphasis, controlled bullish intimidation."
     },
     "loopTargets": [
@@ -291,12 +291,12 @@
   {
     "stateId": "state-18",
     "label": "Very Strong Bullish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, very strong bullish dominance, massive horns, dominant shoulder and chest power, hoof impact force, intense emerald eyes, rising heat and market-fire energy, bear traits suppressed",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, very strong bullish dominance, massive horns, dominant shoulder and chest power, hoof impact force, intense emerald eyes, rising heat and market-fire energy, bear traits suppressed",
     "stillTarget": "/states/state-18/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, intense emerald eye pulse, strong contained bullish power.",
-      "b": "Rising heat haze, drifting smoke, floating money, strong atmospheric uplift.",
+      "b": "Rising heat haze, drifting smoke, ember grit, strong atmospheric uplift.",
       "c": "Slight head movement, stronger horn highlight flicker, charge-ready energy."
     },
     "loopTargets": [
@@ -308,12 +308,12 @@
   {
     "stateId": "state-19",
     "label": "Exceptionally Bullish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, exceptionally bullish, colossal horn structure, explosive upward force, strong hoof emphasis, vivid green eyes, glowing hot finance-apocalypse atmosphere, only faint residual bear traits",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, exceptionally bullish, colossal horn structure, explosive upward force, strong hoof emphasis, vivid green eyes, glowing hot finance-apocalypse atmosphere, only faint residual bear traits",
     "stillTarget": "/states/state-19/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, vivid green eye pulse, explosive but contained bullish power.",
-      "b": "Hot haze, smoke, floating bills, glowing finance-apocalypse atmosphere, still controlled.",
+      "b": "Hot haze, smoke, ember grit, glowing finance-apocalypse atmosphere, still controlled.",
       "c": "Slight head movement, horn highlight flicker, strong contained upward force."
     },
     "loopTargets": [
@@ -325,12 +325,12 @@
   {
     "stateId": "state-20",
     "label": "Extremely Bullish",
-    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, debris, scattered paper money, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, maximum bullish dominance, gigantic horns, maximum chest and shoulder power, heavy hoof impact, blazing emerald eyes, heated gold-ember atmosphere, unstoppable upward market fury, only the slightest trace of bear ancestry",
+    "stillPrompt": "colossal cinematic market beast portrait, the same recurring hybrid bull-bear titan, photorealistic dark fantasy realism, Wall Street financial district destruction, smoke, dust, ember grit, atmospheric haze, low-angle hero composition, dramatic blockbuster lighting, high-contrast atmosphere, ultra-detailed fur, horns, skull, claws, hoof structure, same visual DNA, same centered hero framing, one believable species, no text, no logo, no collage, maximum bullish dominance, gigantic horns, maximum chest and shoulder power, heavy hoof impact, blazing emerald eyes, heated gold-ember atmosphere, unstoppable upward market fury, only the slightest trace of bear ancestry",
     "stillTarget": "/states/state-20/still.png",
-    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift.",
+    "animationBasePrompt": "Animate this exact creature as a short 3 to 5 second cinematic loop. Preserve the exact character identity, anatomy, framing, environment, and visual style from the source image. Keep the camera mostly fixed. Motion should be subtle, premium, and loopable. No scene cuts, no new subjects, no text, no logos, no drastic camera moves, no anatomy drift. Do not introduce floating paper scraps, banknotes, flyers, confetti, tickets, or any rectangular debris.",
     "loopPrompts": {
       "a": "Subtle breathing, blazing emerald eye pulse, maximum contained bullish power.",
-      "b": "Gold-ember haze, smoke drift, floating money, heated atmosphere, still premium and loopable.",
+      "b": "Gold-ember haze, smoke drift, ember grit, heated atmosphere, still premium and loopable.",
       "c": "Slight head movement, strong horn highlight flicker, unstoppable upward force held within fixed framing."
     },
     "loopTargets": [

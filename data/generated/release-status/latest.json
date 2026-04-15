@@ -1,0 +1,55 @@
+{
+  "verdict": "WATCH",
+  "checkedAt": "2026-04-08T17:24:06.297Z",
+  "newestEvidenceAt": "2026-04-08T17:24:06.297Z",
+  "newestEvidenceAge": "0m",
+  "activeWorkstream": "rollout-proof-only",
+  "activeWorkstreamSummary": "Asset coverage is complete and the active lane is rollout / scheduler proof only.",
+  "operator": {
+    "level": "WATCH",
+    "snapshotFreshness": "fresh",
+    "runHealth": "healthy",
+    "auditHealth": "fresh",
+    "issueCount": 0,
+    "warningCount": 4,
+    "nextActionCount": 1,
+    "blockers": [],
+    "cautions": [
+      "Operator status is WATCH."
+    ],
+    "headline": "operator=WATCH snapshot=fresh run=healthy audit=fresh"
+  },
+  "assets": {
+    "fullCoverageComplete": true,
+    "approvedStills": 20,
+    "totalStates": 20,
+    "approvedLoops": 60,
+    "pendingStates": 0,
+    "nextActionCount": 0,
+    "staleArtifactCount": 1,
+    "imageLedgerFreshness": "stale",
+    "loopLedgerFreshness": "fresh",
+    "blockers": [],
+    "cautions": [],
+    "headline": "coverage=complete stills=20/20 loops=60 pending=0"
+  },
+  "blockers": [],
+  "cautions": [
+    "Operator status is WATCH."
+  ],
+  "recommendedActions": [
+    {
+      "priority": "high",
+      "area": "scheduler",
+      "command": "npm run verify:cron -- --strict",
+      "reason": "Resolve duplicate installed Bull Bear cron jobs so only one production scheduler remains."
+    }
+  ],
+  "baseUrl": "http://127.0.0.1:3078",
+  "shouldFail": false,
+  "summarySource": "app-release-status",
+  "summaryUrl": "http://127.0.0.1:3078/api/release-status",
+  "fallbackReason": null,
+  "requireAppRoute": false,
+  "sourceRequirementMet": true
+}

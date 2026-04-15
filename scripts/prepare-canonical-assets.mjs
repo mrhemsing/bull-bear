@@ -12,6 +12,7 @@ const publicStatesDir = path.join(root, 'public', 'states');
 const outputDir = path.join(root, 'data', 'generated');
 const outDir = path.join(root, 'out');
 const anchorSelectionPath = path.join(outputDir, 'anchor-selection.json');
+const loopRerenderTargetsPath = path.join(root, 'data', 'loop-rerender-targets.json');
 
 const manifest = JSON.parse(await fs.readFile(manifestPath, 'utf8'));
 const prompts = JSON.parse(await fs.readFile(promptsPath, 'utf8'));
@@ -79,6 +80,7 @@ const createSanitizedStillReference = async ({ sourcePath, outputPath }) => {
 const anchorSelection = await readJsonIfExists(anchorSelectionPath);
 const previousChecklist = await readJsonIfExists(path.join(outputDir, 'canonical-asset-checklist.json'));
 const previousReviewQueue = await readJsonIfExists(path.join(outputDir, 'canonical-review-queue.json'));
+const configuredLoopRerenderTargets = await readJsonIfExists(loopRerenderTargetsPath);
 const forceAllStillRenders = process.argv.includes('--force-still-regeneration');
 const forceStillStatesArg = process.argv.find((arg) => arg.startsWith('--force-still-states='));
 const stillModelArg = process.argv.find((arg) => arg.startsWith('--still-model='));
@@ -111,14 +113,24 @@ const forceStillStates = new Set(
 );
 const forceAllLoopRenders = process.argv.includes('--force-loop-regeneration');
 const forceLoopStatesArg = process.argv.find((arg) => arg.startsWith('--force-loop-states='));
-const forceLoopStates = new Set(
-  forceLoopStatesArg
-    ? forceLoopStatesArg
-        .split('=')[1]
-        .split(',')
-        .map((value) => value.trim())
+const configuredLoopRerenderStateIds = new Set(
+  Array.isArray(configuredLoopRerenderTargets?.states)
+    ? configuredLoopRerenderTargets.states
+        .map((value) => typeof value === 'string' ? value.trim() : '')
         .filter(Boolean)
     : []
+);
+const forceLoopStates = new Set(
+  [
+    ...configuredLoopRerenderStateIds,
+    ...(forceLoopStatesArg
+      ? forceLoopStatesArg
+          .split('=')[1]
+          .split(',')
+          .map((value) => value.trim())
+          .filter(Boolean)
+      : [])
+  ]
 );
 const shouldForceStillRegeneration = (stateId) => forceAllStillRenders || forceStillStates.has(stateId);
 const shouldForceLoopRegeneration = (stateId) => forceAllLoopRenders || forceLoopStates.has(stateId);
@@ -137,27 +149,10 @@ let readyLoopCount = 0;
 const buildNextActions = () => {
   const actions = [];
 
-  for (const item of stillQueue) {
-    actions.push({
-      type: 'generate-still',
-      priority: 1,
-      stateId: item.stateId,
-      stateIndex: item.stateIndex,
-      label: item.label,
-      title: `Generate frontier still batch for ${item.label}`,
-      target: item.stillTarget,
-      source: item.outputDir,
-      referenceStateId: item.referenceStateId,
-      referenceStillTarget: item.referenceStillTarget,
-      prompt: item.prompt,
-      notes: item.notes,
-    });
-  }
-
   for (const item of loopQueue) {
     actions.push({
       type: 'generate-loop',
-      priority: 2,
+      priority: item.priorityGroup === 'forced-regeneration' ? 1 : 3,
       stateId: item.stateId,
       stateIndex: item.stateIndex,
       label: item.label,
@@ -166,6 +161,23 @@ const buildNextActions = () => {
       source: item.stillSource,
       referenceStateId: null,
       referenceStillTarget: item.stillTarget,
+      prompt: item.prompt,
+      notes: item.notes,
+    });
+  }
+
+  for (const item of stillQueue) {
+    actions.push({
+      type: 'generate-still',
+      priority: item.priorityGroup === 'forced-regeneration' ? 2 : 4,
+      stateId: item.stateId,
+      stateIndex: item.stateIndex,
+      label: item.label,
+      title: `Generate frontier still batch for ${item.label}`,
+      target: item.stillTarget,
+      source: item.outputDir,
+      referenceStateId: item.referenceStateId,
+      referenceStillTarget: item.referenceStillTarget,
       prompt: item.prompt,
       notes: item.notes,
     });
@@ -205,19 +217,20 @@ for (const state of manifest) {
     throw new Error(`Missing prompt entry for ${state.id}`);
   }
 
-  const stateDir = path.join(publicStatesDir, state.id);
-  await fs.mkdir(stateDir, { recursive: true });
+  const importPlaceholderDir = path.join(outDir, 'imported-state-placeholders');
+  await fs.mkdir(importPlaceholderDir, { recursive: true });
 
+  const stateKey = String(state.index).padStart(2, '0');
   const placeholderFiles = [
-    { name: 'still.png', note: 'Drop approved still image here.' },
-    { name: 'loop-a.mp4', note: 'Drop approved loop A here.' },
-    { name: 'loop-b.mp4', note: 'Drop approved loop B here.' },
-    { name: 'loop-c.mp4', note: 'Drop approved loop C here.' }
+    { runtimeName: `${stateKey}.png`, note: 'Drop approved still image here.' },
+    { runtimeName: `${stateKey}-a.mp4`, note: 'Drop approved loop A here.' },
+    { runtimeName: `${stateKey}-b.mp4`, note: 'Drop approved loop B here.' },
+    { runtimeName: `${stateKey}-c.mp4`, note: 'Drop approved loop C here.' }
   ];
 
   for (const file of placeholderFiles) {
-    const target = path.join(stateDir, `${file.name}.placeholder.txt`);
-    const content = `${state.id} / ${state.label}\n${file.note}\nExpected runtime path: /states/${state.id}/${file.name}\n`;
+    const target = path.join(importPlaceholderDir, `${file.runtimeName}.placeholder.txt`);
+    const content = `${state.id} / ${state.label}\n${file.note}\nExpected runtime path: /states/${file.runtimeName}\nExpected filesystem target: public/states/${file.runtimeName}\n`;
     await fs.writeFile(target, content, 'utf8');
   }
 
@@ -407,7 +420,7 @@ for (const state of manifest) {
     const forceLoopRegeneration = shouldForceLoopRegeneration(state.id);
     const status = canonicalLoopExists
       ? forceLoopRegeneration
-        ? 'approved-needs-regeneration'
+        ? 'approved-needs-rerender'
         : 'approved'
       : selectedStill
         ? 'ready-to-generate'
@@ -496,13 +509,16 @@ for (const state of manifest) {
   });
 
   if (selectedAnchor || approvedAdjacentSelection || adjacentFiles.length > 0) {
+    const needsLoopRerender = shouldForceLoopRegeneration(state.id);
     review.push({
       stateId: state.id,
       label: state.label,
       reviewType: selectedAnchor
         ? 'approved-anchor'
         : approvedAdjacentSelection
-          ? 'approved-adjacent'
+          ? needsLoopRerender
+            ? 'approved-adjacent-needs-rerender'
+            : 'approved-adjacent'
           : 'adjacent-candidates',
       sourceDir: selectedStill
         ? path.dirname(selectedStill.sourceFile)
@@ -511,7 +527,10 @@ for (const state of manifest) {
       candidateFiles: selectedStill
         ? [path.basename(selectedStill.sourceFile)]
         : adjacentManifest?.map((entry) => entry.file) ?? adjacentFiles,
-      notes: selectedStill?.notes ?? null
+      loopRegenerationRequired: needsLoopRerender,
+      notes: needsLoopRerender
+        ? `${selectedStill?.notes ?? `Approved still is usable, but the loop set must be regenerated before this state is review-complete.`}`
+        : selectedStill?.notes ?? null
     });
   }
 }
@@ -725,17 +744,25 @@ stillQueue.sort((a, b) => a.stateIndex - b.stateIndex);
 loopRenderJobs.sort((a, b) => a.stateIndex - b.stateIndex || a.variant.localeCompare(b.variant));
 stagedRenderHandoff.sort((a, b) => a.priority - b.priority || a.stateIndex - b.stateIndex || String(a.variant ?? '').localeCompare(String(b.variant ?? '')));
 
+const visibleStillQueue = stillQueue;
+const visibleLoopQueue = loopQueue;
+const visibleStillRenderJobs = stillRenderJobs;
+const visibleLoopRenderJobs = loopRenderJobs;
+const visibleStagedRenderHandoff = stagedRenderHandoff;
+const visibleImageGenerationJobs = imageGenerationJobs;
+const visibleReadyLoopCount = visibleLoopQueue.length;
+
 await writeJson(path.join(outputDir, 'canonical-asset-checklist.json'), checklist);
 await writeJson(path.join(outputDir, 'canonical-asset-batch.json'), batch);
 const nextActions = buildNextActions();
 
 await writeJson(path.join(outputDir, 'canonical-review-queue.json'), review);
-await writeJson(path.join(outputDir, 'canonical-loop-generation-queue.json'), loopQueue);
-await writeJson(path.join(outputDir, 'canonical-still-generation-queue.json'), stillQueue);
-await writeJson(path.join(outputDir, 'canonical-still-render-jobs.json'), stillRenderJobs);
-await writeJson(path.join(outputDir, 'canonical-loop-render-jobs.json'), loopRenderJobs);
-await writeJson(path.join(outputDir, 'canonical-staged-render-handoff.json'), stagedRenderHandoff);
-await writeJson(path.join(outputDir, 'canonical-image-generation-jobs.json'), imageGenerationJobs);
+await writeJson(path.join(outputDir, 'canonical-loop-generation-queue.json'), visibleLoopQueue);
+await writeJson(path.join(outputDir, 'canonical-still-generation-queue.json'), visibleStillQueue);
+await writeJson(path.join(outputDir, 'canonical-still-render-jobs.json'), visibleStillRenderJobs);
+await writeJson(path.join(outputDir, 'canonical-loop-render-jobs.json'), visibleLoopRenderJobs);
+await writeJson(path.join(outputDir, 'canonical-staged-render-handoff.json'), visibleStagedRenderHandoff);
+await writeJson(path.join(outputDir, 'canonical-image-generation-jobs.json'), visibleImageGenerationJobs);
 await writeJson(path.join(outputDir, 'canonical-production-next-actions.json'), nextActions);
 
 const markdown = [
@@ -744,7 +771,7 @@ const markdown = [
   'Generated by `npm run assets:prepare`.',
   '',
   `Approved loops detected: ${approvedLoopCount}`,
-  `Loop targets ready to generate: ${readyLoopCount}`,
+  `Loop targets ready to generate: ${visibleReadyLoopCount}`,
   '',
   '| State | Label | Still | Loop A | Loop B | Loop C |',
   '| --- | --- | --- | --- | --- | --- |'
@@ -759,7 +786,7 @@ const loopQueueMarkdown = [
   '',
   'Generated by `npm run assets:prepare`.',
   '',
-  `Ready loop targets: ${loopQueue.length}`,
+  `Ready loop targets: ${visibleLoopQueue.length}`,
   '',
   '| State | Label | Variant | Still source | Loop target | Notes |',
   '| --- | --- | --- | --- | --- | --- |'
@@ -770,7 +797,7 @@ const stillQueueMarkdown = [
   '',
   'Generated by `npm run assets:prepare`.',
   '',
-  `Ready frontier still states: ${stillQueue.length}`,
+  `Ready frontier still states: ${visibleStillQueue.length}`,
   '',
   '| State | Label | Direction | Reference state | Output dir | Notes |',
   '| --- | --- | --- | --- | --- | --- |'
@@ -781,7 +808,7 @@ const imageGenerationMarkdown = [
   '',
   'Generated by `npm run assets:prepare`.',
   '',
-  `Provider-ready still image-edit jobs: ${imageGenerationJobs.length}`,
+  `Provider-ready still image-edit jobs: ${visibleImageGenerationJobs.length}`,
   '',
   '| State | Label | Model | Reference image | Original reference | Output dir | Canonical target | Suggested outputs |',
   '| --- | --- | --- | --- | --- | --- | --- | --- |'
@@ -792,7 +819,7 @@ const stillRenderJobsMarkdown = [
   '',
   'Generated by `npm run assets:prepare`.',
   '',
-  `Frontier render jobs: ${stillRenderJobs.length}`,
+  `Frontier render jobs: ${visibleStillRenderJobs.length}`,
   '',
   '| State | Label | Direction | Reference state | Bridge reference copy | Scrubbed reference copy | Output dir |',
   '| --- | --- | --- | --- | --- | --- | --- |'
@@ -803,7 +830,7 @@ const loopRenderJobsMarkdown = [
   '',
   'Generated by `npm run assets:prepare`.',
   '',
-  `Ready loop render jobs: ${loopRenderJobs.length}`,
+  `Ready loop render jobs: ${visibleLoopRenderJobs.length}`,
   '',
   '| State | Label | Variant | Still reference copy | Loop target | Render dir |',
   '| --- | --- | --- | --- | --- | --- |'
@@ -814,9 +841,9 @@ const stagedRenderHandoffMarkdown = [
   '',
   'Generated by `npm run assets:prepare`.',
   '',
-  `Total staged render jobs: ${stagedRenderHandoff.length}`,
-  `Frontier still handoffs: ${stillRenderJobs.length}`,
-  `Loop handoffs: ${loopRenderJobs.length}`,
+  `Total staged render jobs: ${visibleStagedRenderHandoff.length}`,
+  `Frontier still handoffs: ${visibleStillRenderJobs.length}`,
+  `Loop handoffs: ${visibleLoopRenderJobs.length}`,
   '',
   '| Priority | Type | State | Variant | Target | Render manifest | Render prompt | Reference copy |',
   '| --- | --- | --- | --- | --- | --- | --- | --- |'
@@ -828,34 +855,34 @@ const nextActionsMarkdown = [
   'Generated by `npm run assets:prepare`.',
   '',
   `Total next actions: ${nextActions.length}`,
-  `Frontier still actions: ${stillQueue.length}`,
-  `Unblocked loop actions: ${loopQueue.length}`,
+  `Frontier still actions: ${visibleStillQueue.length}`,
+  `Unblocked loop actions: ${visibleLoopQueue.length}`,
   '',
   '| Priority | Type | State | Label | Target | Source | Notes |',
   '| --- | --- | --- | --- | --- | --- | --- |'
 ];
 
-for (const item of loopQueue) {
+for (const item of visibleLoopQueue) {
   loopQueueMarkdown.push(`| ${String(item.stateIndex).padStart(2, '0')} | ${item.label} | ${item.variant.toUpperCase()} | ${item.stillSource} | ${item.loopTarget} | ${item.notes} |`);
 }
 
-for (const item of stillQueue) {
+for (const item of visibleStillQueue) {
   stillQueueMarkdown.push(`| ${String(item.stateIndex).padStart(2, '0')} | ${item.label} | ${item.direction} | ${item.referenceStateId ?? '—'} | ${item.outputDir} | ${item.notes} |`);
 }
 
-for (const item of imageGenerationJobs) {
+for (const item of visibleImageGenerationJobs) {
   imageGenerationMarkdown.push(`| ${String(item.stateIndex).padStart(2, '0')} | ${item.label} | ${item.model} | ${item.image ?? '—'} | ${item.originalReferenceImage ?? '—'} | ${item.outputDir} | ${item.canonicalTarget} | ${item.suggestedOutputs.join('<br />')} |`);
 }
 
-for (const job of stillRenderJobs) {
+for (const job of visibleStillRenderJobs) {
   stillRenderJobsMarkdown.push(`| ${String(job.stateIndex).padStart(2, '0')} | ${job.label} | ${job.direction} | ${job.referenceStateId ?? '—'} | ${job.bridgeReferenceCopy ?? '—'} | ${job.sanitizedBridgeReferenceCopy ?? '—'} | ${job.outputDir} |`);
 }
 
-for (const job of loopRenderJobs) {
+for (const job of visibleLoopRenderJobs) {
   loopRenderJobsMarkdown.push(`| ${String(job.stateIndex).padStart(2, '0')} | ${job.label} | ${job.variant.toUpperCase()} | ${job.stillReferenceCopy ?? '—'} | ${job.loopTarget} | ${job.renderDir} |`);
 }
 
-for (const item of stagedRenderHandoff) {
+for (const item of visibleStagedRenderHandoff) {
   stagedRenderHandoffMarkdown.push(`| ${item.priority} | ${item.type} | ${String(item.stateIndex).padStart(2, '0')} | ${item.variant ? item.variant.toUpperCase() : '—'} | ${item.target} | ${item.renderManifestPath} | ${item.renderPromptPath} | ${item.referenceCopy ?? '—'} |`);
 }
 
@@ -874,7 +901,7 @@ await fs.writeFile(path.join(outputDir, 'canonical-production-next-actions.md'),
 
 console.log(`Prepared canonical asset workspace for ${manifest.length} states.`);
 console.log(`Approved loops detected: ${approvedLoopCount}`);
-console.log(`Loop targets ready to generate: ${readyLoopCount}`);
+console.log(`Loop targets ready to generate: ${visibleReadyLoopCount}`);
 console.log(`Checklist: ${path.relative(root, path.join(outputDir, 'canonical-asset-checklist.md'))}`);
 console.log(`Still queue: ${path.relative(root, path.join(outputDir, 'canonical-still-generation-queue.md'))}`);
 console.log(`Image generation jobs: ${path.relative(root, path.join(outputDir, 'canonical-image-generation-jobs.md'))}`);

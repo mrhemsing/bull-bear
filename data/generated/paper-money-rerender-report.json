@@ -1,15 +1,17 @@
 {
-  "startedAt": "2026-03-30T16:56:25.030Z",
-  "finishedAt": "2026-03-30T16:56:26.083Z",
+  "startedAt": "2026-04-03T20:28:28.965Z",
+  "finishedAt": "2026-04-03T20:28:30.439Z",
   "states": [
     "state-20"
   ],
   "variant": "b",
   "prepOnly": true,
   "hasFalKey": true,
-  "model": "fal-ai/kling-video/v2.1/standard/image-to-video",
-  "timeoutMs": 900000,
+  "model": "fal-ai/minimax/video-01/image-to-video",
+  "timeoutMs": null,
   "queueJobs": 1,
+  "canonicalNextActionsCount": 0,
+  "canonicalNextActions": [],
   "generatedCount": 0,
   "blockedMissingFalKeyCount": 0,
   "failedGenerationCount": 0,
@@ -19,7 +21,7 @@
   "failedReviewCount": 0,
   "seamReadyCount": 1,
   "seamBlockedCount": 0,
-  "seamRiskWarningCount": 1,
+  "seamRiskWarningCount": 0,
   "regressionScan": {
     "terms": [
       "paper money",
@@ -49,9 +51,9 @@
       "variant": "b",
       "target": "public/states/state-20/loop-b.mp4",
       "targetFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\public\\states\\state-20\\loop-b.mp4",
-      "generationStatus": "not-recorded",
-      "generationNotes": null,
-      "generationModel": "fal-ai/kling-video/v2.1/standard/image-to-video",
+      "generationStatus": "prep-only-existing-loop",
+      "generationNotes": "Prep-only mode skipped loop generation and refreshed review evidence against the existing on-disk loop file.",
+      "generationModel": "fal-ai/minimax/video-01/image-to-video",
       "reviewFrame": "out/loop-review-frames/state-20-b/state-20-b-frame-0.png",
       "seamEndFrame": "out/loop-review-frames/state-20-b/state-20-b-frame-end.png",
       "seamDiffFrame": "out/loop-review-frames/state-20-b/state-20-b-frame-diff.png",
@@ -60,10 +62,10 @@
       "seamDiffFrameFilesystemPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\out\\loop-review-frames\\state-20-b\\state-20-b-frame-diff.png",
       "reviewStatus": "extracted",
       "seamStatus": "ready-for-comparison",
-      "seamSimilarity": 0.591117,
-      "seamRisk": true,
+      "seamSimilarity": 0.927187,
+      "seamRisk": false,
       "reviewNotes": "Representative start frame extracted at 0s for visual loop review.",
-      "seamNotes": "End frame extracted 0.1s before the loop ended for seamless-loop review. SSIM: 0.5911 (closer to 1.0 is better)."
+      "seamNotes": "End frame extracted 0.1s before the loop ended for seamless-loop review. SSIM: 0.9272 (closer to 1.0 is better)."
     }
   ],
   "reportJson": "data/generated/paper-money-rerender-report.json",
@@ -77,7 +79,7 @@
       "kind": "prepare",
       "command": "\"C:\\\\Program Files\\\\nodejs\\\\node.exe\" scripts/prepare-canonical-assets.mjs --force-loop-states=state-20",
       "code": 0,
-      "stdout": "Prepared canonical asset workspace for 20 states.\nApproved loops detected: 60\nLoop targets ready to generate: 3\nChecklist: data\\generated\\canonical-asset-checklist.md\nStill queue: data\\generated\\canonical-still-generation-queue.md\nImage generation jobs: data\\generated\\canonical-image-generation-jobs.md\nStill render jobs: data\\generated\\canonical-still-render-jobs.md\nLoop queue: data\\generated\\canonical-loop-generation-queue.md\nLoop render jobs: data\\generated\\canonical-loop-render-jobs.md\nStaged render handoff: data\\generated\\canonical-staged-render-handoff.md\nNext actions: data\\generated\\canonical-production-next-actions.md\nBatch JSON: data\\generated\\canonical-asset-batch.json\n",
+      "stdout": "Prepared canonical asset workspace for 20 states.\nApproved loops detected: 60\nLoop targets ready to generate: 0\nChecklist: data\\generated\\canonical-asset-checklist.md\nStill queue: data\\generated\\canonical-still-generation-queue.md\nImage generation jobs: data\\generated\\canonical-image-generation-jobs.md\nStill render jobs: data\\generated\\canonical-still-render-jobs.md\nLoop queue: data\\generated\\canonical-loop-generation-queue.md\nLoop render jobs: data\\generated\\canonical-loop-render-jobs.md\nStaged render handoff: data\\generated\\canonical-staged-render-handoff.md\nNext actions: data\\generated\\canonical-production-next-actions.md\nBatch JSON: data\\generated\\canonical-asset-batch.json\n",
       "stderr": ""
     },
     {
@@ -87,5 +89,25 @@
       "stdout": "Processed 1 loop review-frame job(s): 1 extracted, 0 stale-source-loop, 0 missing-loop-file, 0 failed.\nWrote data/generated/loop-review-frames.json, data/generated/loop-review-frames.md, and data/generated/loop-review-frames.html.\n",
       "stderr": ""
     }
-  ]
+  ],
+  "objectivelyAcceptanceClean": true,
+  "checklistAutomation": {
+    "allReviewStatusesFresh": true,
+    "allSeamStatusesReady": true,
+    "noSeamRiskWarnings": true,
+    "zeroPaperMoneyRegressions": true,
+    "generationRanWithFalKey": false
+  },
+  "checklistApprovalCoverage": [
+    {
+      "stateId": "state-20",
+      "variant": "b",
+      "target": "public/states/state-20/loop-b.mp4",
+      "approvedInCanonicalChecklist": true,
+      "canonicalChecklistStatus": "approved"
+    }
+  ],
+  "allTargetLoopsAlreadyApprovedInCanonicalChecklist": true,
+  "manualReapprovalStillRequired": false,
+  "remainingManualAcceptanceSteps": []
 }

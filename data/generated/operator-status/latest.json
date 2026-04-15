@@ -1,0 +1,192 @@
+{
+  "checkedAt": "2026-04-14T09:41:39.600Z",
+  "snapshotFreshness": {
+    "verdict": "fresh",
+    "reason": "Recorded operator snapshot was refreshed 0m ago.",
+    "ageMs": 1,
+    "age": "0m",
+    "staleThresholdHours": 2
+  },
+  "overall": {
+    "level": "ATTENTION",
+    "issues": [
+      "Latest saved transition is older than 24h."
+    ],
+    "warnings": [
+      "Loaded installed cron jobs from local file ..\\..\\cron\\jobs.json for local verification.",
+      "Latest successful cron run summary does not preserve the canonical lowercase shouldPersist boolean from /api/capture.",
+      "Latest successful cron run summary does not include the canonical Bull Bear state id/label; it appears to be using a degraded state summary instead.",
+      "Latest capture audit recorded an error: fetch failed"
+    ]
+  },
+  "runtimeHealth": {
+    "level": "STALE",
+    "summary": "Latest saved transition is older than 24h.",
+    "latestTransition": {
+      "timestamp": "2026-04-08T16:17:58.000Z",
+      "formattedTimestamp": "4/8/2026, 9:17:58 AM",
+      "ageHours": 137.36,
+      "ageText": "137h 21m"
+    },
+    "latestState": {
+      "stateId": "state-09",
+      "stateLabel": "Mildly Bearish"
+    },
+    "savedTransitionCount": 24,
+    "assetCoverage": {
+      "approvedStills": 20,
+      "totalStills": 20,
+      "approvedLoops": 9,
+      "totalLoops": 60
+    },
+    "thresholds": {
+      "watchHours": 6,
+      "staleHours": 24
+    },
+    "note": "Transition history only grows when the canonical state changes, so an older timestamp can be legitimate during a flat market; confirm with the scheduler run history or a manual GET /api/capture check if this status looks suspicious.",
+    "__nonZeroExitCode": 1
+  },
+  "cronArtifact": {
+    "valid": true,
+    "message": "Bull Bear cron artifact validation passed.",
+    "artifactPath": "C:\\Users\\Matt\\.openclaw\\workspace-sora\\bull-bear\\docs\\openclaw-hourly-capture-cron.json",
+    "schedule": {
+      "kind": "cron",
+      "expr": "0 * * * *",
+      "tz": "America/Los_Angeles"
+    },
+    "sessionTarget": "isolated",
+    "delivery": {
+      "mode": "none"
+    },
+    "timeoutSeconds": 420
+  },
+  "installedCron": {
+    "matchCount": 1,
+    "duplicatesDetected": false,
+    "latestRun": {
+      "id": null,
+      "status": "ok",
+      "startedAt": 1776157247370,
+      "finishedAt": 1776157352090,
+      "durationMs": 104720,
+      "text": "Unable to complete exactly as requested."
+    },
+    "runHealth": {
+      "verdict": "healthy",
+      "reason": "Latest cron run succeeded 37m ago.",
+      "latestRunAgeMs": 2249342,
+      "latestRunAge": "37m",
+      "staleThresholdHours": 2
+    },
+    "warnings": [
+      "Unable to load cron run history from CLI: Command timed out after 35000ms",
+      "Loaded installed cron jobs from local file ..\\..\\cron\\jobs.json for local verification.",
+      "Latest successful cron run summary does not preserve the canonical lowercase shouldPersist boolean from /api/capture.",
+      "Latest successful cron run summary does not include the canonical Bull Bear state id/label; it appears to be using a degraded state summary instead."
+    ],
+    "errors": []
+  },
+  "latestCaptureAudit": {
+    "capturedAt": "2026-04-14T09:37:11.567Z",
+    "httpStatus": 0,
+    "ok": false,
+    "shouldPersist": null,
+    "stateId": null,
+    "stateLabel": null,
+    "provider": null,
+    "error": "fetch failed"
+  },
+  "auditHealth": {
+    "verdict": "error",
+    "reason": "Latest capture audit recorded an error: fetch failed",
+    "ageMs": null,
+    "age": null,
+    "staleThresholdHours": 6
+  },
+  "nextActions": [
+    {
+      "priority": "medium",
+      "area": "scheduler-proof",
+      "command": "npm run verify:cron",
+      "reason": "Tighten the installed Bull Bear cron payload/proof path so successful runs echo the exact /api/capture fields instead of degraded null/summary values."
+    },
+    {
+      "priority": "medium",
+      "area": "runtime",
+      "command": "npm run audit:capture -- --url=\"http://127.0.0.1:3078/api/capture\"",
+      "reason": "Write a fresh capture proof artifact and confirm the local /api/capture route still resolves cleanly."
+    },
+    {
+      "priority": "medium",
+      "area": "audit",
+      "command": "npm run audit:capture -- --url=\"http://127.0.0.1:3078/api/capture\"",
+      "reason": "Retry the capture audit after the latest recorded audit error."
+    }
+  ],
+  "historySummary": {
+    "sampleSize": 5,
+    "historyEntryCount": 1306,
+    "previousLevel": "ATTENTION",
+    "previousCheckedAt": "2026-04-14T07:42:16.965Z",
+    "levelChanged": false,
+    "recentLevels": [
+      {
+        "checkedAt": "2026-04-08T17:22:18.413Z",
+        "level": "WATCH"
+      },
+      {
+        "checkedAt": "2026-04-08T17:24:06.297Z",
+        "level": "WATCH"
+      },
+      {
+        "checkedAt": "2026-04-14T06:42:01.790Z",
+        "level": "ATTENTION"
+      },
+      {
+        "checkedAt": "2026-04-14T07:42:16.965Z",
+        "level": "ATTENTION"
+      },
+      {
+        "checkedAt": "2026-04-14T09:41:39.600Z",
+        "level": "ATTENTION"
+      }
+    ],
+    "recentLevelCounts": {
+      "WATCH": 2,
+      "ATTENTION": 3
+    },
+    "currentStreak": {
+      "level": "ATTENTION",
+      "count": 3,
+      "sinceCheckedAt": "2026-04-14T06:42:01.790Z"
+    }
+  },
+  "artifactPaths": {
+    "dir": "data\\generated\\operator-status",
+    "latest": {
+      "path": "data\\generated\\operator-status\\latest.json",
+      "sizeBytes": 6119,
+      "sizeHuman": "6.0 KB",
+      "updatedAt": "2026-04-14T09:41:39.609Z"
+    },
+    "latestText": {
+      "path": "data\\generated\\operator-status\\latest.txt",
+      "sizeBytes": 2600,
+      "sizeHuman": "2.5 KB",
+      "updatedAt": "2026-04-14T09:41:39.609Z"
+    },
+    "latestMarkdown": {
+      "path": "data\\generated\\operator-status\\latest.md",
+      "sizeBytes": 2746,
+      "sizeHuman": "2.7 KB",
+      "updatedAt": "2026-04-14T09:41:39.610Z"
+    },
+    "history": {
+      "path": "data\\generated\\operator-status\\history.ndjson",
+      "sizeBytes": 4216411,
+      "sizeHuman": "4.0 MB",
+      "updatedAt": "2026-04-14T09:41:39.607Z"
+    }
+  }
+}

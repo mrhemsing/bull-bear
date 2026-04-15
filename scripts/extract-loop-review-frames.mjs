@@ -26,6 +26,7 @@ const selectedStates = new Set(
 );
 const selectedVariant = selectedVariantArg ? selectedVariantArg.split('=')[1].trim().toLowerCase() : 'b';
 const timestampSeconds = timeArg ? timeArg.split('=')[1].trim() : '0';
+const endOffsetSeconds = '0.1';
 
 const readJson = async (targetPath) => JSON.parse(await fs.readFile(targetPath, 'utf8'));
 const ensureDir = async (targetPath) => fs.mkdir(targetPath, { recursive: true });
@@ -46,15 +47,7 @@ const exists = async (targetPath) => {
   }
 };
 
-const runFfmpeg = (inputPath, outputPath) => new Promise((resolve, reject) => {
-  const args = [
-    '-y',
-    '-ss', timestampSeconds,
-    '-i', inputPath,
-    '-frames:v', '1',
-    outputPath
-  ];
-
+const runFfmpeg = (args) => new Promise((resolve, reject) => {
   const child = spawn('ffmpeg', args, { stdio: ['ignore', 'ignore', 'pipe'] });
   let stderr = '';
 
@@ -75,6 +68,85 @@ const runFfmpeg = (inputPath, outputPath) => new Promise((resolve, reject) => {
     reject(new Error(stderr.trim() || `ffmpeg exited with code ${code}`));
   });
 });
+
+const runFfmpegCapture = (args) => new Promise((resolve, reject) => {
+  const child = spawn('ffmpeg', args, { stdio: ['ignore', 'pipe', 'pipe'] });
+  let stdout = '';
+  let stderr = '';
+
+  child.stdout.on('data', (chunk) => {
+    stdout += chunk.toString();
+  });
+
+  child.stderr.on('data', (chunk) => {
+    stderr += chunk.toString();
+  });
+
+  child.on('error', (error) => {
+    reject(error);
+  });
+
+  child.on('close', (code) => {
+    if (code === 0) {
+      resolve({ stdout, stderr });
+      return;
+    }
+
+    reject(new Error(stderr.trim() || stdout.trim() || `ffmpeg exited with code ${code}`));
+  });
+});
+
+const extractFrameAtTime = (inputPath, outputPath, seconds) => runFfmpeg([
+  '-y',
+  '-ss', seconds,
+  '-i', inputPath,
+  '-frames:v', '1',
+  outputPath,
+]);
+
+const generateSeamDifferenceImage = (startFramePath, endFramePath, outputPath) => runFfmpeg([
+  '-y',
+  '-i', startFramePath,
+  '-i', endFramePath,
+  '-filter_complex', '[0:v][1:v]blend=all_mode=difference',
+  outputPath,
+]);
+
+const measureSeamSimilarity = async (startFramePath, endFramePath) => {
+  const { stderr } = await runFfmpegCapture([
+    '-i', startFramePath,
+    '-i', endFramePath,
+    '-lavfi', 'ssim',
+    '-f', 'null',
+    '-',
+  ]);
+
+  const match = stderr.match(/All:([0-9.]+)/);
+  return match ? Number.parseFloat(match[1]) : null;
+};
+
+const extractFrameNearEnd = async (inputPath, outputPath) => {
+  try {
+    await runFfmpeg([
+      '-y',
+      '-sseof', `-${endOffsetSeconds}`,
+      '-i', inputPath,
+      '-frames:v', '1',
+      outputPath,
+    ]);
+  } catch (error) {
+    await extractFrameAtTime(inputPath, outputPath, timestampSeconds);
+    return {
+      extractionMode: 'fallback-start-frame',
+      extractionNotes: `ffmpeg could not seek near the end of the loop, so the start frame was reused for seam review (${error instanceof Error ? error.message : String(error)}).`,
+    };
+  }
+
+  return {
+    extractionMode: 'end-offset',
+    extractionNotes: `End frame extracted ${endOffsetSeconds}s before the loop ended for seamless-loop review.`,
+  };
+};
 
 const jobs = (await readJson(jobsPath)).filter((job) => {
   if (selectedStates.size && !selectedStates.has(job.stateId)) return false;
@@ -111,6 +183,8 @@ for (const job of jobs) {
   const inputPath = resolveFromRoot(job.loopTargetFilesystemPath);
   const stateOutputDir = path.join(outputDir, `${job.stateId}-${job.variant}`);
   const outputPath = path.join(stateOutputDir, `${job.stateId}-${job.variant}-frame-${timestampSeconds.replace(/[^0-9a-zA-Z_-]/g, '-') || '0'}.png`);
+  const seamEndOutputPath = path.join(stateOutputDir, `${job.stateId}-${job.variant}-frame-end.png`);
+  const seamDiffOutputPath = path.join(stateOutputDir, `${job.stateId}-${job.variant}-frame-diff.png`);
   await ensureDir(stateOutputDir);
 
   if (!(await exists(inputPath))) {
@@ -121,6 +195,10 @@ for (const job of jobs) {
       variant: job.variant,
       source: job.loopTargetFilesystemPath,
       reviewFrame: relativeFromRoot(outputPath),
+      seamEndFrame: relativeFromRoot(seamEndOutputPath),
+      seamDiffFrame: relativeFromRoot(seamDiffOutputPath),
+      seamStatus: 'missing-loop-file',
+      seamNotes: 'No seam end-frame could be extracted because the loop MP4 is missing on this host.',
       extractedAt,
       generationStatus: generation?.status ?? 'not-recorded',
       generationNotes: generation?.notes ?? null,
@@ -136,7 +214,10 @@ for (const job of jobs) {
     ? `Generation result is ${generation.status}${generation.notes ? ` (${generation.notes})` : ''}, so this extracted frame may still reflect the pre-rerender loop on disk.`
     : null;
 
-  if (!overwrite && (await exists(outputPath))) {
+  if (!overwrite && (await exists(outputPath)) && (await exists(seamEndOutputPath))) {
+    const seamSimilarity = await exists(seamDiffOutputPath)
+      ? await measureSeamSimilarity(outputPath, seamEndOutputPath).catch(() => null)
+      : null;
     results.push({
       stateId: job.stateId,
       stateIndex: job.stateIndex,
@@ -144,17 +225,25 @@ for (const job of jobs) {
       variant: job.variant,
       source: job.loopTargetFilesystemPath,
       reviewFrame: relativeFromRoot(outputPath),
+      seamEndFrame: relativeFromRoot(seamEndOutputPath),
+      seamDiffFrame: relativeFromRoot(seamDiffOutputPath),
+      seamStatus: staleStatus ?? 'ready-for-comparison',
+      seamSimilarity,
+      seamNotes: staleNotes ?? `Compare the start frame at ${timestampSeconds}s against the end frame extracted ${endOffsetSeconds}s before the loop ends; they should land in the same composition without restart snap.${seamSimilarity !== null ? ` Current SSIM: ${seamSimilarity.toFixed(4)} (closer to 1.0 is better).` : ''}`,
       extractedAt,
       generationStatus: generation?.status ?? 'not-recorded',
       generationNotes: generation?.notes ?? null,
       status: staleStatus ?? 'already-exists',
-      notes: staleNotes ?? 'Review frame already existed; rerun with --overwrite to replace it.'
+      notes: staleNotes ?? 'Review frames already existed; rerun with --overwrite to replace them.'
     });
     continue;
   }
 
   try {
-    await runFfmpeg(inputPath, outputPath);
+    await extractFrameAtTime(inputPath, outputPath, timestampSeconds);
+    const seamExtraction = await extractFrameNearEnd(inputPath, seamEndOutputPath);
+    await generateSeamDifferenceImage(outputPath, seamEndOutputPath, seamDiffOutputPath);
+    const seamSimilarity = await measureSeamSimilarity(outputPath, seamEndOutputPath);
     results.push({
       stateId: job.stateId,
       stateIndex: job.stateIndex,
@@ -162,11 +251,17 @@ for (const job of jobs) {
       variant: job.variant,
       source: job.loopTargetFilesystemPath,
       reviewFrame: relativeFromRoot(outputPath),
+      seamEndFrame: relativeFromRoot(seamEndOutputPath),
+      seamDiffFrame: relativeFromRoot(seamDiffOutputPath),
+      seamStatus: staleStatus ?? 'ready-for-comparison',
+      seamSimilarity,
+      seamNotes: staleStatus ?? `${seamExtraction.extractionNotes} SSIM: ${seamSimilarity !== null ? seamSimilarity.toFixed(4) : 'unavailable'} (closer to 1.0 is better).`,
+      seamExtractionMode: seamExtraction.extractionMode,
       extractedAt,
       generationStatus: generation?.status ?? 'not-recorded',
       generationNotes: generation?.notes ?? null,
       status: staleStatus ?? 'extracted',
-      notes: staleNotes ?? `Representative frame extracted at ${timestampSeconds}s for visual loop review.`
+      notes: staleNotes ?? `Representative start frame extracted at ${timestampSeconds}s for visual loop review.`
     });
   } catch (error) {
     results.push({
@@ -176,6 +271,10 @@ for (const job of jobs) {
       variant: job.variant,
       source: job.loopTargetFilesystemPath,
       reviewFrame: relativeFromRoot(outputPath),
+      seamEndFrame: relativeFromRoot(seamEndOutputPath),
+      seamDiffFrame: relativeFromRoot(seamDiffOutputPath),
+      seamStatus: 'failed',
+      seamNotes: error instanceof Error ? error.message : String(error),
       extractedAt,
       generationStatus: generation?.status ?? 'not-recorded',
       generationNotes: generation?.notes ?? null,
@@ -197,9 +296,9 @@ const mdLines = [
   `State filter: ${selectedStates.size ? Array.from(selectedStates).join(', ') : 'all queued states'}`,
   `Timestamp seconds: ${timestampSeconds}`,
   '',
-  '| State | Label | Variant | Review status | Generation | Loop MP4 | Review frame | Notes |',
-  '| --- | --- | --- | --- | --- | --- | --- | --- |',
-  ...results.map((item) => `| ${item.stateId.replace('state-', '')} | ${item.label} | ${item.variant.toUpperCase()} | ${item.status} | ${item.generationStatus ?? 'not-recorded'} | ${item.source} | ${item.reviewFrame} | ${item.notes.replace(/\|/g, '\\|')} |`)
+  '| State | Label | Variant | Review status | Seam status | SSIM | Generation | Loop MP4 | Start frame | End frame | Diff frame | Notes |',
+  '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+  ...results.map((item) => `| ${item.stateId.replace('state-', '')} | ${item.label} | ${item.variant.toUpperCase()} | ${item.status} | ${item.seamStatus ?? 'not-recorded'} | ${item.seamSimilarity !== null && item.seamSimilarity !== undefined ? item.seamSimilarity.toFixed(4) : '—'} | ${item.generationStatus ?? 'not-recorded'} | ${item.source} | ${item.reviewFrame} | ${item.seamEndFrame ?? '—'} | ${item.seamDiffFrame ?? '—'} | ${(item.seamNotes ?? item.notes).replace(/\|/g, '\\|')} |`)
 ];
 
 await fs.writeFile(reportMdPath, `${mdLines.join('\n')}\n`);
@@ -222,6 +321,9 @@ const htmlLines = [
   '    .status { display: inline-block; margin: 8px 0 12px; padding: 4px 10px; border-radius: 999px; background: #1d2940; color: #b7c6df; font-size: 12px; }',
   '    .status.stale { background: #4a2d1d; color: #ffd1a8; }',
   '    .status.failed { background: #4a1d27; color: #ffb7c3; }',
+  '    .frame-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 12px; }',
+  '    figure { margin: 0; }',
+  '    figcaption { color: #aab6cc; font-size: 12px; margin-top: 6px; }',
   '    img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid #2d3b57; background: #05070d; margin-bottom: 12px; }',
   '    .warning { margin: 0 0 12px; padding: 10px 12px; border-radius: 10px; background: #3a2618; color: #ffd8b4; border: 1px solid #7a4a2a; }',
   '    ul { margin: 0; padding-left: 18px; color: #cdd7e8; }',
@@ -235,22 +337,57 @@ const htmlLines = [
   ...results.map((item) => {
     const reviewFrameAbsolute = resolveFromRoot(item.reviewFrame);
     const reviewFrameRelativeToHtml = path.relative(path.dirname(reportHtmlPath), reviewFrameAbsolute).replace(/\\/g, '/');
+    const seamEndFrameAbsolute = item.seamEndFrame ? resolveFromRoot(item.seamEndFrame) : null;
+    const seamEndFrameRelativeToHtml = seamEndFrameAbsolute ? path.relative(path.dirname(reportHtmlPath), seamEndFrameAbsolute).replace(/\\/g, '/') : null;
+    const seamDiffFrameAbsolute = item.seamDiffFrame ? resolveFromRoot(item.seamDiffFrame) : null;
+    const seamDiffFrameRelativeToHtml = seamDiffFrameAbsolute ? path.relative(path.dirname(reportHtmlPath), seamDiffFrameAbsolute).replace(/\\/g, '/') : null;
     const statusClass = item.status === 'stale-source-loop' ? 'status stale' : item.status === 'failed' ? 'status failed' : 'status';
+    const seamStatusClass = item.seamStatus === 'failed' ? 'status failed' : item.seamStatus === 'missing-loop-file' ? 'status failed' : item.status === 'stale-source-loop' ? 'status stale' : 'status';
     const isImageSafe = item.status === 'extracted' || item.status === 'already-exists' || item.status === 'stale-source-loop';
+    const hasSeamEndFrame = Boolean(seamEndFrameRelativeToHtml) && (item.seamStatus === 'ready-for-comparison' || item.status === 'stale-source-loop' || item.status === 'already-exists');
+    const hasDiffFrame = Boolean(seamDiffFrameRelativeToHtml) && (item.seamStatus === 'ready-for-comparison' || item.status === 'stale-source-loop' || item.status === 'already-exists');
     return [
       '    <section class="card">',
       `      <h2>${escapeHtml(item.stateId)} · ${escapeHtml(item.label)} · ${escapeHtml(item.variant.toUpperCase())}</h2>`,
       `      <div class="${statusClass}">${escapeHtml(item.status)}</div>`,
+      `      <div class="${seamStatusClass}">${escapeHtml(item.seamStatus ?? 'no-seam-status')}</div>`,
       item.status === 'stale-source-loop'
         ? `      <p class="warning">${escapeHtml(item.notes)}</p>`
         : '',
       isImageSafe
-        ? `      <img src="${escapeHtml(reviewFrameRelativeToHtml)}" alt="${escapeHtml(`${item.stateId} ${item.label} ${item.variant} review frame`)}" />`
+        ? [
+            '      <div class="frame-pair">',
+            '        <figure>',
+            `          <img src="${escapeHtml(reviewFrameRelativeToHtml)}" alt="${escapeHtml(`${item.stateId} ${item.label} ${item.variant} start review frame`)}" />`,
+            `          <figcaption>Start frame (${escapeHtml(timestampSeconds)}s)</figcaption>`,
+            '        </figure>',
+            hasSeamEndFrame
+              ? [
+                  '        <figure>',
+                  `          <img src="${escapeHtml(seamEndFrameRelativeToHtml)}" alt="${escapeHtml(`${item.stateId} ${item.label} ${item.variant} end review frame`)}" />`,
+                  `          <figcaption>End frame (-${escapeHtml(endOffsetSeconds)}s from end)</figcaption>`,
+                  '        </figure>'
+                ].join('\n')
+              : '        <p>No end-frame seam image available.</p>',
+            hasDiffFrame
+              ? [
+                  '        <figure>',
+                  `          <img src="${escapeHtml(seamDiffFrameRelativeToHtml)}" alt="${escapeHtml(`${item.stateId} ${item.label} ${item.variant} seam difference frame`)}" />`,
+                  `          <figcaption>Difference heatmap${item.seamSimilarity !== null && item.seamSimilarity !== undefined ? ` · SSIM ${escapeHtml(item.seamSimilarity.toFixed(4))}` : ''}</figcaption>`,
+                  '        </figure>'
+                ].join('\n')
+              : '        <p>No seam difference image available.</p>',
+            '      </div>'
+          ].join('\n')
         : '      <p>No review image available.</p>',
       '      <ul>',
       `        <li><strong>Generation:</strong> <code>${escapeHtml(item.generationStatus ?? 'not-recorded')}</code></li>`,
       `        <li><strong>Loop MP4:</strong> <code>${escapeHtml(item.source)}</code></li>`,
-      `        <li><strong>Review frame:</strong> <code>${escapeHtml(item.reviewFrame)}</code></li>`,
+      `        <li><strong>Start frame:</strong> <code>${escapeHtml(item.reviewFrame)}</code></li>`,
+      `        <li><strong>End frame:</strong> <code>${escapeHtml(item.seamEndFrame ?? 'not-available')}</code></li>`,
+      `        <li><strong>Diff frame:</strong> <code>${escapeHtml(item.seamDiffFrame ?? 'not-available')}</code></li>`,
+      `        <li><strong>SSIM:</strong> ${escapeHtml(item.seamSimilarity !== null && item.seamSimilarity !== undefined ? item.seamSimilarity.toFixed(4) : 'not-available')}</li>`,
+      `        <li><strong>Seam review:</strong> ${escapeHtml(item.seamNotes ?? 'Compare the start and end frames for seamless-loop acceptance.')}</li>`,
       `        <li><strong>Notes:</strong> ${escapeHtml(item.notes)}</li>`,
       '      </ul>',
       '    </section>'

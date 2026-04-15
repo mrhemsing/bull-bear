@@ -4,24 +4,35 @@ This project now uses a **continuous composite market score** in the range `-100
 
 ## Signal model
 
-The creature state is determined from a weighted composite:
+The creature state is determined from a weighted composite built from current market structure, momentum, derivatives positioning, and sentiment:
 
-- **35%** Fear & Greed sentiment
-- **40%** BTC price vs **7-day moving average**
-- **25%** BTC price vs **30-day moving average**
+- **15 pts** Fear & Greed contribution from Alternative.me
+- **35 pts** Market bias from Coinbase spot regime plus 24h and 7d BTC change
+- **25 pts** Momentum from Coinbase hourly RSI and MACD
+- **25 pts** Derivatives positioning from Binance funding, basis, open interest, and taker flow
 
 ### Component formulas
 
 ```text
-sentiment_score = (fng - 50) * 2
-trend7_pct = ((price / ma7) - 1) * 100
-trend30_pct = ((price / ma30) - 1) * 100
-trend7_score = clamp(trend7_pct * 8, -100, 100)
-trend30_score = clamp(trend30_pct * 5, -100, 100)
+fear_greed_score = scoreBand(fng, 35, 65) * 15
+
+regime_score = scoreBand(((price - ema200) / ema200) * 100, -4, 4)
+day_score = scoreBand(price_change_24h, -3, 3)
+week_score = scoreBand(price_change_7d, -8, 8)
+market_bias_score = round((regime_score * 0.45 + day_score * 0.20 + week_score * 0.35) * 35)
+
+macd_score = scoreBand(macd_histogram, -120, 120)
+rsi_score = scoreBand(rsi14, 42, 58)
+momentum_score = round((macd_score * 0.55 + rsi_score * 0.45) * 25)
+
+funding_score = scoreBand_or_extreme_cap(funding_rate)
+basis_score = scoreBand(basis_pct, -0.08, 0.08)
+oi_score = scoreBand(open_interest_change_1h, -2.5, 2.5)
+taker_score = scoreBand(taker_buy_sell_ratio, 0.96, 1.04)
+derivatives_score = round((funding_score * 0.30 + basis_score * 0.20 + oi_score * 0.30 + taker_score * 0.20) * 25)
+
 final_score = clamp(
-  sentiment_score * 0.35 +
-  trend7_score * 0.40 +
-  trend30_score * 0.25,
+  market_bias_score + momentum_score + derivatives_score + fear_greed_score,
   -100,
   100
 )

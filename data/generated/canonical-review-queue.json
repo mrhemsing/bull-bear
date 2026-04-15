@@ -1,0 +1,242 @@
+[
+  {
+    "stateId": "state-01",
+    "label": "Extremely Bearish",
+    "reviewType": "approved-adjacent",
+    "sourceDir": "public/states/state-01",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": false,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-02",
+    "label": "Very Strong Bearish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-02",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-03",
+    "label": "Strong Bearish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-03",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-04",
+    "label": "Firmly Bearish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-04",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-05",
+    "label": "Bearish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-05",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-06",
+    "label": "Moderately Bearish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-06",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-07",
+    "label": "Lean Bearish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-07",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-08",
+    "label": "Slightly Bearish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "out/state-08-adjacent",
+    "selectedFile": "state-08-adjacent-03.png",
+    "candidateFiles": [
+      "state-08-adjacent-03.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved from out/state-08-adjacent."
+  },
+  {
+    "stateId": "state-09",
+    "label": "Mildly Bearish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "out/state-09-adjacent",
+    "selectedFile": "state-09-adjacent-02.png",
+    "candidateFiles": [
+      "state-09-adjacent-02.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved from out/state-09-adjacent."
+  },
+  {
+    "stateId": "state-10",
+    "label": "Neutral",
+    "reviewType": "approved-anchor",
+    "sourceDir": "out/state-10-anchor",
+    "selectedFile": "state-10-anchor-02.png",
+    "candidateFiles": [
+      "state-10-anchor-02.png"
+    ],
+    "loopRegenerationRequired": false,
+    "notes": "Chosen as the recurring identity anchor for Bull Bear. Use as the visual reference point for adjacent state generation."
+  },
+  {
+    "stateId": "state-11",
+    "label": "Mildly Bullish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "out/state-11-adjacent",
+    "selectedFile": "state-11-adjacent-02.png",
+    "candidateFiles": [
+      "state-11-adjacent-02.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved from out/state-11-adjacent."
+  },
+  {
+    "stateId": "state-12",
+    "label": "Slightly Bullish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "out/state-12-adjacent",
+    "selectedFile": "state-12-adjacent-03.png",
+    "candidateFiles": [
+      "state-12-adjacent-03.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved from out/state-12-adjacent."
+  },
+  {
+    "stateId": "state-13",
+    "label": "Lean Bullish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-13",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-14",
+    "label": "Moderately Bullish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-14",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-15",
+    "label": "Bullish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-15",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-16",
+    "label": "Firmly Bullish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-16",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-17",
+    "label": "Strong Bullish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-17",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-18",
+    "label": "Very Strong Bullish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-18",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-19",
+    "label": "Exceptionally Bullish",
+    "reviewType": "approved-adjacent-needs-rerender",
+    "sourceDir": "public/states/state-19",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": true,
+    "notes": "Approved still detected in canonical public asset path."
+  },
+  {
+    "stateId": "state-20",
+    "label": "Extremely Bullish",
+    "reviewType": "approved-adjacent",
+    "sourceDir": "public/states/state-20",
+    "selectedFile": "still.png",
+    "candidateFiles": [
+      "still.png"
+    ],
+    "loopRegenerationRequired": false,
+    "notes": "Approved still detected in canonical public asset path."
+  }
+]

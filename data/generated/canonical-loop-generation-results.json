@@ -1,0 +1,21 @@
+[
+  {
+    "stateId": "state-11",
+    "stateIndex": 11,
+    "label": "Mildly Bullish",
+    "variant": "a",
+    "status": "generated",
+    "provider": "runway",
+    "model": "runway:gen4_turbo",
+    "stillReference": "out/loop-renders/state-11-loop-a/state-11-still-reference.png",
+    "stillSource": "out/state-11-adjacent/state-11-adjacent-02.png",
+    "renderDir": "out/loop-renders/state-11-loop-a",
+    "target": "/states/state-11/loop-a.mp4",
+    "targetFilesystemPath": "public/states/state-11/loop-a.mp4",
+    "output": "public/states/state-11/loop-a.mp4",
+    "providerResultUrl": "https://dnznrvs05pmza.cloudfront.net/2bd57ce7-542b-47ee-9a8c-287256281851.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiMzVlMzhmYjcxNjk0NWY0YSIsImJ1Y2tldCI6InJ1bndheS10YXNrLWFydGlmYWN0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc3NjIxMTIwMH0.x6bA8eZDWTQruVhfK01U1rjIJO1pO36jyOjW9_vFzI8",
+    "requestId": "1b5913c7-2fce-4abd-bb21-100699b643c4",
+    "recordedAt": "2026-04-13T15:38:26.657Z",
+    "notes": "Generated loop and saved it to the canonical runtime target."
+  }
+]

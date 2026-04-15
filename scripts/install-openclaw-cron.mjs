@@ -13,7 +13,6 @@ function resolveOpenClawCommand() {
 
 const projectRoot = process.cwd();
 const artifactPath = path.join(projectRoot, 'docs', 'openclaw-hourly-capture-cron.json');
-const compactCronMessage = 'Bull Bear local only: GET http://127.0.0.1:3078/api/capture once, then report state, provider, shouldPersist, persisted, and failures.';
 
 function parseArgs(argv) {
   const options = {
@@ -145,12 +144,12 @@ function validateArtifact(job) {
   assert(typeof job.schedule?.tz === 'string' && job.schedule.tz.trim().length > 0, 'Cron artifact must define schedule.tz.');
   assert(job.sessionTarget === 'isolated', 'Cron artifact must target an isolated session.');
   assert(job.payload?.kind === 'agentTurn', 'Cron artifact must use an agentTurn payload.');
-  assert(typeof job.payload?.message === 'string' && job.payload.message.includes('http://localhost:3000/api/capture'), 'Cron artifact payload must call the local /api/capture route.');
-  assert(job.payload.message.includes('shouldPersist'), 'Cron artifact payload must mention shouldPersist.');
-  assert(job.payload.message.includes('state id and label'), 'Cron artifact payload must mention state id and label.');
-  assert(job.payload.message.includes('asset provider'), 'Cron artifact payload must mention asset provider.');
-  assert(job.payload.message.toLowerCase().includes('failure'), 'Cron artifact payload must require clear failure reporting.');
-  assert(job.delivery?.mode === 'announce', 'Cron artifact delivery mode must be announce.');
+  assert(typeof job.payload?.message === 'string' && job.payload.message.includes('http://127.0.0.1:3078/api/capture-proof?format=text'), 'Cron artifact payload must call the local /api/capture-proof?format=text route.');
+  assert(job.payload.message.includes('output that single response body exactly, byte for byte'), 'Cron artifact payload must require exact proof echoing.');
+  assert(job.payload.message.includes('Do not browse, search, infer, or use any other tool, source, URL, or endpoint'), 'Cron artifact payload must forbid alternate tools and endpoints.');
+  assert(job.payload.message.includes('Do not call cash-grab.vercel.app'), 'Cron artifact payload must forbid cash-grab.vercel.app.');
+  assert(job.payload.message.includes('The response body is already the final five-line Bull Bear proof, so echo it verbatim and stop'), 'Cron artifact payload must require the final proof body to be echoed verbatim.');
+  assert(job.delivery?.mode === 'none', 'Cron artifact delivery mode must be none.');
 }
 
 function buildCommand(job, options) {
@@ -161,7 +160,7 @@ function buildCommand(job, options) {
   args.push('--cron', job.schedule.expr);
   args.push('--tz', job.schedule.tz);
   args.push('--session', job.sessionTarget);
-  args.push('--message', compactCronMessage);
+  args.push('--message', job.payload.message);
 
   const timeoutSeconds = typeof job.payload.timeoutSeconds === 'number'
     ? job.payload.timeoutSeconds

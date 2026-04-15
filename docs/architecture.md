@@ -9,9 +9,9 @@ Represent Bitcoin market psychology as a single recurring cinematic bull-bear cr
 The product no longer relies on raw 1-hour BTC percentage movement alone.
 
 Instead it uses:
-- Fear & Greed sentiment
-- BTC price vs 7-day moving average
-- BTC price vs 30-day moving average
+- Alternative.me Fear & Greed
+- Coinbase BTC-USD hourly spot structure and momentum
+- Binance BTC perpetual funding, basis, open interest, and taker flow
 
 These are blended into a **continuous composite score** from `-100` to `+100`.
 
@@ -21,17 +21,18 @@ That score is then mapped into **20 canonical visual states**.
 
 ### 1. Market data
 Responsibilities:
-- Fetch Fear & Greed score
-- Fetch BTC price history
-- Compute MA7 and MA30
+- Fetch Alternative.me Fear & Greed
+- Fetch Coinbase BTC-USD hourly candles
+- Fetch Binance BTC perpetual premium, funding, open interest, and taker ratio data
 - Store raw market inputs for each evaluation cycle
 
 ### 2. Signal engine
 Responsibilities:
-- Convert Fear & Greed into a centered sentiment score
-- Convert price distance from MA7 and MA30 into trend scores
-- Blend component scores with configurable weights
-- Clamp final score to `-100` to `+100`
+- Convert Fear & Greed into a bounded sentiment contribution
+- Convert Coinbase regime, 24h move, and 7d move into a market-bias score
+- Convert Coinbase RSI and MACD into a momentum score
+- Convert Binance funding, basis, open interest, and taker flow into a derivatives score
+- Blend component scores into the final composite and clamp to `-100` to `+100`
 
 ### 3. State mapper
 Responsibilities:
