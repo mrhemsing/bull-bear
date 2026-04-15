@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "if exist .next rmdir /s /q .next && next build",
+    "build": "node -e \"const fs=require('fs'); fs.rmSync('.next', { recursive: true, force: true });\" && next build",
     "start": "next start",
     "lint": "next lint",
     "generate:sample": "node scripts/generate-sample-frames.mjs",
