@@ -1,3 +1,0 @@
-state-14 / Moderately Bullish
-Drop approved loop A here.
-Expected runtime path: /states/state-14/loop-a.mp4

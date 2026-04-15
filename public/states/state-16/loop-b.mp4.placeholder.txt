@@ -1,3 +1,0 @@
-state-16 / Firmly Bullish
-Drop approved loop B here.
-Expected runtime path: /states/state-16/loop-b.mp4

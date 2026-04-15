@@ -1,3 +1,0 @@
-state-09 / Mildly Bearish
-Drop approved loop A here.
-Expected runtime path: /states/state-09/loop-a.mp4

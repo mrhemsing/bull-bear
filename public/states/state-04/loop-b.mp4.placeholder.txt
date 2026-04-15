@@ -1,3 +1,0 @@
-state-04 / Firmly Bearish
-Drop approved loop B here.
-Expected runtime path: /states/state-04/loop-b.mp4

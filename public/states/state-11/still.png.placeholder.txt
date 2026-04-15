@@ -1,3 +1,0 @@
-state-11 / Mildly Bullish
-Drop approved still image here.
-Expected runtime path: /states/state-11/still.png

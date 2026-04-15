@@ -1,3 +1,0 @@
-state-08 / Slightly Bearish
-Drop approved still image here.
-Expected runtime path: /states/state-08/still.png

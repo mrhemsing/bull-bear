@@ -1,3 +1,0 @@
-state-05 / Bearish
-Drop approved loop C here.
-Expected runtime path: /states/state-05/loop-c.mp4

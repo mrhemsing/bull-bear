@@ -1,3 +1,0 @@
-state-03 / Strong Bearish
-Drop approved loop A here.
-Expected runtime path: /states/state-03/loop-a.mp4

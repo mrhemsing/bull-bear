@@ -1,3 +1,0 @@
-state-17 / Strong Bullish
-Drop approved loop C here.
-Expected runtime path: /states/state-17/loop-c.mp4
