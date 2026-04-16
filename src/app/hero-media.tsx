@@ -125,7 +125,14 @@ export function HeroMedia({
       <div className="heroMediaCaption" style={{ position: 'absolute', left: 18, right: 18, bottom: 18, display: 'flex', justifyContent: 'space-between', gap: 16, alignItems: 'end' }}>
         <div className="heroMediaCaptionLeft">
           <div style={{ fontSize: 'clamp(1.5rem, 4vw, 30px)', fontWeight: 800, marginBottom: 6, lineHeight: 1.05, color: stateLabelColor }}>{stateLabel}</div>
-          {intensity ? <div className="heroMediaIntensity" style={{ marginTop: 4, color: '#c5d0e7', fontSize: 13 }}>{intensity.replace(' · ', String.fromCharCode(10))}</div> : null}
+          {intensity ? <div className="heroMediaIntensity" style={{ marginTop: 4, color: '#c5d0e7', fontSize: 13 }}>
+            {intensity.split(' · ').map((part, index) => (
+              <span key={`${part}-${index}`} className={index === 1 ? 'heroMediaTimeframe' : undefined}>
+                {index > 0 ? ' ' : ''}
+                {part}
+              </span>
+            ))}
+          </div> : null}
         </div>
         <div className="heroMediaCaptionRight" style={{ minWidth: 110, textAlign: 'right' }}>
           <div style={{ color: '#8ea3c7', fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 }}>Composite</div>
@@ -141,6 +148,10 @@ export function HeroMedia({
 
         .heroMediaIntensity {
           white-space: normal;
+        }
+
+        .heroMediaTimeframe {
+          display: inline;
         }
       }
 
@@ -175,7 +186,11 @@ export function HeroMedia({
 
         .heroMediaIntensity {
           max-width: 170px;
-          white-space: pre-line;
+          white-space: normal;
+        }
+
+        .heroMediaTimeframe {
+          display: block;
         }
 
         .heroMediaCaptionRight {
