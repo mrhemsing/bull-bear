@@ -14,9 +14,29 @@ if (!response.ok) {
 }
 
 const payload = await response.json();
-const stateIndex = Number(payload?.snapshot?.stateIndex ?? payload?.manifest?.index);
+const snapshot = payload?.snapshot ?? {};
+const stateIndex = Number(snapshot?.stateIndex ?? payload?.manifest?.index);
 if (!Number.isInteger(stateIndex) || stateIndex < 1) {
-  throw new Error(`Could not determine live state index from /api/live payload: ${JSON.stringify({ snapshotStateIndex: payload?.snapshot?.stateIndex, manifestIndex: payload?.manifest?.index })}`);
+  throw new Error(`Could not determine live state index from /api/live payload: ${JSON.stringify({ snapshotStateIndex: snapshot?.stateIndex, manifestIndex: payload?.manifest?.index })}`);
+}
+
+if (snapshot?.source !== 'Coinbase spot candles + Binance futures positioning + Alternative.me Fear & Greed') {
+  throw new Error(`/api/live snapshot.source did not report the new current-market model: ${snapshot?.source}`);
+}
+
+for (const field of ['fearGreedScore', 'marketBiasScore', 'momentumScore', 'derivativesScore', 'finalScore']) {
+  if (typeof snapshot?.[field] !== 'number' || Number.isNaN(snapshot[field])) {
+    throw new Error(`/api/live snapshot.${field} was not a valid number: ${snapshot?.[field]}`);
+  }
+}
+
+if (typeof snapshot?.fearAndGreed !== 'number' || snapshot.fearAndGreed < 0 || snapshot.fearAndGreed > 100) {
+  throw new Error(`/api/live snapshot.fearAndGreed was outside the expected 0-100 range: ${snapshot?.fearAndGreed}`);
+}
+
+const expectedDirection = snapshot.finalScore > 4 ? 'bull' : snapshot.finalScore < -4 ? 'bear' : 'neutral';
+if (payload?.creature?.direction !== expectedDirection) {
+  throw new Error(`/api/live creature.direction ${payload?.creature?.direction} did not match finalScore ${snapshot.finalScore}`);
 }
 
 const key = String(stateIndex).padStart(2, '0');

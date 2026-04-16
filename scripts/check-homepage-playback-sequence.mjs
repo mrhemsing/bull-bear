@@ -4,6 +4,23 @@ import { chromium } from 'playwright';
 
 const baseUrl = process.env.BULL_BEAR_BASE_URL ?? 'http://127.0.0.1:3078';
 const homepageUrl = new URL('/', baseUrl).toString();
+const liveUrl = new URL('/api/live', baseUrl).toString();
+
+const liveResponse = await fetch(liveUrl, {
+  headers: {
+    'user-agent': 'bull-bear-homepage-playback-check/1.0'
+  }
+});
+
+if (!liveResponse.ok) {
+  throw new Error(`/api/live request failed: ${liveResponse.status} ${liveResponse.statusText}`);
+}
+
+const livePayload = await liveResponse.json();
+const liveStateIndex = Number(livePayload?.snapshot?.stateIndex ?? livePayload?.manifest?.index);
+if (!Number.isInteger(liveStateIndex) || liveStateIndex < 1) {
+  throw new Error(`Could not determine live state index from /api/live payload: ${JSON.stringify({ snapshotStateIndex: livePayload?.snapshot?.stateIndex, manifestIndex: livePayload?.manifest?.index })}`);
+}
 
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage();
@@ -30,6 +47,10 @@ try {
   }
 
   const key = stateMatch[1];
+  if (key !== String(liveStateIndex).padStart(2, '0')) {
+    throw new Error(`Homepage hero state ${key} did not match /api/live state ${String(liveStateIndex).padStart(2, '0')}.`);
+  }
+
   const expectedSequence = ['a', 'b', 'c'].map((suffix) => `/states/${key}-${suffix}.mp4`);
   const declaredSequence = initial.loopSequence.split('|');
 
@@ -73,6 +94,7 @@ try {
   console.log(JSON.stringify({
     status: 'ok',
     homepageUrl,
+    liveUrl,
     key,
     poster: initial.poster,
     declaredSequence,

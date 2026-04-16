@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 import { getLiveMarketBeastState } from '@/lib/live-state';
+import { HeroMedia } from '../hero-media';
 
-const HeroMedia = dynamic(() => import('../hero-media').then((mod) => mod.HeroMedia), { ssr: false });
 const TimelineScrubber = dynamic(() => import('../timeline-scrubber').then((mod) => mod.TimelineScrubber), { ssr: false });
 
 function formatSignedNumber(value?: number, digits = 2) {
@@ -35,7 +35,7 @@ export default async function DashboardPage() {
             <p style={{ textTransform: 'uppercase', letterSpacing: 2, color: '#8ea3c7', marginBottom: 8 }}>Bull Bear dashboard</p>
             <h1 style={{ margin: 0, fontSize: 'clamp(2.4rem, 6vw, 56px)', lineHeight: 1.02 }}>Live market creature control room.</h1>
             <p style={{ maxWidth: 760, color: '#b4bfd3', lineHeight: 1.7, marginTop: 14 }}>
-              Internal dashboard for the live Bull Bear experience, with the hero, current market read, and timeline in one place.
+              Internal dashboard for the live Bull Bear experience, with the hero, current market model, and timeline in one place.
             </p>
           </div>
           <div style={{ minWidth: 260, background: 'linear-gradient(180deg, rgba(81,137,255,0.18), rgba(81,137,255,0.06))', border: '1px solid #28406f', borderRadius: 22, padding: 18 }}>
@@ -73,10 +73,11 @@ export default async function DashboardPage() {
             <DetailRow label="Resolved still" value={live.activeStill} mono />
           </Panel>
 
-          <Panel title="Signal breakdown" subtitle="The three inputs behind the current state.">
-            <SignalBar label="Sentiment" value={live.snapshot.sentimentScore} />
-            <SignalBar label="Trend 7" value={live.snapshot.trend7Score} />
-            <SignalBar label="Trend 30" value={live.snapshot.trend30Score} />
+          <Panel title="Signal breakdown" subtitle="Fear & Greed stays first, then Coinbase spot and Binance positioning refine the read.">
+            <SignalBar label="Fear & Greed" value={live.snapshot.fearGreedScore} />
+            <SignalBar label="Spot trend" value={live.snapshot.marketBiasScore} />
+            <SignalBar label="Momentum" value={live.snapshot.momentumScore} />
+            <SignalBar label="Binance positioning" value={live.snapshot.derivativesScore} />
           </Panel>
 
           <Panel title="Transition memory" subtitle="How this compares with the last recorded state.">

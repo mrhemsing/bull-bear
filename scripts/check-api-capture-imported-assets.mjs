@@ -14,9 +14,14 @@ if (!response.ok) {
 }
 
 const payload = await response.json();
-const stateIndex = Number(payload?.snapshot?.stateIndex ?? payload?.frame?.stateIndex);
+const snapshot = payload?.snapshot ?? {};
+const stateIndex = Number(snapshot?.stateIndex ?? payload?.frame?.stateIndex);
 if (!Number.isInteger(stateIndex) || stateIndex < 1) {
-  throw new Error(`Could not determine capture state index from /api/capture payload: ${JSON.stringify({ snapshotStateIndex: payload?.snapshot?.stateIndex, frameStateIndex: payload?.frame?.stateIndex })}`);
+  throw new Error(`Could not determine capture state index from /api/capture payload: ${JSON.stringify({ snapshotStateIndex: snapshot?.stateIndex, frameStateIndex: payload?.frame?.stateIndex })}`);
+}
+
+if (snapshot?.source !== 'Coinbase spot candles + Binance futures positioning + Alternative.me Fear & Greed') {
+  throw new Error(`/api/capture snapshot.source did not report the new current-market model: ${snapshot?.source}`);
 }
 
 const key = String(stateIndex).padStart(2, '0');
@@ -56,6 +61,7 @@ console.log(JSON.stringify({
   status: 'ok',
   captureUrl,
   stateIndex,
+  source: snapshot?.source,
   provider: payload.provider,
   frameImageUrl: payload?.frame?.imageUrl,
   generationImageUrl: payload?.generation?.imageUrl,

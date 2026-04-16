@@ -32,10 +32,10 @@ export function DebugPanel({
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 16 }}>
         <div style={{ display: 'grid', gap: 12 }}>
-          <ContributionRow label="Fear & Greed" raw={String(snapshot.fearAndGreed)} score={snapshot.fearGreedScore} weight="15 pts" contribution={snapshot.fearGreedScore} />
-          <ContributionRow label="Market bias" raw={`24h ${formatSignedNumber(snapshot.priceChange24h)}% · 7d ${formatSignedNumber(snapshot.priceChange7d)}%`} score={snapshot.marketBiasScore} weight="35 pts" contribution={snapshot.marketBiasScore} />
-          <ContributionRow label="Momentum" raw={`RSI/MACD on Coinbase 1h candles`} score={snapshot.momentumScore} weight="25 pts" contribution={snapshot.momentumScore} />
-          <ContributionRow label="Derivatives" raw={`Funding ${formatSignedNumber(snapshot.fundingRate)}% · Basis ${formatSignedNumber(snapshot.basisPct)}% · OI ${formatSignedNumber(snapshot.openInterestChangePct1h)}% · Taker ${formatSignedNumber(snapshot.takerBuySellRatio, 3)}`} score={snapshot.derivativesScore} weight="25 pts" contribution={snapshot.derivativesScore} />
+          <ContributionRow label="Fear & Greed" raw={String(snapshot.fearAndGreed)} score={snapshot.fearGreedScore} weight="18 pts" contribution={snapshot.fearGreedScore} />
+          <ContributionRow label="Spot trend" raw={`24h ${formatSignedNumber(snapshot.priceChange24h)}% · 7d ${formatSignedNumber(snapshot.priceChange7d)}%`} score={snapshot.marketBiasScore} weight="35 pts" contribution={snapshot.marketBiasScore} />
+          <ContributionRow label="Momentum" raw={`RSI, MACD, and latest 1h impulse on Coinbase`} score={snapshot.momentumScore} weight="22 pts" contribution={snapshot.momentumScore} />
+          <ContributionRow label="Binance positioning" raw={`Funding ${formatSignedNumber(snapshot.fundingRate)}% · Basis ${formatSignedNumber(snapshot.basisPct)}% · OI ${formatSignedNumber(snapshot.openInterestChangePct1h)}% · Taker ${formatSignedNumber(snapshot.takerBuySellRatio, 3)}`} score={snapshot.derivativesScore} weight="25 pts" contribution={snapshot.derivativesScore} />
         </div>
 
         <div style={{ display: 'grid', gap: 12 }}>

@@ -37,9 +37,17 @@ try {
     throw new Error(`Dashboard declared sequence ${JSON.stringify(declaredSequence)} did not match expected ${JSON.stringify(expectedSequence)}.`);
   }
 
+  const startIndex = expectedSequence.indexOf(initial.src);
+  if (startIndex < 0) {
+    throw new Error(`Initial dashboard hero src ${initial.src} was not in declared sequence ${JSON.stringify(expectedSequence)}.`);
+  }
+
   const observed = [initial.src];
 
   for (let step = 0; step < 3; step += 1) {
+    const expectedIndex = (startIndex + step + 1) % expectedSequence.length;
+    const expectedSrc = expectedSequence[expectedIndex];
+
     await page.evaluate(() => {
       const debug = window.__heroMediaDebug;
       if (!debug) throw new Error('window.__heroMediaDebug was not available.');
@@ -50,14 +58,14 @@ try {
         const video = document.querySelector('[data-testid="hero-media-video"]');
         return !!video && video.getAttribute('src') === expectedSrc && video.getAttribute('data-loop-index') === String(expectedIndex);
       },
-      { expectedSrc: expectedSequence[(step + 1) % expectedSequence.length], expectedIndex: (step + 1) % expectedSequence.length }
+      { expectedSrc, expectedIndex }
     );
 
     const currentSrc = await page.locator('[data-testid="hero-media-video"]').getAttribute('src');
     observed.push(currentSrc);
   }
 
-  const expectedObserved = [...expectedSequence, expectedSequence[0]];
+  const expectedObserved = Array.from({ length: expectedSequence.length + 1 }, (_, index) => expectedSequence[(startIndex + index) % expectedSequence.length]);
   if (JSON.stringify(observed) !== JSON.stringify(expectedObserved)) {
     throw new Error(`Observed dashboard playback order ${JSON.stringify(observed)} did not match ${JSON.stringify(expectedObserved)}.`);
   }

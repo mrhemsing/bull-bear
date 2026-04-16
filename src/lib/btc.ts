@@ -3,6 +3,10 @@ import type { CompositeMarketSnapshot, StateManifestEntry } from './types';
 
 const COINBASE_CANDLES_URL = 'https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=3600';
 const FEAR_AND_GREED_URL = 'https://api.alternative.me/fng/?limit=1';
+const BINANCE_PREMIUM_INDEX_URL = 'https://fapi.binance.com/fapi/v1/premiumIndex?symbol=BTCUSDT';
+const BINANCE_BASIS_URL = 'https://fapi.binance.com/futures/data/basis?pair=BTCUSDT&contractType=PERPETUAL&period=1h&limit=2';
+const BINANCE_OPEN_INTEREST_URL = 'https://fapi.binance.com/futures/data/openInterestHist?symbol=BTCUSDT&period=5m&limit=13';
+const BINANCE_TAKER_RATIO_URL = 'https://fapi.binance.com/futures/data/takerlongshortRatio?symbol=BTCUSDT&period=5m&limit=12';
 
 const STATE_MANIFEST = stateManifest as StateManifestEntry[];
 
@@ -13,6 +17,31 @@ type Candle = {
   open: number;
   close: number;
   volume: number;
+};
+
+type BinancePremiumIndex = {
+  markPrice?: string;
+  indexPrice?: string;
+  lastFundingRate?: string;
+  time?: number;
+};
+
+type BinanceBasisPoint = {
+  basisRate?: string;
+  basis?: string;
+  futuresPrice?: string;
+  indexPrice?: string;
+  timestamp?: number;
+};
+
+type BinanceOpenInterestPoint = {
+  sumOpenInterestValue?: string;
+  timestamp?: number;
+};
+
+type BinanceTakerRatioPoint = {
+  buySellRatio?: string;
+  timestamp?: number;
 };
 
 function clamp(value: number, min: number, max: number) {
@@ -102,17 +131,20 @@ function calculateMacdHistogram(values: number[]) {
   return macdLine[macdLine.length - 1] - signal;
 }
 
-function calculateFearGreedScore(fearGreed: number, momentumScore: number, marketBiasScore: number) {
-  const baseline = scoreBand(fearGreed, 35, 65) * 15;
+function calculateFearGreedScore(fearGreed: number, marketBiasScore: number, momentumScore: number, derivativesScore: number) {
+  const baseline = scoreBand(fearGreed, 30, 70) * 18;
 
-  if (fearGreed <= 20) {
-    const recoverySupport = clamp(((Math.max(0, momentumScore) * 0.7) + (Math.max(0, marketBiasScore) * 0.3)) / 35, 0, 1);
-    const bearishPenalty = Math.min(10, Math.abs(baseline) * 0.5);
-    const contrarianBoost = recoverySupport * 6;
-    return clamp(baseline + bearishPenalty + contrarianBoost, -15, 15);
+  if (fearGreed <= 25) {
+    const recoverySupport = clamp(((Math.max(0, marketBiasScore) * 0.45) + (Math.max(0, momentumScore) * 0.35) + (Math.max(0, derivativesScore) * 0.2)) / 40, 0, 1);
+    return clamp((baseline * 0.85) + (recoverySupport * 5), -18, 18);
   }
 
-  return clamp(baseline, -15, 15);
+  if (fearGreed >= 75) {
+    const overheatingPenalty = clamp(((Math.max(0, derivativesScore) * -0.25) + (Math.max(0, momentumScore) * -0.15)), -4, 0);
+    return clamp(baseline + overheatingPenalty, -18, 18);
+  }
+
+  return clamp(baseline, -18, 18);
 }
 
 async function fetchJson<T>(url: string) {
@@ -174,9 +206,13 @@ async function getCoinbaseCandles() {
 }
 
 export async function getCompositeMarketSnapshot(): Promise<CompositeMarketSnapshot> {
-  const [candlesResult, fearGreedResult] = await Promise.allSettled([
+  const [candlesResult, fearGreedResult, premiumIndexResult, basisResult, openInterestResult, takerRatioResult] = await Promise.allSettled([
     getCoinbaseCandles(),
-    fetchJson<{ data?: Array<{ value?: string; value_classification?: string }> }>(FEAR_AND_GREED_URL)
+    fetchJson<{ data?: Array<{ value?: string; value_classification?: string }> }>(FEAR_AND_GREED_URL),
+    fetchJson<BinancePremiumIndex>(BINANCE_PREMIUM_INDEX_URL),
+    fetchJson<BinanceBasisPoint[]>(BINANCE_BASIS_URL),
+    fetchJson<BinanceOpenInterestPoint[]>(BINANCE_OPEN_INTEREST_URL),
+    fetchJson<BinanceTakerRatioPoint[]>(BINANCE_TAKER_RATIO_URL)
   ]);
 
   if (candlesResult.status !== 'fulfilled') {
@@ -186,9 +222,22 @@ export async function getCompositeMarketSnapshot(): Promise<CompositeMarketSnaps
 
   const candles = candlesResult.value;
   const fearGreedData = fearGreedResult.status === 'fulfilled' ? fearGreedResult.value : null;
+  const premiumIndex = premiumIndexResult.status === 'fulfilled' ? premiumIndexResult.value : null;
+  const basisPoints = basisResult.status === 'fulfilled' ? basisResult.value : [];
+  const openInterestPoints = openInterestResult.status === 'fulfilled' ? openInterestResult.value : [];
+  const takerRatioPoints = takerRatioResult.status === 'fulfilled' ? takerRatioResult.value : [];
 
   if (fearGreedResult.status !== 'fulfilled') {
-    console.error('Fear & Greed unavailable, continuing with neutral sentiment overlay:', fearGreedResult.reason);
+    console.error('Fear & Greed unavailable, continuing with a neutral top-line overlay while spot and derivatives stay live:', fearGreedResult.reason);
+  }
+
+  if (premiumIndexResult.status !== 'fulfilled' || basisResult.status !== 'fulfilled' || openInterestResult.status !== 'fulfilled' || takerRatioResult.status !== 'fulfilled') {
+    console.error('One or more Binance derivatives inputs were unavailable, continuing with neutralized derivatives components.', {
+      premiumIndex: premiumIndexResult.status,
+      basis: basisResult.status,
+      openInterest: openInterestResult.status,
+      takerRatio: takerRatioResult.status
+    });
   }
 
   const closes = candles.map((candle) => candle.close);
@@ -203,37 +252,61 @@ export async function getCompositeMarketSnapshot(): Promise<CompositeMarketSnaps
   const priceChange24h = close24hAgo > 0 ? ((currentPrice - close24hAgo) / close24hAgo) * 100 : 0;
   const priceChange7d = close7dAgo > 0 ? ((currentPrice - close7dAgo) / close7dAgo) * 100 : 0;
 
-  const fundingRate = 0;
-  const basisPct = 0;
-  const oiChangePct1h = 0;
-  const takerBuySellRatio = 1;
+  const fundingRate = Number(premiumIndex?.lastFundingRate ?? 0);
+  const markPrice = Number(premiumIndex?.markPrice ?? currentPrice);
+  const indexPrice = Number(premiumIndex?.indexPrice ?? currentPrice);
+  const latestBasisPoint = basisPoints[basisPoints.length - 1];
+  const basisPct = Number(latestBasisPoint?.basisRate ?? (indexPrice > 0 ? (markPrice - indexPrice) / indexPrice : 0)) * 100;
+  const previousOi = Number(openInterestPoints[0]?.sumOpenInterestValue ?? 0);
+  const latestOi = Number(openInterestPoints[openInterestPoints.length - 1]?.sumOpenInterestValue ?? previousOi);
+  const oiChangePct1h = previousOi > 0 ? ((latestOi - previousOi) / previousOi) * 100 : 0;
+  const takerRatios = takerRatioPoints.map((point) => Number(point.buySellRatio ?? 1)).filter((value) => Number.isFinite(value) && value > 0);
+  const takerBuySellRatio = takerRatios.length ? takerRatios.reduce((sum, value) => sum + value, 0) / takerRatios.length : 1;
   const fearGreed = Number(fearGreedData?.data?.[0]?.value ?? 50);
 
   const regimeScore = scoreBand(ema200 > 0 ? ((currentPrice - ema200) / ema200) * 100 : 0, -4, 4);
   const dayScore = scoreBand(priceChange24h, -3, 3);
   const weekScore = scoreBand(priceChange7d, -8, 8);
-  const marketBiasScore = Math.round(((regimeScore * 0.45) + (dayScore * 0.2) + (weekScore * 0.35)) * 35);
+  const marketBiasScore = Math.round(((regimeScore * 0.45) + (dayScore * 0.2) + (weekScore * 0.35)) * 32);
 
   const macdScore = scoreBand(macdHistogram, -120, 120);
   const rsiScore = scoreBand(rsi14, 42, 58);
-  const momentumScore = Math.round(((macdScore * 0.55) + (rsiScore * 0.45)) * 25);
-  const fearGreedScore = Math.round(calculateFearGreedScore(fearGreed, momentumScore, marketBiasScore));
+  const hourlyImpulse = scoreBand(closes.length > 1 && closes[closes.length - 2] > 0 ? ((currentPrice - closes[closes.length - 2]) / closes[closes.length - 2]) * 100 : 0, -0.9, 0.9);
+  const momentumScore = Math.round(((macdScore * 0.45) + (rsiScore * 0.35) + (hourlyImpulse * 0.2)) * 24);
 
-  const derivativesScore = 0;
+  const fundingScore = scoreBand(fundingRate * 100, -0.03, 0.03);
+  const basisScore = scoreBand(basisPct, -0.08, 0.08);
+  const openInterestScore = scoreBand(oiChangePct1h, -2.5, 2.5);
+  const takerScore = scoreBand(takerBuySellRatio, 0.94, 1.06);
+  const derivativesScore = Math.round(((fundingScore * 0.2) + (basisScore * 0.25) + (openInterestScore * 0.3) + (takerScore * 0.25)) * 26);
 
-  const marketStructureScore = Math.round(clamp((marketBiasScore * 0.58) + (momentumScore * 0.42), -60, 60));
-  const adjustedSentimentScore = Math.round(clamp(fearGreedScore * 1.2, -18, 18));
-  const finalScore = Math.round(clamp(marketStructureScore + adjustedSentimentScore, -100, 100));
+  const fearGreedScore = Math.round(calculateFearGreedScore(fearGreed, marketBiasScore, momentumScore, derivativesScore));
+
+  const finalScore = Math.round(clamp(
+    (fearGreedScore * 1) +
+    (marketBiasScore * 1.1) +
+    (momentumScore * 0.95) +
+    (derivativesScore * 1.05),
+    -100,
+    100
+  ));
 
   const state = resolveState(finalScore);
   const sentimentScore = Math.round(clamp(fearGreedScore, -100, 100));
-  const trend7Score = marketBiasScore;
-  const trend30Score = momentumScore;
-  const latestTimestamp = (candles[candles.length - 1]?.time ?? Math.floor(Date.now() / 1000)) * 1000;
+  const trend7Score = Math.round(clamp((marketBiasScore * 0.7) + (momentumScore * 0.3), -100, 100));
+  const trend30Score = Math.round(clamp((marketBiasScore * 0.55) + (derivativesScore * 0.45), -100, 100));
+  const latestTimestamp = Math.max(
+    (candles[candles.length - 1]?.time ?? 0) * 1000,
+    premiumIndex?.time ?? 0,
+    latestBasisPoint?.timestamp ?? 0,
+    openInterestPoints[openInterestPoints.length - 1]?.timestamp ?? 0,
+    takerRatioPoints[takerRatioPoints.length - 1]?.timestamp ?? 0,
+    Date.now()
+  );
 
   return {
     timestamp: new Date(latestTimestamp).toISOString(),
-    source: 'Coinbase spot candles + Alternative.me Fear & Greed',
+    source: 'Coinbase spot candles + Binance futures positioning + Alternative.me Fear & Greed',
     currentPrice: Number(currentPrice.toFixed(2)),
     ma7: Number(ma7.toFixed(2)),
     ma30: Number(ma30.toFixed(2)),

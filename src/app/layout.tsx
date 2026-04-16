@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 
 export const metadata = {
-  title: 'Bitcoin Bulls vs Bears sentiment and analysis tracker',
-  description: 'BTC-driven cinematic bull-bear market beast'
+  title: 'Bitcoin Bulls vs Bears current-market tracker',
+  description: 'BTC market state tracker driven by Coinbase spot, Binance futures positioning, and Fear & Greed'
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

@@ -117,37 +117,33 @@ function getConfidenceLabel(confidence: number) {
 
 function summarizeWhy(view: SnapshotView) {
   const contributions = [
-    { label: 'Trend', value: view.marketBiasScore },
+    { label: 'Fear & Greed', value: view.fearGreedScore },
+    { label: 'Spot trend', value: view.marketBiasScore },
     { label: 'Momentum', value: view.momentumScore },
-    { label: 'Derivatives', value: view.derivativesScore },
-    { label: 'Sentiment', value: view.fearGreedScore }
+    { label: 'Derivatives', value: view.derivativesScore }
   ].sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
 
-  const positive = contributions.filter((item) => item.value > 0);
-  const negative = contributions.filter((item) => item.value < 0);
-  const strongestPositive = positive[0];
-  const secondPositive = positive[1];
-  const strongestNegative = negative[0];
-  const sentimentContext = view.fearAndGreed <= 25 && view.finalScore > 0
-    ? ' Extreme fear persists, but it is being offset by stronger trend and momentum.'
-    : '';
+  const strongest = contributions[0];
+  const leadingWithTrend = contributions.find((item) => Math.sign(item.value) === Math.sign(view.finalScore) && item.value !== 0) ?? strongest;
+  const counter = contributions.find((item) => Math.sign(item.value) !== Math.sign(view.finalScore) && item.value !== 0);
 
   if (view.finalScore > 0) {
-    return `Bullish: Trend (${formatWholeSignedNumber(view.marketBiasScore)}), momentum (${formatWholeSignedNumber(view.momentumScore)}), and sentiment (${formatWholeSignedNumber(view.fearGreedScore)}) combine to keep the composite positive.${sentimentContext}`;
+    return `Bullish: ${leadingWithTrend?.label ?? 'The composite'} is leading higher, with spot, momentum, and Binance positioning keeping the model positive${counter ? ` despite ${counter.label.toLowerCase()} at ${formatWholeSignedNumber(counter.value)}` : ''}.`;
   }
 
   if (view.finalScore < 0) {
-    return `Bearish: Trend (${formatWholeSignedNumber(view.marketBiasScore)}), momentum (${formatWholeSignedNumber(view.momentumScore)}), and sentiment (${formatWholeSignedNumber(view.fearGreedScore)}) combine to keep the composite negative.`;
+    return `Bearish: ${leadingWithTrend?.label ?? 'The composite'} is leaning risk-off, with Coinbase trend, momentum, and Binance positioning keeping the model negative${counter ? ` even with ${counter.label.toLowerCase()} at ${formatWholeSignedNumber(counter.value)}` : ''}.`;
   }
 
-  return `Neutral: ${strongestPositive ? `${strongestPositive.label} (${formatWholeSignedNumber(strongestPositive.value)})` : 'positive inputs'} and ${strongestNegative ? `${strongestNegative.label.toLowerCase()} (${formatWholeSignedNumber(strongestNegative.value)})` : 'negative inputs'} are close enough to keep the composite balanced.`;
+  return `Balanced: ${strongest ? `${strongest.label} is only ${formatWholeSignedNumber(strongest.value)}` : 'Inputs are closely matched'}, so the market is still sitting near the midpoint.`;
 }
 
 function getTopDrivers(view: SnapshotView) {
   return [
-    { label: 'Sentiment', value: view.fearGreedScore, reason: view.fearAndGreed <= 25 ? 'Extreme fear is weighing on the score.' : 'Sentiment is contributing positively.' },
-    { label: 'Trend', value: view.marketBiasScore, reason: view.marketBiasScore >= 0 ? 'Spot trend remains supportive.' : 'Spot trend is leaning against the move.' },
-    { label: 'Momentum', value: view.momentumScore, reason: view.momentumScore >= 0 ? 'RSI and MACD are supportive.' : 'RSI and MACD are dragging.' }
+    { label: 'Fear & Greed', value: view.fearGreedScore, reason: view.fearAndGreed <= 25 ? 'Extreme fear is still the dominant top-line input.' : view.fearAndGreed >= 75 ? 'Greed is supportive, but no longer enough on its own.' : 'Fear & Greed is near the middle and not overpowering spot or derivatives.' },
+    { label: 'Spot trend', value: view.marketBiasScore, reason: view.marketBiasScore >= 0 ? 'Coinbase price structure stays above the bearish threshold.' : 'Coinbase price structure is still leaning below trend support.' },
+    { label: 'Momentum', value: view.momentumScore, reason: view.momentumScore >= 0 ? 'Hourly RSI, MACD, and the latest impulse are helping.' : 'Hourly RSI, MACD, and the latest impulse are still fading.' },
+    { label: 'Binance positioning', value: view.derivativesScore, reason: view.derivativesScore >= 0 ? `Funding, basis, open interest, and taker flow are aligned long.` : 'Funding, basis, open interest, and taker flow are leaning defensive.' }
   ].sort((a, b) => Math.abs(b.value) - Math.abs(a.value)).slice(0, 3);
 }
 
@@ -289,13 +285,14 @@ export function LiveSnapshot({
           <ValueRow label="BTC price" value={fallbackMode ? 'Unavailable' : formatUsd(view.currentPrice)} trend={fallbackMode ? undefined : formatMetricTrend(view.priceChange24h)} />
           <ValueRow label="24h move" value={fallbackMode ? 'Unavailable' : formatPercent(view.priceChange24h)} trend={fallbackMode ? undefined : formatMetricTrend(view.priceChange24h)} help={`Spot move over the last 24 hours from Coinbase hourly candles.`} />
           <ValueRow label="7d move" value={fallbackMode ? 'Unavailable' : formatPercent(view.priceChange7d)} trend={fallbackMode ? undefined : formatMetricTrend(view.priceChange7d)} help={`Spot move over the last 7 days from Coinbase hourly candles.`} />
-          <div style={{ color: '#6f85ab', fontSize: 12, marginTop: 8, marginBottom: 2 }}>Model: Trend + Momentum + Sentiment</div>
+          <div style={{ color: '#6f85ab', fontSize: 12, marginTop: 8, marginBottom: 2 }}>Model: Fear & Greed + Coinbase spot + Binance derivatives</div>
         </section>
         <section style={{ background: '#121931', borderRadius: 24, padding: 18, border: '1px solid #24304f' }}>
           <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 12 }}>Composite breakdown</div>
-          <SignalBar label="Sentiment" value={view.fearGreedScore} weight="18%" help={`Alternative.me Fear & Greed contribution to the Bull Bear composite.`} />
-          <SignalBar label="Trend" value={view.marketBiasScore} weight="47%" help={`Coinbase spot regime score using BTC versus EMA200 plus 24h and 7d spot change.`} />
-          <SignalBar label="Momentum" value={view.momentumScore} weight="35%" help={`Coinbase hourly RSI and MACD momentum score.`} />
+          <SignalBar label="Fear & Greed" value={view.fearGreedScore} weight="18%" help={`Alternative.me Fear & Greed stays at the top of the stack, but it is now tempered by spot and derivatives context.`} />
+          <SignalBar label="Spot trend" value={view.marketBiasScore} weight="35%" help={`Coinbase spot regime score using BTC versus EMA200 plus 24h and 7d change.`} />
+          <SignalBar label="Momentum" value={view.momentumScore} weight="22%" help={`Coinbase hourly RSI, MACD, and latest 1h impulse.`} />
+          <SignalBar label="Binance positioning" value={view.derivativesScore} weight="25%" help={`Binance funding, basis, 1h open-interest change, and taker buy/sell flow.`} />
         </section>
         <section style={{ background: '#121931', borderRadius: 24, padding: 18, border: '1px solid #24304f' }}>
           <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 12 }}>Top drivers</div>
@@ -486,7 +483,7 @@ function SignalBar({ label, value, weight, help }: { label: string; value: numbe
         </div>
         <div style={{ color: positive ? '#86efac' : '#fca5a5', fontWeight: 700 }}>{formatWholeSignedNumber(value)}</div>
       </div>
-      <div style={{ position: 'relative', height: 10, borderRadius: 999, background: '#0c1327', overflow: 'hidden', border: '1px solid #26304b' }}>
+      <div style={{ position: 'relative', height: 13, borderRadius: 999, background: '#0c1327', overflow: 'hidden', border: '1px solid #26304b' }}>
         <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: '#44506d' }} />
         <div style={{ position: 'absolute', top: 0, bottom: 0, [positive ? 'left' : 'right']: '50%', width, background: positive ? 'linear-gradient(90deg, #2bd67b, #7fffb2)' : 'linear-gradient(90deg, #f36d6d, #ffb0b0)' }} />
       </div>

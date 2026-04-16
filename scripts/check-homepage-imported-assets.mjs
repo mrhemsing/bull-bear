@@ -25,12 +25,12 @@ const key = String(stateIndex).padStart(2, '0');
 const expectedPoster = `/states/${key}.png`;
 const expectedLoops = ['a', 'b', 'c'].map((suffix) => `/states/${key}-${suffix}.mp4`);
 
-const videoMatch = html.match(/<video[^>]+src="([^"]+)"[^>]+poster="([^"]+)"/i);
+const videoMatch = html.match(/<video[^>]+src="([^"]+)"[^>]+poster="([^"]+)"[^>]+data-loop-sequence="([^"]+)"/i);
 if (!videoMatch) {
-  throw new Error('Could not find homepage hero video tag.');
+  throw new Error('Could not find homepage hero video tag with loop metadata.');
 }
 
-const [, videoSrc, posterSrc] = videoMatch;
+const [, videoSrc, posterSrc, loopSequence] = videoMatch;
 if (!expectedLoops.includes(videoSrc)) {
   throw new Error(`Homepage hero video src ${videoSrc} did not match imported flat loop set ${expectedLoops.join(', ')}.`);
 }
@@ -39,19 +39,14 @@ if (posterSrc !== expectedPoster) {
   throw new Error(`Homepage hero poster ${posterSrc} did not match imported flat still ${expectedPoster}.`);
 }
 
-const activeLoopsMatch = html.match(/activeLoops\\":\[(.*?)\]/);
-if (!activeLoopsMatch) {
-  throw new Error('Could not find activeLoops array in homepage flight payload.');
-}
-
-const activeLoops = Array.from(activeLoopsMatch[1].matchAll(/\\"(\/states\/[^^\\"]+)\\"/g), (match) => match[1]);
+const activeLoops = loopSequence.split('|').filter(Boolean);
 if (activeLoops.length !== 3) {
-  throw new Error(`Expected 3 activeLoops entries, found ${activeLoops.length}.`);
+  throw new Error(`Expected 3 active loop sequence entries, found ${activeLoops.length}.`);
 }
 
 for (const loop of expectedLoops) {
   if (!activeLoops.includes(loop)) {
-    throw new Error(`Homepage activeLoops payload is missing expected imported loop ${loop}.`);
+    throw new Error(`Homepage loop sequence is missing expected imported loop ${loop}.`);
   }
 }
 

@@ -14,14 +14,26 @@ if (!response.ok) {
 }
 
 const html = await response.text();
-const videoMatch = html.match(/<video[^>]+src="(\/states\/(\d{2})-a\.mp4)"[^>]+poster="(\/states\/(\d{2})\.png)"/i);
+const videoMatch = html.match(/<video[^>]+src="(\/states\/(\d{2})-[abc]\.mp4)"[^>]+poster="(\/states\/(\d{2})\.png)"[^>]+data-loop-sequence="([^"]+)"/i);
 if (!videoMatch) {
-  throw new Error('Could not find dashboard hero video tag with imported flat assets.');
+  throw new Error('Could not find dashboard hero video tag with imported flat assets and loop metadata.');
 }
 
-const [, videoSrc, videoKey, posterSrc, posterKey] = videoMatch;
+const [, videoSrc, videoKey, posterSrc, posterKey, loopSequence] = videoMatch;
 if (videoKey !== posterKey) {
   throw new Error(`Dashboard hero video/poster keys diverged: ${videoSrc} vs ${posterSrc}.`);
+}
+
+const expectedLoops = ['a', 'b', 'c'].map((suffix) => `/states/${videoKey}-${suffix}.mp4`);
+const activeLoops = loopSequence.split('|').filter(Boolean);
+if (activeLoops.length !== 3) {
+  throw new Error(`Dashboard expected 3 declared loops, found ${activeLoops.length}.`);
+}
+
+for (const expectedLoop of expectedLoops) {
+  if (!activeLoops.includes(expectedLoop)) {
+    throw new Error(`Dashboard loop metadata is missing expected imported loop ${expectedLoop}.`);
+  }
 }
 
 if (html.includes('/states/state-')) {
