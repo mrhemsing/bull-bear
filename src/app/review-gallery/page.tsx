@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import dynamic from 'next/dynamic';
+import { mediaUrl } from '@/lib/media-url';
 
 const StateGallery = dynamic(() => import('../state-gallery').then((mod) => mod.StateGallery), { ssr: false });
 
@@ -13,13 +14,13 @@ function getStateGalleryEntries() {
     .map((entry) => {
       const key = entry.name.replace('.png', '');
       const loops = ['a', 'b', 'c']
-        .map((suffix) => `/states/${key}-${suffix}.mp4`)
+        .map((suffix) => mediaUrl(`/states/${key}-${suffix}.mp4`))
         .filter((loopPath) => fs.existsSync(path.join(statesDir, path.basename(loopPath))));
 
       return {
         id: `state-${key}`,
         index: Number.parseInt(key, 10),
-        stillSrc: `/states/${entry.name}`,
+        stillSrc: mediaUrl(`/states/${entry.name}`),
         loops
       };
     })

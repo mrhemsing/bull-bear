@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { mediaUrl } from '@/lib/media-url';
 
 function getStillEntries() {
   const statesDir = path.join(process.cwd(), 'public', 'states');
@@ -10,7 +11,7 @@ function getStillEntries() {
     .map((entry) => ({
       id: entry.name,
       index: Number.parseInt(entry.name.replace('.png', ''), 10),
-      stillSrc: `/states/${entry.name}`
+      stillSrc: mediaUrl(`/states/${entry.name}`)
     }))
     .sort((a, b) => a.index - b.index);
 }

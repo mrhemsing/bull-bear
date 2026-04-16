@@ -1,3 +1,5 @@
+import { mediaUrl } from '@/lib/media-url';
+
 const canonicalLadderStates = [
   { key: '08', label: 'State 08 · Slightly Bearish', note: 'Imported canonical still in the current runtime slot.' },
   { key: '09', label: 'State 09 · Mildly Bearish', note: 'Imported canonical still in the current runtime slot.' },
@@ -12,7 +14,7 @@ const renderGroups = [
     items: [
       {
         label: 'State 10 · Neutral · approved anchor',
-        src: '/states/10.png',
+        src: mediaUrl('/states/10.png'),
         note: 'Approved anchor now shown from Matt\'s flat imported runtime asset.'
       }
     ]
@@ -21,16 +23,16 @@ const renderGroups = [
     title: 'Current canonical ladder progress',
     items: canonicalLadderStates.map((state) => ({
       ...state,
-      src: `/states/${state.key}.png`
+      src: mediaUrl(`/states/${state.key}.png`)
     }))
   },
   {
     title: 'Original neutral anchor batch',
     items: [
-      { label: 'Anchor 01', src: '/visual-source/state-10-anchor-01.png', note: 'First-pass neutral candidate.' },
-      { label: 'Anchor 02', src: '/visual-source/state-10-anchor-02.png', note: 'Approved winner.' },
-      { label: 'Anchor 03', src: '/visual-source/state-10-anchor-03.png', note: 'First-pass neutral candidate.' },
-      { label: 'Anchor 04', src: '/visual-source/state-10-anchor-04.png', note: 'First-pass neutral candidate.' }
+      { label: 'Anchor 01', src: mediaUrl('/visual-source/state-10-anchor-01.png'), note: 'First-pass neutral candidate.' },
+      { label: 'Anchor 02', src: mediaUrl('/visual-source/state-10-anchor-02.png'), note: 'Approved winner.' },
+      { label: 'Anchor 03', src: mediaUrl('/visual-source/state-10-anchor-03.png'), note: 'First-pass neutral candidate.' },
+      { label: 'Anchor 04', src: mediaUrl('/visual-source/state-10-anchor-04.png'), note: 'First-pass neutral candidate.' }
     ]
   }
 ];

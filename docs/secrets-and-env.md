@@ -6,6 +6,18 @@ Do not commit real keys into the repository.
 
 ## Supported variables
 
+### Media hosting
+- `NEXT_PUBLIC_MEDIA_BASE_URL` optional public base URL for canonical Bull Bear media like `/states/01.png` and `/states/01-a.mp4`
+- `MEDIA_BASE_URL` optional server-side fallback if you prefer setting only a server variable in some environments
+- if neither is set, the app falls back to local paths under `public/`
+
+Example:
+
+```env
+NEXT_PUBLIC_MEDIA_BASE_URL=https://media.example.com
+```
+
+
 ### OpenClaw / Bull Bear operator rollout
 - `OPENCLAW_GATEWAY_URL`
 - `OPENCLAW_GATEWAY_TOKEN`

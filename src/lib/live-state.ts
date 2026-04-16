@@ -1,6 +1,7 @@
 import stateManifest from '@/../data/state-manifest.json';
 import frames from '@/../data/frames.json';
 import { getCompositeMarketSnapshot } from './btc';
+import { mediaUrl } from './media-url';
 import type { FrameRecord, StateManifestEntry } from './types';
 import { compositeSnapshotToCreatureState } from './signal';
 
@@ -10,8 +11,8 @@ const FRAMES = frames as FrameRecord[];
 function resolveFlatStateAssets(index: number) {
   const key = String(index).padStart(2, '0');
   return {
-    still: `/states/${key}.png`,
-    loops: ['a', 'b', 'c'].map((suffix) => `/states/${key}-${suffix}.mp4`)
+    still: mediaUrl(`/states/${key}.png`),
+    loops: ['a', 'b', 'c'].map((suffix) => mediaUrl(`/states/${key}-${suffix}.mp4`))
   };
 }
 

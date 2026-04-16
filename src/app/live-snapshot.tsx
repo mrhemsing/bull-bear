@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 import type { CompositeMarketSnapshot, CreatureState, FrameRecord, StateManifestEntry } from '@/lib/types';
 import { HeroMedia } from './hero-media';
+import { mediaUrl } from '@/lib/media-url';
 
 const badgeBaseStyle = {
   display: 'inline-block',
@@ -152,9 +153,9 @@ function capitalize(value: string) {
 
 function buildStateAssetSet(stateIndex: number) {
   const key = String(stateIndex).padStart(2, '0');
-  const loops = ['a', 'b', 'c'].map((suffix) => `/states/${key}-${suffix}.mp4`);
+  const loops = ['a', 'b', 'c'].map((suffix) => mediaUrl(`/states/${key}-${suffix}.mp4`));
   return {
-    still: `/states/${key}.png`,
+    still: mediaUrl(`/states/${key}.png`),
     loops,
     activeLoop: loops[0] ?? null
   };
