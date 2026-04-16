@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server';
-import { getFrames, getStateManifest } from '@/lib/frames';
+import frames from '@/../data/frames.json';
+import stateManifest from '@/../data/state-manifest.json';
+import type { FrameRecord, StateManifestEntry } from '@/lib/types';
 
 export async function GET() {
   return NextResponse.json({
-    frames: getFrames(),
-    manifest: getStateManifest()
+    frames: frames as FrameRecord[],
+    manifest: stateManifest as StateManifestEntry[]
   });
 }
