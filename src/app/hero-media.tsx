@@ -28,7 +28,6 @@ export function HeroMedia({
 }) {
   const stateLabelColor = /bull/i.test(stateLabel) ? '#86efac' : /bear/i.test(stateLabel) ? '#fca5a5' : '#f5f7fb';
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [debugTimecode, setDebugTimecode] = useState('0.00 / 0.00');
   const resolvedLoops = useMemo(() => loops.filter((loop): loop is string => typeof loop === 'string' && loop.length > 0), [loops]);
   const initialLoopIndex = useMemo(() => {
     if (resolvedLoops.length === 0) return -1;
@@ -72,12 +71,6 @@ export function HeroMedia({
     const video = videoRef.current;
     if (!video) return;
 
-    const updateTimecode = () => {
-      const current = Number.isFinite(video.currentTime) ? video.currentTime.toFixed(2) : '0.00';
-      const duration = Number.isFinite(video.duration) ? video.duration.toFixed(2) : '0.00';
-      setDebugTimecode(`${current} / ${duration}`);
-    };
-
     const advanceLoop = () => {
       if (resolvedLoops.length === 0) return;
       setCurrentLoopIndex((currentIndex) => {
@@ -86,16 +79,9 @@ export function HeroMedia({
       });
     };
 
-    updateTimecode();
-    video.addEventListener('timeupdate', updateTimecode);
-    video.addEventListener('loadedmetadata', updateTimecode);
-    video.addEventListener('durationchange', updateTimecode);
     video.addEventListener('ended', advanceLoop);
 
     return () => {
-      video.removeEventListener('timeupdate', updateTimecode);
-      video.removeEventListener('loadedmetadata', updateTimecode);
-      video.removeEventListener('durationchange', updateTimecode);
       video.removeEventListener('ended', advanceLoop);
     };
   }, [currentLoop, resolvedLoops]);
@@ -135,13 +121,6 @@ export function HeroMedia({
           pointerEvents: 'none'
         }}
       />
-
-      <div className="heroMediaDebugWrap" style={{ position: 'absolute', left: 18, right: 18, top: 18, display: 'flex', justifyContent: 'flex-end', pointerEvents: 'none' }}>
-        <div style={{ padding: '6px 10px', borderRadius: 12, background: 'rgba(7,10,20,0.72)', border: '1px solid rgba(255,255,255,0.12)', color: '#dbe4f3', fontSize: 12, fontVariantNumeric: 'tabular-nums', textAlign: 'right' }}>
-          <div>{debugTimecode}</div>
-          <div style={{ marginTop: 4, color: '#8ea3c7', fontSize: 11 }}>{currentLoop ? currentLoop.split('/').pop() : 'no-video'}</div>
-        </div>
-      </div>
 
       <div className="heroMediaCaption" style={{ position: 'absolute', left: 18, right: 18, bottom: 18, display: 'flex', justifyContent: 'space-between', gap: 16, alignItems: 'end' }}>
         <div className="heroMediaCaptionLeft">
