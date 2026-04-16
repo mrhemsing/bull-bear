@@ -1,6 +1,5 @@
-import { existsSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
-import { getAssetProductionSummary } from '@/lib/asset-production';
 
 const reviewStatusSourceFiles = [
   'canonical-review-queue.json',
@@ -77,36 +76,95 @@ function getReviewStatusSourceSummary() {
   };
 }
 
-function getReviewStatusSummary(checkedAt: string | null) {
-  const summary = getAssetProductionSummary();
+function readJson<T>(fileName: string, fallback: T): T {
+  const resolvedPath = path.join(process.cwd(), 'data', 'generated', fileName);
+  if (!existsSync(resolvedPath)) return fallback;
+
+  try {
+    return JSON.parse(readFileSync(resolvedPath, 'utf8')) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+function getReviewStatusSummary(checkedAt: string | null): {
+  checkedAt: string | null;
+  totalStates: number;
+  approvedStills: number;
+  candidateStates: number;
+  pendingStates: number;
+  totalCandidateImages: number;
+  fullCoverageComplete: boolean;
+  activeRange: { start: number; end: number } | null;
+  frontierStates: Array<{ id: string; index: number; label: string; status: 'in-review' | 'ready-to-generate'; reason: string }>;
+  reviewSourceExpectedCount: number;
+  reviewSourceMissingCount: number;
+  reviewSourceExpectedFiles: string[];
+  reviewSourcePresentFiles: string[];
+  reviewSourceMissingFiles: string[];
+  reviewSourceAllPresent: boolean;
+  reviewQueue: Array<Record<string, unknown>>;
+  reviewQueuePreview: Array<Record<string, unknown>>;
+  candidateStatesList: Array<Record<string, unknown>>;
+  pendingStatesPreview: Array<{ id: string; index: number; label: string }>;
+  stillQueueCount: number;
+  stillQueuePreview: Array<Record<string, unknown>>;
+  loopQueueCount: number;
+  loopQueuePreview: Array<Record<string, unknown>>;
+  nextActionsCount: number;
+  nextActionsPreview: Array<Record<string, unknown>>;
+} {
   const sourceSummary = getReviewStatusSourceSummary();
+  const reviewQueue = readJson<Array<Record<string, unknown>>>('canonical-review-queue.json', []);
+  const checklist = readJson<Array<Record<string, unknown>>>('canonical-asset-checklist.json', []);
+  const nextActions = readJson<Array<Record<string, unknown>>>('canonical-production-next-actions.json', []);
+  const stillQueue = readJson<Array<Record<string, unknown>>>('canonical-still-generation-queue.json', []);
+  const loopQueue = readJson<Array<Record<string, unknown>>>('canonical-loop-generation-queue.json', []);
+
+  const approvedStills = checklist.filter((entry) => entry?.still && typeof entry.still === 'object' && (entry.still as { status?: string }).status === 'approved').length;
+  const candidateStates = checklist.filter((entry) => entry?.still && typeof entry.still === 'object' && (entry.still as { status?: string }).status === 'candidate').length;
+  const pendingStatesPreview = checklist
+    .filter((entry) => entry?.still && typeof entry.still === 'object' && (entry.still as { status?: string }).status !== 'approved')
+    .slice(0, 6)
+    .map((entry) => ({ id: String(entry.id ?? ''), index: Number(entry.index ?? 0), label: String(entry.label ?? '') }));
+
+  const frontierStates = checklist
+    .filter((entry) => entry?.still && typeof entry.still === 'object' && (entry.still as { status?: string }).status !== 'approved')
+    .slice(0, 6)
+    .map((entry) => ({
+      id: String(entry.id ?? ''),
+      index: Number(entry.index ?? 0),
+      label: String(entry.label ?? ''),
+      status: ((entry.still as { status?: string }).status === 'candidate' ? 'in-review' : 'ready-to-generate') as 'in-review' | 'ready-to-generate',
+      reason: String((entry.still as { status?: string }).status ?? 'pending')
+    }));
 
   return {
     checkedAt,
-    totalStates: summary.totalStates,
-    approvedStills: summary.approvedStills,
-    candidateStates: summary.candidateStates,
-    pendingStates: summary.pendingStates,
-    totalCandidateImages: summary.totalCandidateImages,
-    fullCoverageComplete: summary.fullCoverageComplete,
-    activeRange: summary.activeRange,
-    frontierStates: summary.frontierStates,
+    totalStates: checklist.length,
+    approvedStills,
+    candidateStates,
+    pendingStates: Math.max(0, checklist.length - approvedStills),
+    totalCandidateImages: reviewQueue.reduce((sum, entry) => sum + (Array.isArray(entry.candidateFiles) ? entry.candidateFiles.length : 0), 0),
+    fullCoverageComplete: checklist.length > 0 && approvedStills === checklist.length,
+    activeRange: null,
+    frontierStates,
     reviewSourceExpectedCount: sourceSummary.expectedCount,
     reviewSourceMissingCount: sourceSummary.missingCount,
     reviewSourceExpectedFiles: sourceSummary.expectedFiles,
     reviewSourcePresentFiles: sourceSummary.presentFiles,
     reviewSourceMissingFiles: sourceSummary.missingFiles,
     reviewSourceAllPresent: sourceSummary.allPresent,
-    reviewQueue: summary.reviewQueue,
-    reviewQueuePreview: summary.reviewQueue.slice(0, 6),
-    candidateStatesList: summary.candidateStatesList,
-    pendingStatesPreview: summary.pendingStatesPreview,
-    stillQueueCount: summary.stillQueue.length,
-    stillQueuePreview: summary.stillQueuePreview,
-    loopQueueCount: summary.loopQueue.length,
-    loopQueuePreview: summary.loopQueuePreview,
-    nextActionsCount: summary.nextActions.length,
-    nextActionsPreview: summary.nextActionsPreview
+    reviewQueue,
+    reviewQueuePreview: reviewQueue.slice(0, 6),
+    candidateStatesList: checklist.filter((entry) => entry?.still && typeof entry.still === 'object' && (entry.still as { status?: string }).status === 'candidate'),
+    pendingStatesPreview,
+    stillQueueCount: stillQueue.length,
+    stillQueuePreview: stillQueue.slice(0, 6),
+    loopQueueCount: loopQueue.length,
+    loopQueuePreview: loopQueue.slice(0, 6),
+    nextActionsCount: nextActions.length,
+    nextActionsPreview: nextActions.slice(0, 6)
   };
 }
 
