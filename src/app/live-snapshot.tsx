@@ -429,7 +429,11 @@ function ValueRow({ label, value, trend, help }: { label: string; value: string;
               title={help}
               aria-label={`Explain ${label}`}
               onClick={() => setShowHelp((value) => !value)}
-              style={{ display: 'inline-flex', width: 16, height: 16, borderRadius: '50%', alignItems: 'center', justifyContent: 'center', border: '1px solid #51617f', color: '#c5d0e7', fontSize: 11, cursor: 'pointer', background: 'transparent', padding: 0 }}
+              onTouchEnd={(event) => {
+                event.preventDefault();
+                setShowHelp((value) => !value);
+              }}
+              style={{ display: 'inline-flex', width: 20, height: 20, borderRadius: '50%', alignItems: 'center', justifyContent: 'center', border: '1px solid #51617f', color: '#c5d0e7', fontSize: 11, cursor: 'pointer', background: 'rgba(11,16,32,0.72)', padding: 0, touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent', position: 'relative', zIndex: 2, pointerEvents: 'auto' }}
             >
               i
             </button>
