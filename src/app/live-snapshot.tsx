@@ -461,13 +461,28 @@ function SummaryTile({ label, value }: { label: string; value: string }) {
 function SignalBar({ label, value, weight, help }: { label: string; value: number; weight?: string; help?: string }) {
   const positive = value >= 0;
   const width = `${Math.min(50, Math.max(6, Math.abs(value) / 2))}%`;
+  const [showHelp, setShowHelp] = useState(false);
   return (
     <div style={{ padding: 12, borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid #2b3655', marginBottom: 10 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 8 }}>
         <div style={{ fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
           <span>{label}</span>
           {weight ? <span style={{ color: '#8ea3c7', fontSize: 12, fontWeight: 600 }}>{weight}</span> : null}
-          {help ? <span title={help} style={{ display: 'inline-flex', width: 16, height: 16, borderRadius: '50%', alignItems: 'center', justifyContent: 'center', border: '1px solid #51617f', color: '#c5d0e7', fontSize: 11, cursor: 'help' }}>i</span> : null}
+          {help ? (
+            <button
+              type="button"
+              title={help}
+              aria-label={`Explain ${label}`}
+              onClick={() => setShowHelp((value) => !value)}
+              onTouchEnd={(event) => {
+                event.preventDefault();
+                setShowHelp((value) => !value);
+              }}
+              style={{ display: 'inline-flex', width: 20, height: 20, borderRadius: '50%', alignItems: 'center', justifyContent: 'center', border: '1px solid #51617f', color: '#c5d0e7', fontSize: 11, cursor: 'pointer', background: 'rgba(11,16,32,0.72)', padding: 0, touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent', position: 'relative', zIndex: 2, pointerEvents: 'auto' }}
+            >
+              i
+            </button>
+          ) : null}
         </div>
         <div style={{ color: positive ? '#86efac' : '#fca5a5', fontWeight: 700 }}>{formatWholeSignedNumber(value)}</div>
       </div>
@@ -475,6 +490,7 @@ function SignalBar({ label, value, weight, help }: { label: string; value: numbe
         <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: '#44506d' }} />
         <div style={{ position: 'absolute', top: 0, bottom: 0, [positive ? 'left' : 'right']: '50%', width, background: positive ? 'linear-gradient(90deg, #2bd67b, #7fffb2)' : 'linear-gradient(90deg, #f36d6d, #ffb0b0)' }} />
       </div>
+      {help && showHelp ? <div style={{ marginTop: 8, color: '#b4bfd3', fontSize: 12, lineHeight: 1.45, paddingRight: 12 }}>{help}</div> : null}
     </div>
   );
 }
