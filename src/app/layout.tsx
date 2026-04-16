@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 export const metadata = {
-  title: 'Bull Bear',
+  title: 'Bitcoin Bulls vs Bears sentiment and analysis tracker',
   description: 'BTC-driven cinematic bull-bear market beast'
 };
 
