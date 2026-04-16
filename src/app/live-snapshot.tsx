@@ -133,11 +133,11 @@ function summarizeWhy(view: SnapshotView) {
     : '';
 
   if (view.finalScore > 0) {
-    return `Bullish: Trend (${formatWholeSignedNumber(view.marketBiasScore)}), momentum (${formatWholeSignedNumber(view.momentumScore)}), derivatives (${formatWholeSignedNumber(view.derivativesScore)}), and sentiment (${formatWholeSignedNumber(view.fearGreedScore)}) combine to keep the composite positive.${sentimentContext}`;
+    return `Bullish: Trend (${formatWholeSignedNumber(view.marketBiasScore)}), momentum (${formatWholeSignedNumber(view.momentumScore)}), and sentiment (${formatWholeSignedNumber(view.fearGreedScore)}) combine to keep the composite positive.${sentimentContext}`;
   }
 
   if (view.finalScore < 0) {
-    return `Bearish: Trend (${formatWholeSignedNumber(view.marketBiasScore)}), momentum (${formatWholeSignedNumber(view.momentumScore)}), derivatives (${formatWholeSignedNumber(view.derivativesScore)}), and sentiment (${formatWholeSignedNumber(view.fearGreedScore)}) combine to keep the composite negative.`;
+    return `Bearish: Trend (${formatWholeSignedNumber(view.marketBiasScore)}), momentum (${formatWholeSignedNumber(view.momentumScore)}), and sentiment (${formatWholeSignedNumber(view.fearGreedScore)}) combine to keep the composite negative.`;
   }
 
   return `Neutral: ${strongestPositive ? `${strongestPositive.label} (${formatWholeSignedNumber(strongestPositive.value)})` : 'positive inputs'} and ${strongestNegative ? `${strongestNegative.label.toLowerCase()} (${formatWholeSignedNumber(strongestNegative.value)})` : 'negative inputs'} are close enough to keep the composite balanced.`;
@@ -147,8 +147,7 @@ function getTopDrivers(view: SnapshotView) {
   return [
     { label: 'Sentiment', value: view.fearGreedScore, reason: view.fearAndGreed <= 25 ? 'Extreme fear is weighing on the score.' : 'Sentiment is contributing positively.' },
     { label: 'Trend', value: view.marketBiasScore, reason: view.marketBiasScore >= 0 ? 'Spot trend remains supportive.' : 'Spot trend is leaning against the move.' },
-    { label: 'Momentum', value: view.momentumScore, reason: view.momentumScore >= 0 ? 'RSI and MACD are supportive.' : 'RSI and MACD are dragging.' },
-    { label: 'Derivatives', value: view.derivativesScore, reason: view.derivativesScore >= 0 ? 'Funding and positioning are supportive.' : 'Funding, basis, or flow are leaning risk-off.' }
+    { label: 'Momentum', value: view.momentumScore, reason: view.momentumScore >= 0 ? 'RSI and MACD are supportive.' : 'RSI and MACD are dragging.' }
   ].sort((a, b) => Math.abs(b.value) - Math.abs(a.value)).slice(0, 3);
 }
 
