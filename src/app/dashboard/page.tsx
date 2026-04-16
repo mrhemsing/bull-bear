@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react';
+import dynamic from 'next/dynamic';
 import { getLiveMarketBeastState } from '@/lib/live-state';
-import { HeroMedia } from '../hero-media';
-import { TimelineScrubber } from '../timeline-scrubber';
+
+const HeroMedia = dynamic(() => import('../hero-media').then((mod) => mod.HeroMedia), { ssr: false });
+const TimelineScrubber = dynamic(() => import('../timeline-scrubber').then((mod) => mod.TimelineScrubber), { ssr: false });
 
 function formatSignedNumber(value?: number, digits = 2) {
   if (value === undefined || value === null || Number.isNaN(value)) return '—';

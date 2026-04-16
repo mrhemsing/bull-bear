@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { StateGallery } from '../state-gallery';
+import dynamic from 'next/dynamic';
+
+const StateGallery = dynamic(() => import('../state-gallery').then((mod) => mod.StateGallery), { ssr: false });
 
 function getStateGalleryEntries() {
   const statesDir = path.join(process.cwd(), 'public', 'states');
