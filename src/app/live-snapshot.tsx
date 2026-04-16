@@ -25,6 +25,7 @@ const badgeBaseStyle = {
 };
 
 type SnapshotView = {
+  source?: string;
   timestamp: string;
   currentPrice: number;
   ma7: number;
@@ -66,7 +67,7 @@ function formatWholeSignedNumber(value?: number) {
 }
 
 function formatUsd(value?: number) {
-  if (value === undefined || value === null || Number.isNaN(value)) return '—';
+  if (value === undefined || value === null || Number.isNaN(value) || value <= 0) return '—';
   return `$${value.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 }
 
@@ -93,6 +94,10 @@ function formatRelativeTime(timestamp: string) {
   if (diffMinutes < 60) return `Updated ${diffMinutes}m ago`;
   const diffHours = Math.round(diffMinutes / 60);
   return `Updated ${diffHours}h ago`;
+}
+
+function isFallbackSnapshot(view: SnapshotView) {
+  return typeof view.source === 'string' && /fallback snapshot/i.test(view.source);
 }
 
 function getConfidence(view: SnapshotView) {
@@ -210,6 +215,7 @@ export function LiveSnapshot({
         intensity: selectedFrame.intensity
       }
     : {
+        source: liveSnapshot.source,
         timestamp: liveSnapshot.timestamp,
         currentPrice: liveSnapshot.currentPrice,
         ma7: liveSnapshot.ma7,
@@ -235,6 +241,7 @@ export function LiveSnapshot({
         intensity: creature.intensity
       };
 
+  const fallbackMode = isFallbackSnapshot(view);
   const confidence = getConfidence(view);
   const confidenceLabel = getConfidenceLabel(confidence);
   const why = summarizeWhy(view);
@@ -273,17 +280,22 @@ export function LiveSnapshot({
           <div style={{ color: '#8ea3c7', textTransform: 'uppercase', letterSpacing: 1.4, fontSize: 12, marginBottom: 13 }}>
             {formatRelativeTime(view.timestamp)} ({new Date(view.timestamp).toLocaleString('en-US', { timeZone: 'UTC', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true })} UTC)
           </div>
+          {fallbackMode ? (
+            <div style={{ marginBottom: 14, padding: '10px 12px', borderRadius: 12, background: 'rgba(250, 204, 21, 0.08)', border: '1px solid rgba(250, 204, 21, 0.22)', color: '#f8e08e', fontSize: 13, lineHeight: 1.45 }}>
+              Live exchange inputs are temporarily unavailable, so Bull Bear is showing a neutral fallback state instead of misleading market numbers.
+            </div>
+          ) : null}
           <FearGreedGauge value={view.fearAndGreed} />
           <SectionLabel>Market snapshot</SectionLabel>
-          <ValueRow label="BTC price" value={formatUsd(view.currentPrice)} trend={formatMetricTrend(view.priceChange24h)} />
-          <ValueRow label="24h move" value={formatPercent(view.priceChange24h)} trend={formatMetricTrend(view.priceChange24h)} help={`Spot move over the last 24 hours from Coinbase hourly candles.`} />
-          <ValueRow label="7d move" value={formatPercent(view.priceChange7d)} trend={formatMetricTrend(view.priceChange7d)} help={`Spot move over the last 7 days from Coinbase hourly candles.`} />
+          <ValueRow label="BTC price" value={fallbackMode ? 'Unavailable' : formatUsd(view.currentPrice)} trend={fallbackMode ? undefined : formatMetricTrend(view.priceChange24h)} />
+          <ValueRow label="24h move" value={fallbackMode ? 'Unavailable' : formatPercent(view.priceChange24h)} trend={fallbackMode ? undefined : formatMetricTrend(view.priceChange24h)} help={`Spot move over the last 24 hours from Coinbase hourly candles.`} />
+          <ValueRow label="7d move" value={fallbackMode ? 'Unavailable' : formatPercent(view.priceChange7d)} trend={fallbackMode ? undefined : formatMetricTrend(view.priceChange7d)} help={`Spot move over the last 7 days from Coinbase hourly candles.`} />
           <div style={{ color: '#6f85ab', fontSize: 12, marginTop: 8, marginBottom: 2 }}>Model: Trend + Momentum + Derivatives + Sentiment</div>
           <SectionLabel>Sentiment inputs</SectionLabel>
-          <ValueRow label="Funding" value={formatPercent(view.fundingRate)} trend={formatMetricTrend(view.fundingRate)} help={`Latest Binance BTC perpetual funding rate. Positive is crowded long positioning.`} />
-          <ValueRow label="Basis" value={formatPercent(view.basisPct)} trend={formatMetricTrend(view.basisPct)} help={`Binance mark price premium or discount versus index price.`} />
-          <ValueRow label="OI 1h" value={formatPercent(view.openInterestChangePct1h)} trend={formatMetricTrend(view.openInterestChangePct1h)} help={`One hour change in Binance BTC futures open interest.`} />
-          <ValueRow label="Taker ratio" value={formatPlainNumber(view.takerBuySellRatio, 3)} trend={formatMetricTrend(view.takerBuySellRatio - 1, 'ratio')} help={`Binance taker buy versus sell ratio. Above 1 means aggressive buyers led the last hour.`} />
+          <ValueRow label="Funding" value={fallbackMode ? 'Unavailable' : formatPercent(view.fundingRate)} trend={fallbackMode ? undefined : formatMetricTrend(view.fundingRate)} help={`Latest Binance BTC perpetual funding rate. Positive is crowded long positioning.`} />
+          <ValueRow label="Basis" value={fallbackMode ? 'Unavailable' : formatPercent(view.basisPct)} trend={fallbackMode ? undefined : formatMetricTrend(view.basisPct)} help={`Binance mark price premium or discount versus index price.`} />
+          <ValueRow label="OI 1h" value={fallbackMode ? 'Unavailable' : formatPercent(view.openInterestChangePct1h)} trend={fallbackMode ? undefined : formatMetricTrend(view.openInterestChangePct1h)} help={`One hour change in Binance BTC futures open interest.`} />
+          <ValueRow label="Taker ratio" value={fallbackMode ? 'Unavailable' : formatPlainNumber(view.takerBuySellRatio, 3)} trend={fallbackMode ? undefined : formatMetricTrend(view.takerBuySellRatio - 1, 'ratio')} help={`Binance taker buy versus sell ratio. Above 1 means aggressive buyers led the last hour.`} />
         </section>
         <section style={{ background: '#121931', borderRadius: 24, padding: 18, border: '1px solid #24304f' }}>
           <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 12 }}>Composite breakdown</div>
