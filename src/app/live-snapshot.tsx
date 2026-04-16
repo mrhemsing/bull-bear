@@ -290,19 +290,13 @@ export function LiveSnapshot({
           <ValueRow label="BTC price" value={fallbackMode ? 'Unavailable' : formatUsd(view.currentPrice)} trend={fallbackMode ? undefined : formatMetricTrend(view.priceChange24h)} />
           <ValueRow label="24h move" value={fallbackMode ? 'Unavailable' : formatPercent(view.priceChange24h)} trend={fallbackMode ? undefined : formatMetricTrend(view.priceChange24h)} help={`Spot move over the last 24 hours from Coinbase hourly candles.`} />
           <ValueRow label="7d move" value={fallbackMode ? 'Unavailable' : formatPercent(view.priceChange7d)} trend={fallbackMode ? undefined : formatMetricTrend(view.priceChange7d)} help={`Spot move over the last 7 days from Coinbase hourly candles.`} />
-          <div style={{ color: '#6f85ab', fontSize: 12, marginTop: 8, marginBottom: 2 }}>Model: Trend + Momentum + Derivatives + Sentiment</div>
-          <SectionLabel>Sentiment inputs</SectionLabel>
-          <ValueRow label="Funding" value={fallbackMode ? 'Unavailable' : formatPercent(view.fundingRate)} trend={fallbackMode ? undefined : formatMetricTrend(view.fundingRate)} help={`Latest Binance BTC perpetual funding rate. Positive is crowded long positioning.`} />
-          <ValueRow label="Basis" value={fallbackMode ? 'Unavailable' : formatPercent(view.basisPct)} trend={fallbackMode ? undefined : formatMetricTrend(view.basisPct)} help={`Binance mark price premium or discount versus index price.`} />
-          <ValueRow label="OI 1h" value={fallbackMode ? 'Unavailable' : formatPercent(view.openInterestChangePct1h)} trend={fallbackMode ? undefined : formatMetricTrend(view.openInterestChangePct1h)} help={`One hour change in Binance BTC futures open interest.`} />
-          <ValueRow label="Taker ratio" value={fallbackMode ? 'Unavailable' : formatPlainNumber(view.takerBuySellRatio, 3)} trend={fallbackMode ? undefined : formatMetricTrend(view.takerBuySellRatio - 1, 'ratio')} help={`Binance taker buy versus sell ratio. Above 1 means aggressive buyers led the last hour.`} />
+          <div style={{ color: '#6f85ab', fontSize: 12, marginTop: 8, marginBottom: 2 }}>Model: Trend + Momentum + Sentiment</div>
         </section>
         <section style={{ background: '#121931', borderRadius: 24, padding: 18, border: '1px solid #24304f' }}>
           <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 12 }}>Composite breakdown</div>
-          <SignalBar label="Sentiment" value={view.fearGreedScore} weight="15%" help={`Alternative.me Fear & Greed contribution to the Bull Bear composite.`} />
-          <SignalBar label="Trend" value={view.marketBiasScore} weight="35%" help={`Coinbase spot regime score using BTC versus EMA200 plus 24h and 7d spot change.`} />
-          <SignalBar label="Momentum" value={view.momentumScore} weight="25%" help={`Coinbase hourly RSI and MACD momentum score.`} />
-          <SignalBar label="Derivatives" value={view.derivativesScore} weight="25%" help={`Binance funding, basis, open interest, and taker flow positioning score.`} />
+          <SignalBar label="Sentiment" value={view.fearGreedScore} weight="18%" help={`Alternative.me Fear & Greed contribution to the Bull Bear composite.`} />
+          <SignalBar label="Trend" value={view.marketBiasScore} weight="47%" help={`Coinbase spot regime score using BTC versus EMA200 plus 24h and 7d spot change.`} />
+          <SignalBar label="Momentum" value={view.momentumScore} weight="35%" help={`Coinbase hourly RSI and MACD momentum score.`} />
         </section>
         <section style={{ background: '#121931', borderRadius: 24, padding: 18, border: '1px solid #24304f' }}>
           <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 12 }}>Top drivers</div>
