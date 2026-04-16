@@ -2,3 +2,7 @@ out/
 tmp/
 tmp-*.json
 tmp-*.html
+data/generated/operator-status/history.ndjson
+data/generated/release-status/history.ndjson
+data/generated/runtime-capture-audit/history.ndjson
+data/generated/cron-verification/history.ndjson
