@@ -160,6 +160,20 @@ async function fetchJson<T>(url: string) {
   return response.json() as Promise<T>;
 }
 
+function resolveUnixTimestampMs(value?: string | number) {
+  const numeric = Number(value ?? 0);
+  if (!Number.isFinite(numeric) || numeric <= 0) return 0;
+  return numeric < 1_000_000_000_000 ? numeric * 1000 : numeric;
+}
+
+function resolveLatestTimestamp(...values: Array<string | number | undefined>) {
+  const timestamps = values
+    .map((value) => resolveUnixTimestampMs(value))
+    .filter((value) => value > 0);
+
+  return timestamps.length ? Math.max(...timestamps) : Date.now();
+}
+
 function getFallbackCompositeMarketSnapshot(): CompositeMarketSnapshot {
   const fallbackScore = 0;
   const state = resolveState(fallbackScore);
@@ -168,6 +182,8 @@ function getFallbackCompositeMarketSnapshot(): CompositeMarketSnapshot {
     timestamp: new Date().toISOString(),
     source: 'Fallback snapshot (live market sources temporarily unavailable)',
     currentPrice: 0,
+    previousPrice: 0,
+    percentChange1h: 0,
     ma7: 0,
     ma30: 0,
     priceChange24h: 0,
@@ -177,9 +193,6 @@ function getFallbackCompositeMarketSnapshot(): CompositeMarketSnapshot {
     marketBiasScore: 0,
     momentumScore: 0,
     derivativesScore: 0,
-    sentimentScore: 0,
-    trend7Score: 0,
-    trend30Score: 0,
     fundingRate: 0,
     basisPct: 0,
     openInterestChangePct1h: 0,
@@ -208,7 +221,7 @@ async function getCoinbaseCandles() {
 export async function getCompositeMarketSnapshot(): Promise<CompositeMarketSnapshot> {
   const [candlesResult, fearGreedResult, premiumIndexResult, basisResult, openInterestResult, takerRatioResult] = await Promise.allSettled([
     getCoinbaseCandles(),
-    fetchJson<{ data?: Array<{ value?: string; value_classification?: string }> }>(FEAR_AND_GREED_URL),
+    fetchJson<{ data?: Array<{ value?: string; value_classification?: string; timestamp?: string }> }>(FEAR_AND_GREED_URL),
     fetchJson<BinancePremiumIndex>(BINANCE_PREMIUM_INDEX_URL),
     fetchJson<BinanceBasisPoint[]>(BINANCE_BASIS_URL),
     fetchJson<BinanceOpenInterestPoint[]>(BINANCE_OPEN_INTEREST_URL),
@@ -242,6 +255,8 @@ export async function getCompositeMarketSnapshot(): Promise<CompositeMarketSnaps
 
   const closes = candles.map((candle) => candle.close);
   const currentPrice = closes[closes.length - 1] ?? 0;
+  const previousPrice = closes[closes.length - 2] ?? currentPrice;
+  const percentChange1h = previousPrice > 0 ? ((currentPrice - previousPrice) / previousPrice) * 100 : 0;
   const ema200 = calculateEma(closes, 200);
   const rsi14 = calculateRsi(closes, 14);
   const macdHistogram = calculateMacdHistogram(closes);
@@ -263,6 +278,7 @@ export async function getCompositeMarketSnapshot(): Promise<CompositeMarketSnaps
   const takerRatios = takerRatioPoints.map((point) => Number(point.buySellRatio ?? 1)).filter((value) => Number.isFinite(value) && value > 0);
   const takerBuySellRatio = takerRatios.length ? takerRatios.reduce((sum, value) => sum + value, 0) / takerRatios.length : 1;
   const fearGreed = Number(fearGreedData?.data?.[0]?.value ?? 50);
+  const fearGreedTimestamp = resolveUnixTimestampMs(fearGreedData?.data?.[0]?.timestamp);
 
   const regimeScore = scoreBand(ema200 > 0 ? ((currentPrice - ema200) / ema200) * 100 : 0, -4, 4);
   const dayScore = scoreBand(priceChange24h, -3, 3);
@@ -271,7 +287,7 @@ export async function getCompositeMarketSnapshot(): Promise<CompositeMarketSnaps
 
   const macdScore = scoreBand(macdHistogram, -120, 120);
   const rsiScore = scoreBand(rsi14, 42, 58);
-  const hourlyImpulse = scoreBand(closes.length > 1 && closes[closes.length - 2] > 0 ? ((currentPrice - closes[closes.length - 2]) / closes[closes.length - 2]) * 100 : 0, -0.9, 0.9);
+  const hourlyImpulse = scoreBand(percentChange1h, -0.9, 0.9);
   const momentumScore = Math.round(((macdScore * 0.45) + (rsiScore * 0.35) + (hourlyImpulse * 0.2)) * 24);
 
   const fundingScore = scoreBand(fundingRate * 100, -0.03, 0.03);
@@ -292,22 +308,21 @@ export async function getCompositeMarketSnapshot(): Promise<CompositeMarketSnaps
   ));
 
   const state = resolveState(finalScore);
-  const sentimentScore = Math.round(clamp(fearGreedScore, -100, 100));
-  const trend7Score = Math.round(clamp((marketBiasScore * 0.7) + (momentumScore * 0.3), -100, 100));
-  const trend30Score = Math.round(clamp((marketBiasScore * 0.55) + (derivativesScore * 0.45), -100, 100));
-  const latestTimestamp = Math.max(
+  const latestTimestamp = resolveLatestTimestamp(
     (candles[candles.length - 1]?.time ?? 0) * 1000,
-    premiumIndex?.time ?? 0,
-    latestBasisPoint?.timestamp ?? 0,
-    openInterestPoints[openInterestPoints.length - 1]?.timestamp ?? 0,
-    takerRatioPoints[takerRatioPoints.length - 1]?.timestamp ?? 0,
-    Date.now()
+    fearGreedTimestamp,
+    premiumIndex?.time,
+    latestBasisPoint?.timestamp,
+    openInterestPoints[openInterestPoints.length - 1]?.timestamp,
+    takerRatioPoints[takerRatioPoints.length - 1]?.timestamp
   );
 
   return {
     timestamp: new Date(latestTimestamp).toISOString(),
     source: 'Coinbase spot candles + Binance futures positioning + Alternative.me Fear & Greed',
     currentPrice: Number(currentPrice.toFixed(2)),
+    previousPrice: Number(previousPrice.toFixed(2)),
+    percentChange1h: Number(percentChange1h.toFixed(2)),
     ma7: Number(ma7.toFixed(2)),
     ma30: Number(ma30.toFixed(2)),
     priceChange24h: Number(priceChange24h.toFixed(2)),
@@ -317,9 +332,6 @@ export async function getCompositeMarketSnapshot(): Promise<CompositeMarketSnaps
     marketBiasScore,
     momentumScore,
     derivativesScore,
-    sentimentScore,
-    trend7Score,
-    trend30Score,
     fundingRate: Number((fundingRate * 100).toFixed(4)),
     basisPct: Number(basisPct.toFixed(4)),
     openInterestChangePct1h: Number(oiChangePct1h.toFixed(2)),

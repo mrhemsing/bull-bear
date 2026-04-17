@@ -23,6 +23,8 @@ export interface CompositeMarketSnapshot {
   timestamp: string;
   source: string;
   currentPrice: number;
+  previousPrice: number;
+  percentChange1h: number;
   ma7: number;
   ma30: number;
   priceChange24h: number;
@@ -32,9 +34,6 @@ export interface CompositeMarketSnapshot {
   marketBiasScore: number;
   momentumScore: number;
   derivativesScore: number;
-  sentimentScore: number;
-  trend7Score: number;
-  trend30Score: number;
   fundingRate: number;
   basisPct: number;
   openInterestChangePct1h: number;
