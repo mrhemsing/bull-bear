@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 export const metadata = {
   title: 'Bitcoin Bulls vs Bears current-market tracker',
-  description: 'BTC market state tracker driven by Fear & Greed, Coinbase spot regime and momentum, and Binance positioning'
+  description: 'BTC market state tracker driven by Coinbase spot, Binance futures positioning, and Fear & Greed'
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

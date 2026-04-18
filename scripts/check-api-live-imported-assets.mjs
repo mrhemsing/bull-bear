@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-import { existsSync } from 'node:fs';
-
 const baseUrl = process.env.BULL_BEAR_BASE_URL ?? 'http://127.0.0.1:3078';
 const liveUrl = new URL('/api/live', baseUrl).toString();
 
@@ -22,8 +20,8 @@ if (!Number.isInteger(stateIndex) || stateIndex < 1) {
   throw new Error(`Could not determine live state index from /api/live payload: ${JSON.stringify({ snapshotStateIndex: snapshot?.stateIndex, manifestIndex: payload?.manifest?.index })}`);
 }
 
-if (snapshot?.source !== 'Fear & Greed + Coinbase spot regime + Coinbase momentum + Binance positioning') {
-  throw new Error(`/api/live snapshot.source did not report the shipped current-market model: ${snapshot?.source}`);
+if (snapshot?.source !== 'Coinbase spot candles + Binance futures positioning + Alternative.me Fear & Greed') {
+  throw new Error(`/api/live snapshot.source did not report the new current-market model: ${snapshot?.source}`);
 }
 
 for (const field of ['fearGreedScore', 'marketBiasScore', 'momentumScore', 'derivativesScore', 'finalScore']) {
@@ -43,9 +41,7 @@ if (payload?.creature?.direction !== expectedDirection) {
 
 const key = String(stateIndex).padStart(2, '0');
 const expectedStill = `/states/${key}.png`;
-const expectedLoops = ['a', 'b', 'c']
-  .map((suffix) => `/states/${key}-${suffix}.mp4`)
-  .filter((loopPath) => existsSync(new URL(`../public${loopPath}`, import.meta.url)));
+const expectedLoops = ['a', 'b', 'c'].map((suffix) => `/states/${key}-${suffix}.mp4`);
 
 const checks = [
   ['activeStill', payload?.activeStill, expectedStill],
@@ -66,12 +62,8 @@ const loopSets = [
 ];
 
 for (const [label, loops] of loopSets) {
-  if (!Array.isArray(loops)) {
-    throw new Error(`/api/live ${label} was not an array: ${JSON.stringify(loops)}`);
-  }
-
-  if (loops.length !== expectedLoops.length) {
-    throw new Error(`/api/live ${label} expected ${expectedLoops.length} imported loops but received ${loops.length}: ${JSON.stringify(loops)}`);
+  if (!Array.isArray(loops) || loops.length !== 3) {
+    throw new Error(`/api/live ${label} did not include exactly 3 imported loops: ${JSON.stringify(loops)}`);
   }
 
   for (const expectedLoop of expectedLoops) {
@@ -81,11 +73,7 @@ for (const [label, loops] of loopSets) {
   }
 }
 
-if (expectedLoops.length === 0) {
-  if (payload?.activeLoop !== null) {
-    throw new Error(`/api/live activeLoop should be null when no Matt animation loops are shipped for state ${key}: ${payload?.activeLoop}`);
-  }
-} else if (!expectedLoops.includes(payload?.activeLoop)) {
+if (!expectedLoops.includes(payload?.activeLoop)) {
   throw new Error(`/api/live activeLoop ${payload?.activeLoop} did not match imported loop set ${expectedLoops.join(', ')}`);
 }
 

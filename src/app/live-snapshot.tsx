@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 import type { CompositeMarketSnapshot, CreatureState, FrameRecord, StateManifestEntry } from '@/lib/types';
 import { HeroMedia } from './hero-media';
+import { mediaUrl } from '@/lib/media-url';
 
 const badgeBaseStyle = {
   display: 'inline-block',
@@ -117,9 +118,9 @@ function getConfidenceLabel(confidence: number) {
 function summarizeWhy(view: SnapshotView) {
   const contributions = [
     { label: 'Fear & Greed', value: view.fearGreedScore },
-    { label: 'Coinbase spot regime', value: view.marketBiasScore },
-    { label: 'Coinbase momentum', value: view.momentumScore },
-    { label: 'Binance positioning', value: view.derivativesScore }
+    { label: 'Spot trend', value: view.marketBiasScore },
+    { label: 'Momentum', value: view.momentumScore },
+    { label: 'Derivatives', value: view.derivativesScore }
   ].sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
 
   const strongest = contributions[0];
@@ -127,11 +128,11 @@ function summarizeWhy(view: SnapshotView) {
   const counter = contributions.find((item) => Math.sign(item.value) !== Math.sign(view.finalScore) && item.value !== 0);
 
   if (view.finalScore > 0) {
-    return `Bullish: ${leadingWithTrend?.label ?? 'The composite'} is leading higher, with Coinbase spot, momentum, and Binance positioning keeping the model positive${counter ? ` despite ${counter.label.toLowerCase()} at ${formatWholeSignedNumber(counter.value)}` : ''}.`;
+    return `Bullish: ${leadingWithTrend?.label ?? 'The composite'} is leading higher, with spot, momentum, and Binance positioning keeping the model positive${counter ? ` despite ${counter.label.toLowerCase()} at ${formatWholeSignedNumber(counter.value)}` : ''}.`;
   }
 
   if (view.finalScore < 0) {
-    return `Bearish: ${leadingWithTrend?.label ?? 'The composite'} is leaning risk-off, with Coinbase spot, momentum, and Binance positioning keeping the model negative${counter ? ` even with ${counter.label.toLowerCase()} at ${formatWholeSignedNumber(counter.value)}` : ''}.`;
+    return `Bearish: ${leadingWithTrend?.label ?? 'The composite'} is leaning risk-off, with Coinbase trend, momentum, and Binance positioning keeping the model negative${counter ? ` even with ${counter.label.toLowerCase()} at ${formatWholeSignedNumber(counter.value)}` : ''}.`;
   }
 
   return `Balanced: ${strongest ? `${strongest.label} is only ${formatWholeSignedNumber(strongest.value)}` : 'Inputs are closely matched'}, so the market is still sitting near the midpoint.`;
@@ -140,12 +141,25 @@ function summarizeWhy(view: SnapshotView) {
 function getTopDrivers(view: SnapshotView) {
   return [
     { label: 'Fear & Greed', value: view.fearGreedScore, reason: view.fearAndGreed <= 25 ? 'Extreme fear is still the dominant top-line input.' : view.fearAndGreed >= 75 ? 'Greed is supportive, but no longer enough on its own.' : 'Fear & Greed is near the middle and not overpowering spot or derivatives.' },
-    { label: 'Coinbase spot regime', value: view.marketBiasScore, reason: view.marketBiasScore >= 0 ? 'Coinbase price structure stays above the bearish threshold.' : 'Coinbase price structure is still leaning below trend support.' },
-    { label: 'Coinbase momentum', value: view.momentumScore, reason: view.momentumScore >= 0 ? 'Hourly RSI, MACD, and the latest impulse are helping.' : 'Hourly RSI, MACD, and the latest impulse are still fading.' },
+    { label: 'Spot trend', value: view.marketBiasScore, reason: view.marketBiasScore >= 0 ? 'Coinbase price structure stays above the bearish threshold.' : 'Coinbase price structure is still leaning below trend support.' },
+    { label: 'Momentum', value: view.momentumScore, reason: view.momentumScore >= 0 ? 'Hourly RSI, MACD, and the latest impulse are helping.' : 'Hourly RSI, MACD, and the latest impulse are still fading.' },
     { label: 'Binance positioning', value: view.derivativesScore, reason: view.derivativesScore >= 0 ? `Funding, basis, open interest, and taker flow are aligned long.` : 'Funding, basis, open interest, and taker flow are leaning defensive.' }
   ].sort((a, b) => Math.abs(b.value) - Math.abs(a.value)).slice(0, 3);
 }
 
+function capitalize(value: string) {
+  return value ? `${value[0].toUpperCase()}${value.slice(1)}` : value;
+}
+
+function buildStateAssetSet(stateIndex: number) {
+  const key = String(stateIndex).padStart(2, '0');
+  const loops = ['a', 'b', 'c'].map((suffix) => mediaUrl(`/states/${key}-${suffix}.mp4`));
+  return {
+    still: mediaUrl(`/states/${key}.png`),
+    loops,
+    activeLoop: loops[0] ?? null
+  };
+}
 
 export function LiveSnapshot({
   liveSnapshot,
@@ -167,6 +181,8 @@ export function LiveSnapshot({
   const [selectedIndex] = useState(-1);
   const selectedFrame = selectedIndex >= 0 ? history[selectedIndex] ?? null : null;
 
+  const liveAssets = buildStateAssetSet(manifest?.index ?? liveSnapshot.stateIndex);
+
   const view: SnapshotView = selectedFrame
     ? {
         timestamp: selectedFrame.timestamp,
@@ -187,9 +203,9 @@ export function LiveSnapshot({
         finalScore: selectedFrame.finalScore ?? selectedFrame.signedScore ?? liveSnapshot.finalScore,
         stateIndex: selectedFrame.stateIndex ?? liveSnapshot.stateIndex,
         stateLabel: selectedFrame.stateLabel ?? liveSnapshot.stateLabel,
-        activeStill: selectedFrame.imageUrl,
-        activeLoop: null,
-        activeLoops: [],
+        activeStill: buildStateAssetSet(selectedFrame.stateIndex ?? liveSnapshot.stateIndex).still,
+        activeLoop: buildStateAssetSet(selectedFrame.stateIndex ?? liveSnapshot.stateIndex).activeLoop,
+        activeLoops: buildStateAssetSet(selectedFrame.stateIndex ?? liveSnapshot.stateIndex).loops,
         direction: selectedFrame.direction,
         intensity: selectedFrame.intensity
       }
@@ -213,9 +229,9 @@ export function LiveSnapshot({
         finalScore: liveSnapshot.finalScore,
         stateIndex: manifest?.index ?? liveSnapshot.stateIndex,
         stateLabel: liveSnapshot.stateLabel,
-        activeStill,
-        activeLoop,
-        activeLoops,
+        activeStill: activeStill ?? liveAssets.still,
+        activeLoop: activeLoop ?? liveAssets.activeLoop,
+        activeLoops: activeLoops?.length ? activeLoops : liveAssets.loops,
         direction: creature.direction,
         intensity: creature.intensity
       };
@@ -269,13 +285,13 @@ export function LiveSnapshot({
           <ValueRow label="BTC price" value={fallbackMode ? 'Unavailable' : formatUsd(view.currentPrice)} trend={fallbackMode ? undefined : formatMetricTrend(view.priceChange24h)} />
           <ValueRow label="24h move" value={fallbackMode ? 'Unavailable' : formatPercent(view.priceChange24h)} trend={fallbackMode ? undefined : formatMetricTrend(view.priceChange24h)} help={`Spot move over the last 24 hours from Coinbase hourly candles.`} />
           <ValueRow label="7d move" value={fallbackMode ? 'Unavailable' : formatPercent(view.priceChange7d)} trend={fallbackMode ? undefined : formatMetricTrend(view.priceChange7d)} help={`Spot move over the last 7 days from Coinbase hourly candles.`} />
-          <div style={{ color: '#6f85ab', fontSize: 12, marginTop: 8, marginBottom: 2 }}>Model: Fear & Greed + Coinbase spot regime + Coinbase momentum + Binance positioning</div>
+          <div style={{ color: '#6f85ab', fontSize: 12, marginTop: 8, marginBottom: 2 }}>Model: Fear & Greed + Coinbase spot + Binance derivatives</div>
         </section>
         <section style={{ background: '#121931', borderRadius: 24, padding: 18, border: '1px solid #24304f' }}>
           <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 12 }}>Composite breakdown</div>
           <SignalBar label="Fear & Greed" value={view.fearGreedScore} weight="18%" help={`Alternative.me Fear & Greed stays at the top of the stack, but it is now tempered by spot and derivatives context.`} />
-          <SignalBar label="Coinbase spot regime" value={view.marketBiasScore} weight="35%" help={`Coinbase spot regime score using BTC versus EMA200 plus 24h and 7d change.`} />
-          <SignalBar label="Coinbase momentum" value={view.momentumScore} weight="22%" help={`Coinbase hourly RSI, MACD, and latest 1h impulse.`} />
+          <SignalBar label="Spot trend" value={view.marketBiasScore} weight="35%" help={`Coinbase spot regime score using BTC versus EMA200 plus 24h and 7d change.`} />
+          <SignalBar label="Momentum" value={view.momentumScore} weight="22%" help={`Coinbase hourly RSI, MACD, and latest 1h impulse.`} />
           <SignalBar label="Binance positioning" value={view.derivativesScore} weight="25%" help={`Binance funding, basis, 1h open-interest change, and taker buy/sell flow.`} />
         </section>
         <section style={{ background: '#121931', borderRadius: 24, padding: 18, border: '1px solid #24304f' }}>
@@ -392,7 +408,7 @@ function FearGreedGauge({ value }: { value: number }) {
 
 function SectionLabel({ children }: { children: ReactNode }) {
   const normalized = typeof children === 'string' ? children.toLowerCase() : '';
-  const extraTop = normalized === 'market snapshot' || normalized === 'composite inputs';
+  const extraTop = normalized === 'market snapshot' || normalized === 'sentiment inputs';
   return <div style={{ color: '#8ea3c7', textTransform: 'uppercase', letterSpacing: 1.2, fontSize: 11, marginTop: extraTop ? 13 : 8, marginBottom: 4 }}>{children}</div>;
 }
 

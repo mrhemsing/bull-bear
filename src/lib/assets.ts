@@ -7,18 +7,19 @@ export interface ResolvedStateAssets {
   loops: string[];
   activeLoop: string | null;
   loopVariantIndex: number | null;
-  source: 'manifest' | 'placeholder';
+  source: 'manifest' | 'history-fallback' | 'placeholder';
 }
 
 export function resolveStateAssets(params: {
   manifest: StateManifestEntry | null;
+  latestTransition: FrameRecord | null;
   timestamp: string;
 }): ResolvedStateAssets {
-  const { manifest, timestamp } = params;
+  const { manifest, latestTransition, timestamp } = params;
 
   if (manifest) {
     const flatAssets = resolveFlatStateAssets(manifest.index);
-    const loops = flatAssets?.loops ?? [];
+    const loops = flatAssets?.loops?.length ? flatAssets.loops : (manifest.loops ?? []);
     const still = flatAssets?.still ?? manifest.still;
     const loopVariantIndex = loops.length ? resolveLoopVariantIndex(timestamp, loops.length) : null;
 
@@ -28,6 +29,16 @@ export function resolveStateAssets(params: {
       activeLoop: loopVariantIndex === null ? null : loops[loopVariantIndex] ?? null,
       loopVariantIndex,
       source: 'manifest'
+    };
+  }
+
+  if (latestTransition?.imageUrl) {
+    return {
+      still: latestTransition.imageUrl,
+      loops: [],
+      activeLoop: null,
+      loopVariantIndex: null,
+      source: 'history-fallback'
     };
   }
 

@@ -15,7 +15,7 @@ export function compositeSnapshotToDirection(snapshot: CompositeMarketSnapshot) 
   return 'neutral' as const;
 }
 
-export function compositeSnapshotToVisualStage(snapshot: CompositeMarketSnapshot) {
+export function compositeSnapshotToLegacyStage(snapshot: CompositeMarketSnapshot) {
   if (snapshot.finalScore <= -55) return 'max-bear' as const;
   if (snapshot.finalScore <= -25) return 'very-bear' as const;
   if (snapshot.finalScore <= -5) return 'strong-bear' as const;
@@ -29,7 +29,7 @@ export function compositeSnapshotToCreatureState(snapshot: CompositeMarketSnapsh
   return {
     direction: compositeSnapshotToDirection(snapshot),
     intensity: Math.round(Math.min(100, Math.abs(snapshot.finalScore))),
-    stage: compositeSnapshotToVisualStage(snapshot),
+    stage: compositeSnapshotToLegacyStage(snapshot),
     signedScore: Number((snapshot.finalScore / 100).toFixed(2))
   };
 }
