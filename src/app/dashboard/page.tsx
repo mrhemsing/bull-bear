@@ -59,6 +59,7 @@ export default async function DashboardPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12, marginTop: 16 }}>
             <MetricCard label="State" value={`${currentIndex} · ${live.snapshot.stateLabel}`} />
             <MetricCard label="BTC/USD" value={formatUsd(live.snapshot.currentPrice)} />
+            <MetricCard label="1h move" value={`${formatSignedNumber(live.snapshot.percentChange1h)}%`} />
             <MetricCard label="Fear & Greed" value={String(live.snapshot.fearAndGreed)} />
             <MetricCard label="Composite" value={formatSignedNumber(live.snapshot.finalScore)} />
           </div>
@@ -69,14 +70,16 @@ export default async function DashboardPage() {
             <DetailRow label="Timestamp" value={new Date(live.snapshot.timestamp).toLocaleString()} />
             <DetailRow label="Direction" value={live.creature.direction} />
             <DetailRow label="Intensity" value={`${live.creature.intensity}%`} />
-            <DetailRow label="Active loop" value={live.activeLoop ?? 'Pending'} mono />
+            <DetailRow label="Previous hourly close" value={formatUsd(live.snapshot.previousPrice)} />
+            <DetailRow label="1h BTC move" value={`${formatSignedNumber(live.snapshot.percentChange1h)}%`} />
+            <DetailRow label="Active loop" value={live.activeLoop ?? 'Still-only state, no shipped loop'} mono />
             <DetailRow label="Resolved still" value={live.activeStill} mono />
           </Panel>
 
-          <Panel title="Signal breakdown" subtitle="Fear & Greed stays first, then Coinbase spot and Binance positioning refine the read.">
+          <Panel title="Signal breakdown" subtitle="Fear & Greed stays first, then Coinbase spot regime, Coinbase momentum, and Binance positioning set the live state.">
             <SignalBar label="Fear & Greed" value={live.snapshot.fearGreedScore} />
-            <SignalBar label="Spot trend" value={live.snapshot.marketBiasScore} />
-            <SignalBar label="Momentum" value={live.snapshot.momentumScore} />
+            <SignalBar label="Coinbase spot regime" value={live.snapshot.marketBiasScore} />
+            <SignalBar label="Coinbase momentum" value={live.snapshot.momentumScore} />
             <SignalBar label="Binance positioning" value={live.snapshot.derivativesScore} />
           </Panel>
 

@@ -4,3 +4,21 @@ node_modules
 .env.local
 .DS_Store
 coverage
+
+# Generated local artifacts
+out/
+tmp/
+tmp-*.json
+tmp-*.html
+
+# Local / generated media, hosted separately from git
+*.mp4
+*.mov
+*.webm
+*.avi
+*.mkv
+*.gif
+
+# Local visual source scratch space
+public/visual-source/
+public/frames/

@@ -14,7 +14,7 @@ function withResolvedFrameAssets(frame: FrameRecord): FrameRecord {
 
   const flatAssets = resolveFlatStateAssets(frame.stateIndex);
   const normalizedSource = frame.provider === 'manifest'
-    ? 'Coinbase spot candles + Binance futures positioning + Alternative.me Fear & Greed'
+    ? 'Fear & Greed + Coinbase spot regime + Coinbase momentum + Binance positioning'
     : frame.source;
   const normalizedNotes = frame.provider === 'manifest'
     ? `Persisted Matt's shipped canonical still for state-${String(frame.stateIndex).padStart(2, '0')}; Bull Bear does not generate runtime media.`
@@ -51,7 +51,7 @@ function withResolvedRuntimeAssets(entry: StateManifestEntry): StateManifestEntr
   return {
     ...entry,
     still: flatAssets.still ?? entry.still,
-    loops: flatAssets.loops.length ? flatAssets.loops : entry.loops
+    loops: flatAssets.loops
   };
 }
 

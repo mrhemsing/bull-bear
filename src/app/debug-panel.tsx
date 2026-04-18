@@ -33,13 +33,14 @@ export function DebugPanel({
       <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 16 }}>
         <div style={{ display: 'grid', gap: 12 }}>
           <ContributionRow label="Fear & Greed" raw={String(snapshot.fearAndGreed)} score={snapshot.fearGreedScore} weight="18 pts" contribution={snapshot.fearGreedScore} />
-          <ContributionRow label="Spot trend" raw={`24h ${formatSignedNumber(snapshot.priceChange24h)}% · 7d ${formatSignedNumber(snapshot.priceChange7d)}%`} score={snapshot.marketBiasScore} weight="35 pts" contribution={snapshot.marketBiasScore} />
-          <ContributionRow label="Momentum" raw={`RSI, MACD, and latest 1h impulse on Coinbase`} score={snapshot.momentumScore} weight="22 pts" contribution={snapshot.momentumScore} />
+          <ContributionRow label="Coinbase spot regime" raw={`24h ${formatSignedNumber(snapshot.priceChange24h)}% · 7d ${formatSignedNumber(snapshot.priceChange7d)}%`} score={snapshot.marketBiasScore} weight="35 pts" contribution={snapshot.marketBiasScore} />
+          <ContributionRow label="Coinbase momentum" raw={`1h ${formatSignedNumber(snapshot.percentChange1h)}% · RSI, MACD, and latest Coinbase impulse`} score={snapshot.momentumScore} weight="22 pts" contribution={snapshot.momentumScore} />
           <ContributionRow label="Binance positioning" raw={`Funding ${formatSignedNumber(snapshot.fundingRate)}% · Basis ${formatSignedNumber(snapshot.basisPct)}% · OI ${formatSignedNumber(snapshot.openInterestChangePct1h)}% · Taker ${formatSignedNumber(snapshot.takerBuySellRatio, 3)}`} score={snapshot.derivativesScore} weight="25 pts" contribution={snapshot.derivativesScore} />
         </div>
 
         <div style={{ display: 'grid', gap: 12 }}>
           <DebugMetric label="Composite score" value={formatSignedNumber(snapshot.finalScore)} />
+          <DebugMetric label="1h BTC move" value={formatSignedNumber(snapshot.percentChange1h) + '%'} />
           <DebugMetric label="Resolved band" value={`${snapshot.stateIndex} · ${snapshot.stateLabel}`} />
           <DebugMetric label="Band range" value={manifest ? `${manifest.scoreMin} to ${manifest.scoreMax}` : '—'} />
           <DebugMetric label="Previous saved state" value={previousStateIndex ? String(previousStateIndex) : 'None'} />

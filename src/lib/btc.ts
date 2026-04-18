@@ -319,7 +319,7 @@ export async function getCompositeMarketSnapshot(): Promise<CompositeMarketSnaps
 
   return {
     timestamp: new Date(latestTimestamp).toISOString(),
-    source: 'Coinbase spot candles + Binance futures positioning + Alternative.me Fear & Greed',
+    source: 'Fear & Greed + Coinbase spot regime + Coinbase momentum + Binance positioning',
     currentPrice: Number(currentPrice.toFixed(2)),
     previousPrice: Number(previousPrice.toFixed(2)),
     percentChange1h: Number(percentChange1h.toFixed(2)),

@@ -170,8 +170,8 @@ export function HeroMedia({
         }
 
         .heroMediaCaption {
-          left: 14px !important;
-          right: 14px !important;
+          left: 24px !important;
+          right: 24px !important;
           bottom: 14px !important;
           gap: 10px !important;
           align-items: flex-end !important;
