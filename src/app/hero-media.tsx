@@ -41,6 +41,10 @@ export function HeroMedia({
   }, [initialLoopIndex]);
 
   const currentLoop = currentLoopIndex >= 0 ? resolvedLoops[currentLoopIndex] ?? null : null;
+  const preloadLoops = useMemo(
+    () => resolvedLoops.filter((loop) => loop !== currentLoop),
+    [currentLoop, resolvedLoops]
+  );
 
   useEffect(() => {
     if (resolvedLoops.length === 0) {
@@ -88,6 +92,12 @@ export function HeroMedia({
 
   return (
     <>
+    {currentLoop ? (
+      <link rel="preload" as="video" href={currentLoop} type="video/mp4" fetchPriority="high" />
+    ) : null}
+    {preloadLoops.map((loop) => (
+      <link key={loop} rel="prefetch" as="video" href={loop} type="video/mp4" />
+    ))}
     <div className="heroMediaRoot" style={{ position: 'relative', aspectRatio: '16 / 9', maxHeight: 520, minHeight: 220, borderRadius: 16, overflow: 'hidden', background: '#0c1327', border: '1px solid #2a3555' }}>
       {currentLoop ? (
         <video
@@ -139,6 +149,22 @@ export function HeroMedia({
           <div style={{ fontSize: 28, fontWeight: 800 }}>{score}</div>
         </div>
       </div>
+      {preloadLoops.length > 0 ? (
+        <div aria-hidden="true" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', opacity: 0, pointerEvents: 'none' }}>
+          {preloadLoops.map((loop) => (
+            <video
+              key={loop}
+              src={loop}
+              muted
+              playsInline
+              preload="auto"
+              data-testid="hero-media-preload-video"
+              data-loop-src={loop}
+              style={{ width: 1, height: 1 }}
+            />
+          ))}
+        </div>
+      ) : null}
     </div>
     <style jsx>{`
       @media (min-width: 641px) {

@@ -58,6 +58,38 @@ try {
     throw new Error(`Hero declared sequence ${JSON.stringify(declaredSequence)} did not match expected ${JSON.stringify(expectedSequence)}.`);
   }
 
+  const preloadHints = await page.locator('link[as="video"]').evaluateAll((links) => links.map((link) => ({
+    rel: link.getAttribute('rel'),
+    href: link.getAttribute('href')
+  })));
+  const preloadHref = preloadHints.find((link) => link.rel === 'preload')?.href;
+  if (!preloadHref || !preloadHref.endsWith(initial.src)) {
+    throw new Error(`Hero did not emit a high-priority preload hint for the active loop: ${JSON.stringify({ initialSrc: initial.src, preloadHints })}`);
+  }
+
+  const prefetchedLoops = preloadHints.filter((link) => link.rel === 'prefetch').map((link) => link.href ?? '');
+  const expectedPrefetches = expectedSequence.filter((loop) => loop !== initial.src);
+  for (const loop of expectedPrefetches) {
+    if (!prefetchedLoops.some((href) => href.endsWith(loop))) {
+      throw new Error(`Hero did not emit a prefetch hint for warm loop ${loop}: ${JSON.stringify(prefetchedLoops)}`);
+    }
+  }
+
+  const hiddenPreloads = await page.locator('[data-testid="hero-media-preload-video"]').evaluateAll((videos) => videos.map((video) => ({
+    src: video.getAttribute('src'),
+    preload: video.getAttribute('preload'),
+    loopSrc: video.getAttribute('data-loop-src')
+  })));
+  if (hiddenPreloads.length !== expectedPrefetches.length) {
+    throw new Error(`Expected ${expectedPrefetches.length} hidden loop preload videos, found ${hiddenPreloads.length}: ${JSON.stringify(hiddenPreloads)}`);
+  }
+  for (const loop of expectedPrefetches) {
+    const match = hiddenPreloads.find((video) => video.src === loop && video.loopSrc === loop);
+    if (!match || match.preload !== 'auto') {
+      throw new Error(`Missing hidden auto-preload video for ${loop}: ${JSON.stringify(hiddenPreloads)}`);
+    }
+  }
+
   const startIndex = expectedSequence.indexOf(initial.src);
   if (startIndex < 0) {
     throw new Error(`Initial hero src ${initial.src} was not in declared sequence ${JSON.stringify(expectedSequence)}.`);
