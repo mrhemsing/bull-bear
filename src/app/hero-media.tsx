@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 declare global {
   interface Window {
@@ -28,6 +28,7 @@ export function HeroMedia({
 }) {
   const stateLabelColor = /bull/i.test(stateLabel) ? '#86efac' : /bear/i.test(stateLabel) ? '#fca5a5' : '#f5f7fb';
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const startupSkippedLoopsRef = useRef<Set<string>>(new Set());
   const resolvedLoops = useMemo(() => loops.filter((loop): loop is string => typeof loop === 'string' && loop.length > 0), [loops]);
   const initialLoopIndex = useMemo(() => {
     if (resolvedLoops.length === 0) return -1;
@@ -40,11 +41,22 @@ export function HeroMedia({
     setCurrentLoopIndex(initialLoopIndex);
   }, [initialLoopIndex]);
 
+  useEffect(() => {
+    startupSkippedLoopsRef.current.clear();
+  }, [resolvedLoops]);
+
   const currentLoop = currentLoopIndex >= 0 ? resolvedLoops[currentLoopIndex] ?? null : null;
   const preloadLoops = useMemo(
     () => resolvedLoops.filter((loop) => loop !== currentLoop),
     [currentLoop, resolvedLoops]
   );
+  const advanceLoop = useCallback(() => {
+    if (resolvedLoops.length === 0) return;
+    setCurrentLoopIndex((currentIndex) => {
+      const safeIndex = currentIndex >= 0 ? currentIndex : 0;
+      return (safeIndex + 1) % resolvedLoops.length;
+    });
+  }, [resolvedLoops]);
 
   useEffect(() => {
     if (resolvedLoops.length === 0) {
@@ -53,12 +65,7 @@ export function HeroMedia({
     }
 
     window.__heroMediaDebug = {
-      advanceLoop: () => {
-        setCurrentLoopIndex((currentIndex) => {
-          const safeIndex = currentIndex >= 0 ? currentIndex : 0;
-          return (safeIndex + 1) % resolvedLoops.length;
-        });
-      },
+      advanceLoop,
       getState: () => ({
         currentLoop,
         currentLoopIndex,
@@ -69,26 +76,47 @@ export function HeroMedia({
     return () => {
       window.__heroMediaDebug = undefined;
     };
-  }, [currentLoop, currentLoopIndex, resolvedLoops]);
+  }, [advanceLoop, currentLoop, currentLoopIndex, resolvedLoops]);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-
-    const advanceLoop = () => {
-      if (resolvedLoops.length === 0) return;
-      setCurrentLoopIndex((currentIndex) => {
-        const safeIndex = currentIndex >= 0 ? currentIndex : 0;
-        return (safeIndex + 1) % resolvedLoops.length;
-      });
-    };
 
     video.addEventListener('ended', advanceLoop);
 
     return () => {
       video.removeEventListener('ended', advanceLoop);
     };
-  }, [currentLoop, resolvedLoops]);
+  }, [advanceLoop, currentLoop]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !currentLoop || resolvedLoops.length <= 1) return;
+
+    let settled = false;
+    const settle = () => {
+      settled = true;
+    };
+    const timeout = window.setTimeout(() => {
+      if (settled || video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA || !video.paused) return;
+      if (startupSkippedLoopsRef.current.has(currentLoop)) return;
+      if (startupSkippedLoopsRef.current.size >= resolvedLoops.length - 1) return;
+
+      startupSkippedLoopsRef.current.add(currentLoop);
+      advanceLoop();
+    }, 2500);
+
+    video.addEventListener('playing', settle, { once: true });
+    video.addEventListener('timeupdate', settle, { once: true });
+    video.addEventListener('canplay', settle, { once: true });
+
+    return () => {
+      window.clearTimeout(timeout);
+      video.removeEventListener('playing', settle);
+      video.removeEventListener('timeupdate', settle);
+      video.removeEventListener('canplay', settle);
+    };
+  }, [advanceLoop, currentLoop, resolvedLoops.length]);
 
   return (
     <>
