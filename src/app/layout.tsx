@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
   title: 'Bitcoin Bulls vs Bears current-market tracker',
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           }
         `}</style>
         {children}
+        <Analytics />
       </body>
     </html>
   );
